@@ -572,35 +572,32 @@ const ADD_PRODUCT_URL = "https://fusion-ai-api.medifus.dev/webhooks/webhook-cis6
       document.getElementById("purchase-modal").classList.add("open");
     }
 
-    async function addProduct() {
-      const body = {
-        product_name: val("p-name"),
-        category: val("p-category"),
-        current_stock: num("p-current"),
-        minimum_stock: num("p-min"),
-        maximum_stock: num("p-max"),
-        safety_stock: num("p-safety"),
-        forecast_demand: num("p-forecast"),
-        delivery_time_days: num("p-delivery"),
-        supplier_name: val("p-supplier"),
-        supplier_email: val("p-email")
-      };
+async function addProduct() {
+  const body = {
+    product_name: val("p-name"),
+    category: val("p-category"),
+    current_stock: num("p-current"),
+    minimum_stock: num("p-min"),
+    supplier_name: val("p-supplier"),
+    supplier_email: val("p-email"),
+    temperature: num("p-temp"),
+    humidity: num("p-humidity")
+  };
 
-      if (!body.product_name || !body.category || body.current_stock < 0) {
-        showToast("Vérifie product name, category et stock");
-        return;
-      }
+  if (!body.product_name || !body.category) {
+    showToast("Vérifie product name et category");
+    return;
+  }
 
-      try {
-        await apiPost(ADD_PRODUCT_URL, body);
-        showToast("Produit ajouté");
-        closeProductModal();
-        loadDashboard(false);
-      } catch (err) {
-        showToast("Erreur ajout: " + err.message);
-      }
-    }
-
+  try {
+    await apiPost(ADD_PRODUCT_URL, body);
+    showToast("Produit ajouté ✅");
+    closeProductModal();
+    loadDashboard(false);
+  } catch (err) {
+    showToast("Erreur ajout: " + err.message);
+  }
+}
     async function createPurchase() {
       const body = {
         product_name: val("a-product"),
