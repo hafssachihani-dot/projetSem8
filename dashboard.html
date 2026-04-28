@@ -129,6 +129,7 @@
     .mini-btn { border: 1px solid var(--border); background: white; color: var(--text); border-radius: 10px; padding: 8px 10px; cursor: pointer; font-size: 0.78rem; font-weight: 900; }
     .mini-btn.order { border-color: #fed7aa; color: #9a3412; background: #fff7ed; }
     .mini-btn.ai    { border-color: #c4b5fd; color: #5b21b6; background: #f5f3ff; }
+    .mini-btn.cancel-notif { border-color: #fecaca; color: #991b1b; background: #fff1f2; }
 
     .stock-bar  { width: 120px; height: 8px; background: #e2e8f0; border-radius: 999px; overflow: hidden; margin-top: 7px; }
     .stock-fill { height: 100%; border-radius: 999px; }
@@ -173,6 +174,36 @@
       .form-full { grid-column: auto; }
       .main { padding: 22px 14px 50px; }
     }
+
+    /* ── Notifications ── */
+    .notif-panel-body { padding: 14px 16px; }
+
+    .risk-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 14px 16px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      margin-bottom: 10px;
+      background: white;
+      gap: 12px;
+      transition: opacity 0.25s, transform 0.25s;
+    }
+    .risk-item.removing {
+      opacity: 0;
+      transform: translateX(30px);
+      pointer-events: none;
+    }
+    .risk-item-actions { display: flex; gap: 8px; flex-shrink: 0; align-items: center; }
+    .risk-item-text .small-muted { color: var(--muted); font-size: 0.8rem; margin-top: 4px; }
+
+    .notif-empty { padding: 24px; text-align: center; color: var(--muted); font-size: 0.9rem; }
+    .notif-header-actions { display: flex; gap: 8px; align-items: center; }
+    .notif-count {
+      background: var(--danger); color: white;
+      border-radius: 999px; padding: 2px 8px; font-size: 0.75rem; font-weight: 900;
+    }
   </style>
 </head>
 <body>
@@ -193,6 +224,21 @@
 </nav>
 
 <main class="main">
+
+  <!-- ═══ NOTIFICATIONS PANEL ═══ -->
+  <div class="panel" style="margin-bottom: 22px;">
+    <div class="panel-header">
+      <div style="display:flex; align-items:center; gap:10px;">
+        <h3>🔔 Notifications IA</h3>
+        <span class="notif-count hidden" id="notif-count">0</span>
+      </div>
+      <div class="notif-header-actions">
+        <button class="mini-btn" onclick="clearAllNotifications()" style="font-size:0.78rem;">🗑 Tout effacer</button>
+      </div>
+    </div>
+    <div id="notifications-container" class="notif-panel-body"></div>
+  </div>
+
   <section class="header">
     <h1>Prévention des ruptures de stock</h1>
     <p>Dashboard avec produits, catégories, fournisseurs, capteurs IoT, forecast et achats/commandes fournisseurs.</p>
@@ -253,8 +299,7 @@
       <div class="form-group"><label>Supplier email</label><input id="p-email" type="email" placeholder="supplier@email.com"/></div>
       <div class="form-group"><label>Température °C</label><input id="p-temp" type="number" value="25"/></div>
       <div class="form-group"><label>Humidité %</label><input id="p-humidity" type="number" value="55"/></div>
-    <div class="form-group"> <label>Expiration date</label> <input id="p-expiration" type="date" />
-</div>
+      <div class="form-group"><label>Expiration date</label><input id="p-expiration" type="date" /></div>
     </div>
     <div class="modal-actions">
       <button class="mini-btn" onclick="closeProductModal()">Annuler</button>
@@ -269,11 +314,11 @@
     <h2>Créer achat / commande fournisseur</h2>
     <p>Un achat = commander une quantité d'un produit chez le fournisseur. Table <strong>purchases</strong>.</p>
     <div class="form-grid">
-  <div class="form-group">
-    <label>Product *</label>
-    <select id="a-product" onchange="fillPurchaseSupplier()"></select>
-  </div>
-        <div class="form-group"><label>Quantity ordered *</label><input id="a-quantity" type="number" value="30" min="1"/></div>
+      <div class="form-group">
+        <label>Product *</label>
+        <select id="a-product" onchange="fillPurchaseSupplier()"></select>
+      </div>
+      <div class="form-group"><label>Quantity ordered *</label><input id="a-quantity" type="number" value="30" min="1"/></div>
       <div class="form-group"><label>Supplier name *</label><input id="a-supplier" placeholder="ex: MedSupply SA"/></div>
       <div class="form-group"><label>Supplier email</label><input id="a-email" type="email" placeholder="supplier@email.com"/></div>
       <div class="form-group"><label>Status</label>
@@ -299,7 +344,6 @@
     <h2>Mouvement de stock</h2>
     <p>Enregistre une <strong>sortie</strong> (vente, consommation, perte) ou une <strong>entrée</strong> (retour, ajustement, correction) de stock.</p>
     <div class="form-grid">
-
       <div class="form-group">
         <label>Type de mouvement *</label>
         <select id="v-type" onchange="onVenteTypeChange()">
@@ -307,17 +351,14 @@
           <option value="IN">⬆️ IN — Entrée (retour, ajustement, correction)</option>
         </select>
       </div>
-
       <div class="form-group">
         <label>Produit *</label>
         <select id="v-product" onchange="updateStockInfo()"></select>
       </div>
-
       <div class="form-group">
         <label>Quantité *</label>
         <input id="v-quantity" type="number" value="1" min="1" oninput="updateStockInfo()"/>
       </div>
-
       <div class="form-group">
         <label>Stock actuel</label>
         <div id="v-stock-info" style="
@@ -326,12 +367,10 @@
           display: flex; align-items: center; gap: 8px;
         ">—</div>
       </div>
-
       <div class="form-group form-full">
         <label>Raison / Note</label>
         <textarea id="v-reason" rows="2" placeholder="Ex: vente client, retour fournisseur, correction inventaire..."></textarea>
       </div>
-
     </div>
     <div class="modal-actions">
       <button class="mini-btn" onclick="closeVenteModal()">Annuler</button>
@@ -362,12 +401,244 @@
   const AUTO_REFRESH_MS = 15000;
   const FETCH_TIMEOUT   = 25000;
 
+  /* ── localStorage key ── */
+  const NOTIF_STORAGE_KEY = "stock_notifications_v1";
+
   let products    = [];
   let purchases   = [];
   let autoRefresh = true;
   let timer       = null;
 
-  /* ── réseau ── */
+  /* ══════════════════════════════════════════════
+     NOTIFICATIONS — stockage persistant localStorage
+     ══════════════════════════════════════════════ */
+
+  /**
+   * Charge les notifs depuis localStorage.
+   * Structure : { alerts: [...], tendances: [...] }
+   * Chaque item a un champ `id` unique pour pouvoir le supprimer.
+   */
+  const DISMISSED_KEY = "stock_notifications_dismissed_v1";
+
+  function loadStoredNotifications() {
+    try {
+      const raw = localStorage.getItem(NOTIF_STORAGE_KEY);
+      if (!raw) return { alerts: [], tendances: [] };
+      return JSON.parse(raw);
+    } catch { return { alerts: [], tendances: [] }; }
+  }
+
+  function saveNotifications(data) {
+    try {
+      localStorage.setItem(NOTIF_STORAGE_KEY, JSON.stringify(data));
+    } catch (e) {
+      console.warn("localStorage indisponible:", e);
+    }
+  }
+
+  /** IDs des notifs que l'utilisateur a explicitement annulées ou commandées */
+  function loadDismissed() {
+    try { return new Set(JSON.parse(localStorage.getItem(DISMISSED_KEY) || "[]")); }
+    catch { return new Set(); }
+  }
+
+  function saveDismissed(set) {
+    try { localStorage.setItem(DISMISSED_KEY, JSON.stringify([...set])); }
+    catch {}
+  }
+
+  function addDismissed(stableKey) {
+    const d = loadDismissed();
+    d.add(stableKey);
+    saveDismissed(d);
+  }
+
+  /** Clé stable basée sur product_id ou product_name (indépendante du timestamp) */
+  function stableKey(n, type) {
+    return `${type}_${n.product_id || n.product_name}`;
+  }
+
+  /**
+   * Fusionne les nouvelles notifs reçues de Fusion avec celles déjà stockées.
+   * - On génère un `id` basé sur product_id + type pour éviter les doublons.
+   * - Les nouvelles notifs remplacent les anciennes du même produit.
+   */
+  function mergeNotifications(data) {
+    const stored    = loadStoredNotifications();
+    const dismissed = loadDismissed();
+
+    let newAlerts    = [];
+    let newTendances = [];
+
+    try { newAlerts    = JSON.parse(data.notificationsJson || "[]"); } catch {}
+    try { newTendances = JSON.parse(data.tendanceJson      || "[]"); } catch {}
+
+    if (!newAlerts.length && !newTendances.length) {
+      // Fusion n'a rien envoyé : on garde ce qui est en localStorage
+      return stored;
+    }
+
+    // _id stable basé sur product uniquement (pas de timestamp) pour survivre aux refreshs
+    const stamp = (item, type) => ({
+      ...item,
+      _id: stableKey(item, type)
+    });
+
+    // Fusion des alertes — on skip les dismissées
+    const mergedAlerts = [...stored.alerts];
+    newAlerts.forEach(n => {
+      const sk = stableKey(n, "alert");
+      if (dismissed.has(sk)) return; // déjà annulée → on n'ajoute pas
+      const idx = mergedAlerts.findIndex(x =>
+        (x.product_id && x.product_id === n.product_id) ||
+        x.product_name === n.product_name
+      );
+      const stamped = stamp(n, "alert");
+      if (idx >= 0) mergedAlerts[idx] = stamped;
+      else mergedAlerts.push(stamped);
+    });
+
+    // Fusion des tendances — idem
+    const mergedTendances = [...stored.tendances];
+    newTendances.forEach(n => {
+      const sk = stableKey(n, "tendance");
+      if (dismissed.has(sk)) return;
+      const idx = mergedTendances.findIndex(x =>
+        (x.product_id && x.product_id === n.product_id) ||
+        x.product_name === n.product_name
+      );
+      const stamped = stamp(n, "tendance");
+      if (idx >= 0) mergedTendances[idx] = stamped;
+      else mergedTendances.push(stamped);
+    });
+
+    const merged = { alerts: mergedAlerts, tendances: mergedTendances };
+    saveNotifications(merged);
+    return merged;
+  }
+
+  /** Supprime une notif par son _id dans localStorage et re-render. */
+  /** Annuler = ne fait rien (la notif reste) */
+  function dismissNotification(_id) {
+    // intentionnellement vide — bouton Annuler ne supprime pas
+  }
+
+  /** Commander = suppression permanente (localStorage + liste noire) */
+  function permanentlyDismiss(_id) {
+    addDismissed(_id);
+    const stored = loadStoredNotifications();
+    stored.alerts    = stored.alerts.filter(x => x._id !== _id);
+    stored.tendances = stored.tendances.filter(x => x._id !== _id);
+    saveNotifications(stored);
+    const el = document.querySelector(`[data-notif-id="${CSS.escape(_id)}"]`);
+    if (el) {
+      el.classList.add("removing");
+      setTimeout(() => el.remove(), 280);
+    }
+  }
+
+  /** Vide toutes les notifs. */
+  function clearAllNotifications() {
+    saveNotifications({ alerts: [], tendances: [] });
+    // On vide aussi la liste noire pour permettre aux futures notifs de réapparaître
+    saveDismissed(new Set());
+    renderNotificationsUI({ alerts: [], tendances: [] });
+  }
+
+  /** Re-render depuis localStorage sans toucher au reste du dashboard. */
+  function renderNotificationsFromStorage() {
+    const stored = loadStoredNotifications();
+    renderNotificationsUI(stored);
+  }
+
+  /** Appelé par Fusion après réponse (vente, dashboard, etc.). */
+  function renderNotifications(data) {
+    const merged = mergeNotifications(data);
+    renderNotificationsUI(merged);
+  }
+
+  /** Rendu HTML des notifications. */
+  function renderNotificationsUI({ alerts = [], tendances = [] }) {
+    const container  = document.getElementById("notifications-container");
+    const countBadge = document.getElementById("notif-count");
+    const total = alerts.length + tendances.length;
+
+    // Badge compteur
+    countBadge.textContent = total;
+    countBadge.classList.toggle("hidden", total === 0);
+
+    if (!total) {
+      container.innerHTML = `<div class="notif-empty">✅ Aucune notification en attente</div>`;
+      return;
+    }
+
+    container.innerHTML = `
+      ${alerts.map(n => `
+        <div class="risk-item" data-notif-id="${escapeHtml(n._id || '')}">
+          <div class="risk-item-text">
+            <strong>⚠️ ${escapeHtml(n.product_name || '—')}</strong>
+            <div class="small-muted">${escapeHtml(n.reason || '')}</div>
+          </div>
+          <div class="risk-item-actions">
+            <button class="mini-btn cancel-notif"
+              onclick="dismissNotification(${JSON.stringify(n._id)})">
+              ✕ Annuler
+            </button>
+            <button class="mini-btn order"
+              onclick='commanderFromNotif(${safeJson(n)})'>
+              🛒 Commander
+            </button>
+          </div>
+        </div>
+      `).join("")}
+
+      ${tendances.map(n => `
+        <div class="risk-item" data-notif-id="${escapeHtml(n._id || '')}">
+          <div class="risk-item-text">
+            <strong>📈 ${escapeHtml(n.product_name || '—')}</strong>
+            <div class="small-muted">${escapeHtml(n.reason || '')}</div>
+          </div>
+          <div class="risk-item-actions">
+            <button class="mini-btn cancel-notif"
+              onclick="dismissNotification(${JSON.stringify(n._id)})">
+              ✕ Annuler
+            </button>
+          </div>
+        </div>
+      `).join("")}
+    `;
+  }
+
+  /**
+   * Commander depuis une notification :
+   * - Envoie la commande à Fusion
+   * - Supprime la notif de localStorage
+   * - Refresh le dashboard
+   */
+  async function commanderFromNotif(n) {
+    // Supprimer définitivement (localStorage + liste noire)
+    if (n._id) permanentlyDismiss(n._id);
+
+    try {
+      await apiPost(ORDER_URL, {
+        product_id:       n.product_id,
+        product_name:     n.product_name,
+        quantity_ordered: n.recommended_order_quantity || 30,
+        supplier_name:    n.supplier_name  || "",
+        supplier_email:   n.supplier_email || "",
+        status:           "pending",
+        message:          "Auto order from AI notification"
+      });
+      showToast(`✅ Commande envoyée — ${n.product_name}`);
+      loadDashboard(false);
+    } catch (err) {
+      showToast("❌ Erreur: " + err.message);
+    }
+  }
+
+  /* ══════════════════════════════════════════════
+     RÉSEAU
+     ══════════════════════════════════════════════ */
   function buildUrl(url) {
     const bust = url + (url.includes("?") ? "&" : "?") + "_=" + Date.now();
     return USE_CORS_PROXY ? `https://corsproxy.io/?url=${encodeURIComponent(bust)}` : bust;
@@ -396,34 +667,30 @@
     return res.json();
   }
 
-  /* ── modals — chaque fonction ferme SON modal ── */
-  function openProductModal()   { document.getElementById("product-modal").classList.add("open"); }
-  function closeProductModal()  { document.getElementById("product-modal").classList.remove("open"); }
+  /* ══════════════════════════════════════════════
+     MODALS
+     ══════════════════════════════════════════════ */
+  function openProductModal()  { document.getElementById("product-modal").classList.add("open"); }
+  function closeProductModal() { document.getElementById("product-modal").classList.remove("open"); }
 
-function openPurchaseModal() {
-  const select = document.getElementById("a-product");
+  function openPurchaseModal() {
+    const select = document.getElementById("a-product");
+    select.innerHTML = products.map(p =>
+      `<option value="${p.id}">${escapeHtml(p.product_name)} — stock: ${Number(p.current_stock || 0)}</option>`
+    ).join("");
+    document.getElementById("a-quantity").value = 30;
+    document.getElementById("a-status").value   = "pending";
+    document.getElementById("a-message").value  = "";
+    fillPurchaseSupplier();
+    document.getElementById("purchase-modal").classList.add("open");
+  }
 
-  select.innerHTML = products.map(p => `
-    <option value="${p.id}">
-      ${escapeHtml(p.product_name)} — stock: ${Number(p.current_stock || 0)}
-    </option>
-  `).join("");
-
-  document.getElementById("a-quantity").value = 30;
-  document.getElementById("a-status").value = "pending";
-  document.getElementById("a-message").value = "";
-
-  fillPurchaseSupplier();
-  document.getElementById("purchase-modal").classList.add("open");
-}
-
-function fillPurchaseSupplier() {
-  const productId = Number(document.getElementById("a-product").value);
-  const p = products.find(x => Number(x.id) === productId);
-
-  document.getElementById("a-supplier").value = p?.supplier_name || "";
-  document.getElementById("a-email").value = p?.supplier_email || "";
-}
+  function fillPurchaseSupplier() {
+    const productId = Number(document.getElementById("a-product").value);
+    const p = products.find(x => Number(x.id) === productId);
+    document.getElementById("a-supplier").value = p?.supplier_name  || "";
+    document.getElementById("a-email").value    = p?.supplier_email || "";
+  }
 
   function closePurchaseModal() { document.getElementById("purchase-modal").classList.remove("open"); }
 
@@ -445,29 +712,31 @@ function fillPurchaseSupplier() {
   function onVenteTypeChange() {
     const isOut = document.getElementById("v-type").value === "OUT";
     const btn   = document.getElementById("v-submit-btn");
-    btn.textContent        = isOut ? "➖ Enregistrer sortie" : "➕ Enregistrer entrée";
-    btn.style.background   = isOut ? "var(--warning)"       : "var(--success)";
+    btn.textContent      = isOut ? "➖ Enregistrer sortie" : "➕ Enregistrer entrée";
+    btn.style.background = isOut ? "var(--warning)"       : "var(--success)";
     updateStockInfo();
   }
 
   function updateStockInfo() {
     const productName = val("v-product");
     const qty         = num("v-quantity");
-    const isOut       = document.getElementById("v-type") && document.getElementById("v-type").value === "OUT";
+    const isOut       = document.getElementById("v-type")?.value === "OUT";
     const p           = products.find(p => p.product_name === productName);
     const current     = Number(p?.current_stock || 0);
     const after       = isOut ? current - qty : current + qty;
     const ok          = !isOut || after >= 0;
     const info        = document.getElementById("v-stock-info");
     if (!info) return;
-    info.style.borderColor = ok ? "var(--border)"  : "var(--danger)";
-    info.style.color       = ok ? "var(--text)"    : "var(--danger)";
+    info.style.borderColor = ok ? "var(--border)" : "var(--danger)";
+    info.style.color       = ok ? "var(--text)"   : "var(--danger)";
     info.innerHTML = p
       ? `Stock: <strong>${current}</strong> → après: <strong style="color:${ok ? "var(--success)" : "var(--danger)"}">${after}</strong>${!ok ? " ❌ insuffisant" : ""}`
       : "—";
   }
 
-  /* ── dashboard ── */
+  /* ══════════════════════════════════════════════
+     DASHBOARD
+     ══════════════════════════════════════════════ */
   async function loadDashboard(manual = false) {
     if (manual) showToast("Refresh en cours...");
     try {
@@ -475,6 +744,8 @@ function fillPurchaseSupplier() {
       products  = normalizeArray(data.products  || data.productsJson  || data.data  || data.rows  || []);
       purchases = normalizeArray(data.purchases || data.purchasesJson || data.orders || data.achats || []);
       renderAll();
+      // Merge les nouvelles notifs de Fusion avec localStorage
+      renderNotifications(data);
       setLive("Connecté à Fusion", false);
       if (manual) showToast("✅ Dashboard mis à jour");
     } catch (err) {
@@ -497,7 +768,9 @@ function fillPurchaseSupplier() {
     document.getElementById("live-dot").classList.toggle("error", err);
   }
 
-  /* ── render ── */
+  /* ══════════════════════════════════════════════
+     RENDER
+     ══════════════════════════════════════════════ */
   function switchTab(tab) {
     document.getElementById("products-panel").classList.toggle("hidden",  tab !== "products");
     document.getElementById("purchases-panel").classList.toggle("hidden", tab !== "purchases");
@@ -541,14 +814,12 @@ function fillPurchaseSupplier() {
     const c = document.getElementById("products-table");
     if (!list.length) { c.innerHTML = `<div class="empty">Aucun produit trouvé. Clique sur Ajouter produit.</div>`; return; }
     c.innerHTML = `<div class="table-wrap"><table>
-<thead>
-  <tr>
-    <th>ID</th><th>Produit</th><th>Supplier</th><th>Email</th>
-    <th>Quantité</th><th>Status</th><th>Message</th><th>Date</th><th>Actions</th>
-  </tr>
-</thead>
-<tbody>
-        <tbody>${list.map(productRow).join("")}</tbody>
+      <thead><tr>
+        <th>Produit</th><th>Catégorie</th><th>Stock</th>
+        <th>Forecast</th><th>Couverture</th><th>Supplier</th>
+        <th>IoT</th><th>Statut</th><th>Actions</th>
+      </tr></thead>
+      <tbody>${list.map(productRow).join("")}</tbody>
     </table></div>`;
   }
 
@@ -558,14 +829,13 @@ function fillPurchaseSupplier() {
     const c = document.getElementById("purchases-table");
     if (!list.length) { c.innerHTML = `<div class="empty">Aucun achat trouvé. Clique sur Créer achat.</div>`; return; }
     c.innerHTML = `<div class="table-wrap"><table>
-      <thead><tr><th>ID</th><th>Produit</th><th>Supplier</th><th>Email</th><th>Quantité</th><th>Status</th><th>Message</th><th>Date</th>
-    <th>Actions</th>
+      <thead><tr><th>ID</th><th>Produit</th><th>Supplier</th><th>Email</th><th>Quantité</th><th>Status</th><th>Message</th><th>Date</th><th>Actions</th></tr></thead>
       <tbody>${list.map(purchaseRow).join("")}</tbody>
     </table></div>`;
   }
 
   function productRow(p) {
-    const risk = getRisk(p);
+    const risk  = getRisk(p);
     const stock = Number(p.current_stock||0), min = Number(p.minimum_stock||10);
     const max   = Math.max(Number(p.maximum_stock||100), stock, 1);
     const pct   = Math.min(100, Math.round((stock/max)*100));
@@ -601,34 +871,33 @@ function fillPurchaseSupplier() {
       <td><span class="badge info">${Number(p.quantity_ordered||p.quantity||0)}</span></td>
       <td><span class="badge ${cls}">${escapeHtml(st)}</span></td>
       <td><div class="muted">${escapeHtml(p.message||"—")}</div></td>
-  <td>${formatDate(p.created_at)}</td>
-  <td>
-    <button class="mini-btn" onclick='setPurchaseStatus(${p.id}, "delivered")'>✔ Deliver</button>
-    <button class="mini-btn" onclick='setPurchaseStatus(${p.id}, "cancelled")'>✖ Cancel</button>
-  </td>    </tr>`;
+      <td>${formatDate(p.created_at)}</td>
+      <td>
+        ${st !== "delivered" && st !== "cancelled" ? `<button class="mini-btn" onclick='setPurchaseStatus(${p.id}, "delivered")'>✔ Deliver</button>` : ""}
+        ${st !== "cancelled" && st !== "delivered" ? `<button class="mini-btn" onclick='setPurchaseStatus(${p.id}, "cancelled")'>✖ Cancel</button>` : ""}
+      </td>
+    </tr>`;
   }
-async function setPurchaseStatus(id, status) {
-  try {
-    await apiPost(ORDER_URL, {
-      action: "update_status",
-      id: id,
-      status: status
-    });
 
-    showToast("Status updated ✅");
-    loadDashboard(false);
-
-  } catch (err) {
-    showToast("Erreur: " + err.message);
+  async function setPurchaseStatus(id, status) {
+    try {
+      await apiPost(ORDER_URL, { action: "update_status", id, status });
+      showToast("Status updated ✅");
+      loadDashboard(false);
+    } catch (err) {
+      showToast("Erreur: " + err.message);
+    }
   }
-}
-  /* ── logique ── */
+
+  /* ══════════════════════════════════════════════
+     LOGIQUE STOCK
+     ══════════════════════════════════════════════ */
   function getRisk(p) {
     const stock=Number(p.current_stock||0), min=Number(p.minimum_stock||10);
-    const days=daysBeforeRupture(p),        del=Number(p.delivery_time_days||3);
-    if (stock<=0)                       return {type:"CRITICAL",label:"Rupture",   message:"Stock épuisé"};
-    if (stock<=min || days<=del)        return {type:"CRITICAL",label:"Critique",  message:"Commander rapidement"};
-    if (stock<=min*1.7 || days<=del+2)  return {type:"WARNING", label:"Vigilance", message:"Préparer achat"};
+    const days=daysBeforeRupture(p), del=Number(p.delivery_time_days||3);
+    if (stock<=0)                      return {type:"CRITICAL",label:"Rupture",  message:"Stock épuisé"};
+    if (stock<=min || days<=del)       return {type:"CRITICAL",label:"Critique", message:"Commander rapidement"};
+    if (stock<=min*1.7 || days<=del+2) return {type:"WARNING", label:"Vigilance",message:"Préparer achat"};
     return {type:"OK",label:"OK",message:"Stock sécurisé"};
   }
   function riskClass(t) { return t==="OK"?"ok":t==="WARNING"?"warning":t==="CRITICAL"?"danger":"gray"; }
@@ -644,43 +913,39 @@ async function setPurchaseStatus(id, status) {
     return (t>32||h>75)?"danger":(t>28||h>65)?"warning":"ok";
   }
 
-  function clearPurchaseForm() {
-    ["a-product","a-supplier","a-email","a-message"].forEach(id => document.getElementById(id).value="");
-    document.getElementById("a-quantity").value=30;
-    document.getElementById("a-status").value="pending";
-  }
-
   function openPurchaseFromProduct(p) {
     const qty=recommendedQty(p)||30;
-    document.getElementById("a-product").value  = p.product_name  ||"";
-    document.getElementById("a-quantity").value = qty;
-    document.getElementById("a-supplier").value = p.supplier_name ||"";
-    document.getElementById("a-email").value    = p.supplier_email||"";
-    document.getElementById("a-status").value   = "pending";
-    document.getElementById("a-message").value  = `Commande fournisseur: ${qty} unité(s) de ${p.product_name}. Stock actuel: ${p.current_stock}.`;
-    document.getElementById("purchase-modal").classList.add("open");
+    openPurchaseModal();
+    setTimeout(() => {
+      const sel = document.getElementById("a-product");
+      const opt = Array.from(sel.options).find(o => Number(o.value) === Number(p.id));
+      if (opt) sel.value = opt.value;
+      document.getElementById("a-quantity").value = qty;
+      document.getElementById("a-supplier").value = p.supplier_name  || "";
+      document.getElementById("a-email").value    = p.supplier_email || "";
+      document.getElementById("a-status").value   = "pending";
+      document.getElementById("a-message").value  = `Commande fournisseur: ${qty} unité(s) de ${p.product_name}. Stock actuel: ${p.current_stock}.`;
+    }, 50);
   }
 
-  /* ════════════════════════════════════════════════
-     ACTIONS — chaque fonction ferme SON PROPRE modal
-     ════════════════════════════════════════════════ */
-
+  /* ══════════════════════════════════════════════
+     ACTIONS FORMULAIRES
+     ══════════════════════════════════════════════ */
   async function addProduct() {
     const body = {
-      product_name:  val("p-name"),
-      category:      val("p-category"),
-      current_stock: num("p-current"),
-      minimum_stock: num("p-min"),
-      supplier_name: val("p-supplier"),
-      supplier_email:val("p-email"),
-      expiration_date: val("p-expiration"),
-      temperature:   num("p-temp"),
-      humidity:      num("p-humidity")
+      product_name:   val("p-name"),
+      category:       val("p-category"),
+      current_stock:  num("p-current"),
+      minimum_stock:  num("p-min"),
+      supplier_name:  val("p-supplier"),
+      supplier_email: val("p-email"),
+      expiration_date:val("p-expiration"),
+      temperature:    num("p-temp"),
+      humidity:       num("p-humidity")
     };
     if (!body.product_name) { showToast("❌ Product name requis"); return; }
     if (!body.category)     { showToast("❌ Category requis"); return; }
-
-    closeProductModal();          // ← ferme product-modal
+    closeProductModal();
     showToast("Envoi à Fusion...");
     try {
       await apiPost(ADD_PRODUCT_URL, body);
@@ -692,62 +957,63 @@ async function setPurchaseStatus(id, status) {
   }
 
   async function createPurchase() {
-  const productId = Number(document.getElementById("a-product").value);
-  const p = products.find(x => Number(x.id) === productId);
-
-  const body = {
-    product_id: productId,
-    product_name: p?.product_name || "",
-    quantity_ordered: num("a-quantity"),
-    supplier_name: val("a-supplier"),
-    supplier_email: val("a-email"),
-    status: val("a-status") || "pending",
-    message: val("a-message")
-  };
-
-  if (!body.product_id || body.quantity_ordered <= 0) {
-    showToast("Vérifie produit et quantité");
-    return;
-  }
-
-  closePurchaseModal();
-
-  try {
-    await apiPost(ORDER_URL, body);
-    showToast("✅ Achat créé");
-    loadDashboard(false);
-  } catch (err) {
-    showToast("❌ Erreur: " + err.message);
-  }
-}
-  async function createVente() {
-    const productName = val("v-product");
-    const quantity    = num("v-quantity");
-    const reason      = val("v-reason");
-    const type        = document.getElementById("v-type").value; // "IN" ou "OUT"
-    const isOut       = type === "OUT";
-
-    if (!productName || quantity <= 0) { showToast("❌ Vérifie produit et quantité"); return; }
-
-    // Vérification stock suffisant seulement pour les sorties (OUT)
-    if (isOut) {
-      const sel       = products.find(p => p.product_name === productName);
-      const available = Number(sel?.current_stock || 0);
-      if (quantity > available) { showToast(`❌ Stock insuffisant — disponible: ${available}`); return; }
+    const productId = Number(document.getElementById("a-product").value);
+    const p = products.find(x => Number(x.id) === productId);
+    const body = {
+      product_id:       productId,
+      product_name:     p?.product_name || "",
+      quantity_ordered: num("a-quantity"),
+      supplier_name:    val("a-supplier"),
+      supplier_email:   val("a-email"),
+      status:           val("a-status") || "pending",
+      message:          val("a-message")
+    };
+    if (!body.product_id || body.quantity_ordered <= 0) {
+      showToast("Vérifie produit et quantité"); return;
     }
-
-    closeVenteModal();
-    showToast("Envoi à Fusion...");
+    closePurchaseModal();
     try {
-      await apiPost(VENTE_URL, { product_name: productName, quantity, reason, type });
-      showToast(isOut ? "✅ Sortie enregistrée" : "✅ Entrée enregistrée");
+      await apiPost(ORDER_URL, body);
+      showToast("✅ Achat créé");
       loadDashboard(false);
     } catch (err) {
       showToast("❌ Erreur: " + err.message);
     }
   }
 
-  /* ── IA ── */
+  async function createVente() {
+    const productName = val("v-product");
+    const quantity    = num("v-quantity");
+    const reason      = val("v-reason");
+    const type        = document.getElementById("v-type").value;
+    const isOut       = type === "OUT";
+
+    if (!productName || quantity <= 0) {
+      showToast("❌ Vérifie produit et quantité"); return;
+    }
+    if (isOut) {
+      const selected  = products.find(p => p.product_name === productName);
+      const available = Number(selected?.current_stock || 0);
+      if (quantity > available) {
+        showToast(`❌ Stock insuffisant — disponible: ${available}`); return;
+      }
+    }
+    closeVenteModal();
+    showToast("Envoi à Fusion...");
+    try {
+      const result = await apiPost(VENTE_URL, { product_name: productName, quantity, reason, type });
+      showToast(isOut ? "✅ Sortie enregistrée" : "✅ Entrée enregistrée");
+      // Merge les nouvelles notifs reçues par Fusion après la vente
+      renderNotifications(result);
+      loadDashboard(false);
+    } catch (err) {
+      showToast("❌ Erreur: " + err.message);
+    }
+  }
+
+  /* ══════════════════════════════════════════════
+     IA
+     ══════════════════════════════════════════════ */
   function showAI(p) {
     const risk=getRisk(p), days=daysBeforeRupture(p), qty=recommendedQty(p)||30;
     const text = risk.type==="CRITICAL"
@@ -759,7 +1025,9 @@ async function setPurchaseStatus(id, status) {
     document.getElementById("ai-modal").classList.add("open");
   }
 
-  /* ── auto-refresh ── */
+  /* ══════════════════════════════════════════════
+     AUTO-REFRESH
+     ══════════════════════════════════════════════ */
   function toggleAutoRefresh() {
     autoRefresh = !autoRefresh;
     document.getElementById("auto-btn").textContent = autoRefresh ? "Pause auto" : "Activer auto";
@@ -771,7 +1039,9 @@ async function setPurchaseStatus(id, status) {
     timer = setInterval(() => { if (autoRefresh) loadDashboard(false); }, AUTO_REFRESH_MS);
   }
 
-  /* ── utils ── */
+  /* ══════════════════════════════════════════════
+     UTILS
+     ══════════════════════════════════════════════ */
   function val(id) { const el=document.getElementById(id); return el ? el.value.trim() : ""; }
   function num(id) { const el=document.getElementById(id); return el ? Number(el.value||0) : 0; }
   function showToast(msg) {
@@ -789,6 +1059,11 @@ async function setPurchaseStatus(id, status) {
     return isNaN(d) ? escapeHtml(v) : d.toLocaleString("fr-FR");
   }
 
+  /* ══════════════════════════════════════════════
+     INIT
+     ══════════════════════════════════════════════ */
+  // Au démarrage, afficher immédiatement les notifs depuis localStorage
+  renderNotificationsFromStorage();
   loadDashboard();
   startAutoRefresh();
 </script>
