@@ -17,7 +17,6 @@
       --muted: #64748b;
       --border: #e2e8f0;
       --bg: #f8fafc;
-      --card: #ffffff;
       --radius: 18px;
     }
 
@@ -36,22 +35,15 @@
       backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border);
       padding: 16px 30px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 16px;
-      position: sticky;
-      top: 0;
-      z-index: 10;
+      display: flex; justify-content: space-between; align-items: center; gap: 16px;
+      position: sticky; top: 0; z-index: 10;
     }
-
     .brand { display: flex; align-items: center; gap: 12px; font-weight: 900; font-size: 1.1rem; }
     .brand-icon {
       width: 42px; height: 42px; border-radius: 14px;
       display: grid; place-items: center; color: white;
       background: linear-gradient(135deg, var(--primary), var(--purple));
     }
-
     .actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
     .btn {
       border: 0; border-radius: 12px; padding: 10px 15px;
@@ -60,9 +52,9 @@
     }
     .btn:hover { transform: translateY(-1px); }
     .btn-primary { color: white; background: linear-gradient(135deg, var(--primary), var(--purple)); }
-    .btn-soft { color: #1e40af; background: #dbeafe; }
-    .btn-green { color: white; background: var(--success); }
-    .btn-orange { color: white; background: var(--warning); }
+    .btn-soft    { color: #1e40af; background: #dbeafe; }
+    .btn-green   { color: white; background: var(--success); }
+    .btn-orange  { color: white; background: var(--warning); }
 
     .live-pill {
       display: flex; align-items: center; gap: 8px;
@@ -70,15 +62,14 @@
       padding: 8px 12px; color: var(--muted); font-size: 0.82rem; font-weight: 800;
     }
     .live-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--success); box-shadow: 0 0 0 5px rgba(22,163,74,0.14); }
+    .live-dot.error { background: var(--danger); box-shadow: 0 0 0 5px rgba(220,38,38,0.14); }
 
     .main { max-width: 1280px; margin: 0 auto; padding: 30px 20px 60px; }
     .header { margin-bottom: 22px; }
     .header h1 { font-size: 2rem; margin-bottom: 8px; }
-    .header p { color: var(--muted); line-height: 1.5; }
+    .header p  { color: var(--muted); line-height: 1.5; }
 
-    .stats-grid {
-      display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 15px; margin-bottom: 22px;
-    }
+    .stats-grid { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 15px; margin-bottom: 22px; }
     .stat-card, .panel {
       background: rgba(255,255,255,0.95); border: 1px solid var(--border);
       border-radius: var(--radius); box-shadow: 0 10px 30px rgba(15,23,42,0.06);
@@ -104,14 +95,17 @@
       width: 100%; border: 1.5px solid var(--border); border-radius: 12px;
       padding: 12px; outline: none; background: #f8fafc; font-size: 0.92rem;
     }
-    input:focus, select:focus, textarea:focus { border-color: var(--primary); background: white; box-shadow: 0 0 0 4px rgba(37,99,235,0.10); }
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--primary); background: white;
+      box-shadow: 0 0 0 4px rgba(37,99,235,0.10);
+    }
     select { width: 220px; font-weight: 800; color: var(--muted); }
 
     .panel-header {
       padding: 17px 20px; border-bottom: 1px solid var(--border);
       display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;
     }
-    .panel-header h3 { font-size: 1.05rem; }
+    .panel-header h3  { font-size: 1.05rem; }
     .panel-header span { color: var(--muted); font-size: 0.86rem; }
 
     .table-wrap { overflow-x: auto; }
@@ -120,30 +114,27 @@
     th { background: #f8fafc; color: var(--muted); text-transform: uppercase; font-size: 0.72rem; letter-spacing: 0.6px; }
     tbody tr:hover { background: #f8fafc; }
     .strong { font-weight: 900; }
-    .muted { color: var(--muted); font-size: 0.8rem; margin-top: 4px; }
+    .muted  { color: var(--muted); font-size: 0.8rem; margin-top: 4px; }
 
     .badge {
       display: inline-flex; align-items: center; gap: 6px;
       padding: 6px 10px; border-radius: 999px; font-size: 0.75rem; font-weight: 900; white-space: nowrap;
     }
-    .badge.ok { background: #dcfce7; color: #166534; }
+    .badge.ok      { background: #dcfce7; color: #166534; }
     .badge.warning { background: #fef3c7; color: #92400e; }
-    .badge.danger { background: #fee2e2; color: #991b1b; }
-    .badge.info { background: #dbeafe; color: #1e40af; }
-    .badge.gray { background: #f1f5f9; color: #475569; }
+    .badge.danger  { background: #fee2e2; color: #991b1b; }
+    .badge.info    { background: #dbeafe; color: #1e40af; }
+    .badge.gray    { background: #f1f5f9; color: #475569; }
 
-    .mini-btn {
-      border: 1px solid var(--border); background: white; color: var(--text);
-      border-radius: 10px; padding: 8px 10px; cursor: pointer; font-size: 0.78rem; font-weight: 900;
-    }
+    .mini-btn { border: 1px solid var(--border); background: white; color: var(--text); border-radius: 10px; padding: 8px 10px; cursor: pointer; font-size: 0.78rem; font-weight: 900; }
     .mini-btn.order { border-color: #fed7aa; color: #9a3412; background: #fff7ed; }
-    .mini-btn.ai { border-color: #c4b5fd; color: #5b21b6; background: #f5f3ff; }
+    .mini-btn.ai    { border-color: #c4b5fd; color: #5b21b6; background: #f5f3ff; }
 
-    .stock-bar { width: 120px; height: 8px; background: #e2e8f0; border-radius: 999px; overflow: hidden; margin-top: 7px; }
+    .stock-bar  { width: 120px; height: 8px; background: #e2e8f0; border-radius: 999px; overflow: hidden; margin-top: 7px; }
     .stock-fill { height: 100%; border-radius: 999px; }
-    .stock-fill.ok { background: var(--success); }
+    .stock-fill.ok      { background: var(--success); }
     .stock-fill.warning { background: var(--warning); }
-    .stock-fill.danger { background: var(--danger); }
+    .stock-fill.danger  { background: var(--danger); }
 
     .hidden { display: none; }
     .empty, .loading, .error { padding: 48px 18px; text-align: center; color: var(--muted); }
@@ -157,13 +148,14 @@
     .modal-overlay.open { display: flex; }
     .modal {
       width: 100%; max-width: 760px; max-height: 92vh; overflow-y: auto;
-      background: white; border-radius: 20px; padding: 26px; box-shadow: 0 24px 70px rgba(15,23,42,0.28);
+      background: white; border-radius: 20px; padding: 26px;
+      box-shadow: 0 24px 70px rgba(15,23,42,0.28);
     }
     .modal h2 { margin-bottom: 8px; }
-    .modal p { color: var(--muted); margin-bottom: 18px; line-height: 1.45; }
-    .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .modal > p { color: var(--muted); margin-bottom: 18px; line-height: 1.45; }
+    .form-grid  { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 14px; }
     .form-group label { display: block; font-size: 0.82rem; font-weight: 900; margin-bottom: 6px; }
-    .form-full { grid-column: 1 / -1; }
+    .form-full  { grid-column: 1 / -1; }
     .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 18px; flex-wrap: wrap; }
 
     .toast {
@@ -173,7 +165,7 @@
     }
     .toast.show { opacity: 1; transform: translateY(0); }
 
-    @media (max-width: 1000px) { .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 1000px) { .stats-grid { grid-template-columns: repeat(2, minmax(0,1fr)); } }
     @media (max-width: 640px) {
       .navbar { align-items: flex-start; flex-direction: column; padding: 14px 16px; }
       .actions, .btn, select { width: 100%; }
@@ -184,490 +176,621 @@
   </style>
 </head>
 <body>
-  <nav class="navbar">
-    <div class="brand">
-      <div class="brand-icon">📦</div>
-      <span>Smart Stock Forecast</span>
-    </div>
-    <div class="actions">
-      <button class="btn btn-green" onclick="openProductModal()">➕ Ajouter produit</button>
-      <button class="btn btn-orange" onclick="openPurchaseModal()">🛒 Créer achat</button>
-      <div class="live-pill"><span class="live-dot"></span><span id="live-status">Auto-refresh actif</span></div>
-      <button class="btn btn-soft" onclick="toggleAutoRefresh()" id="auto-btn">Pause auto</button>
-      <button class="btn btn-primary" onclick="loadDashboard(true)">↻ Refresh</button>
-    </div>
-  </nav>
 
-  <main class="main">
-    <section class="header">
-      <h1>Prévention des ruptures de stock</h1>
-      <p>Dashboard avec produits, catégories, fournisseurs, capteurs IoT, forecast et achats/commandes fournisseurs.</p>
-    </section>
+<nav class="navbar">
+  <div class="brand">
+    <div class="brand-icon">📦</div>
+    <span>Smart Stock Forecast</span>
+  </div>
+  <div class="actions">
+    <button class="btn btn-green"   onclick="openProductModal()">➕ Ajouter produit</button>
+    <button class="btn btn-orange"  onclick="openPurchaseModal()">🛒 Créer achat</button>
+    <button class="btn btn-orange"  onclick="openVenteModal()">➖ Enregistrer vente</button>
+    <div class="live-pill"><span class="live-dot" id="live-dot"></span><span id="live-status">Connexion...</span></div>
+    <button class="btn btn-soft"    onclick="toggleAutoRefresh()" id="auto-btn">Pause auto</button>
+    <button class="btn btn-primary" onclick="loadDashboard(true)">↻ Refresh</button>
+  </div>
+</nav>
 
-    <section class="stats-grid">
-      <div class="stat-card"><div class="stat-label">Produits</div><div class="stat-value" id="stat-products">—</div></div>
-      <div class="stat-card"><div class="stat-label">Stock OK</div><div class="stat-value" id="stat-ok">—</div></div>
-      <div class="stat-card"><div class="stat-label">Critiques</div><div class="stat-value" id="stat-critical">—</div></div>
-      <div class="stat-card"><div class="stat-label">Achats pending</div><div class="stat-value" id="stat-pending">—</div></div>
-      <div class="stat-card"><div class="stat-label">Quantité commandée</div><div class="stat-value" id="stat-ordered">—</div></div>
-    </section>
+<main class="main">
+  <section class="header">
+    <h1>Prévention des ruptures de stock</h1>
+    <p>Dashboard avec produits, catégories, fournisseurs, capteurs IoT, forecast et achats/commandes fournisseurs.</p>
+  </section>
 
-    <div class="tabs">
-      <button class="tab-btn active" id="tab-products-btn" onclick="switchTab('products')">📦 Produits & Stock</button>
-      <button class="tab-btn" id="tab-purchases-btn" onclick="switchTab('purchases')">🛒 Achats / Commandes</button>
-    </div>
+  <section class="stats-grid">
+    <div class="stat-card"><div class="stat-label">Produits</div><div class="stat-value" id="stat-products">—</div></div>
+    <div class="stat-card"><div class="stat-label">Stock OK</div><div class="stat-value" id="stat-ok">—</div></div>
+    <div class="stat-card"><div class="stat-label">Critiques</div><div class="stat-value" id="stat-critical">—</div></div>
+    <div class="stat-card"><div class="stat-label">Achats pending</div><div class="stat-value" id="stat-pending">—</div></div>
+    <div class="stat-card"><div class="stat-label">Quantité commandée</div><div class="stat-value" id="stat-ordered">—</div></div>
+  </section>
 
-    <section class="toolbar">
-      <div class="search"><input id="search-input" placeholder="Rechercher produit, catégorie, fournisseur..." oninput="renderAll()" /></div>
-      <select id="status-filter" onchange="renderAll()">
-        <option value="ALL">Tous les statuts</option>
-        <option value="OK">Stock OK</option>
-        <option value="WARNING">Vigilance</option>
-        <option value="CRITICAL">Critique</option>
-        <option value="pending">Achat pending</option>
-        <option value="sent">Achat sent</option>
-        <option value="delivered">Achat delivered</option>
-      </select>
-    </section>
-
-    <section class="panel" id="products-panel">
-      <div class="panel-header">
-        <div>
-          <h3>Produits & Stock intelligent</h3>
-          <span id="products-subtitle">Connexion...</span>
-        </div>
-      </div>
-      <div id="products-table"><div class="loading"><div class="spinner"></div>Connexion avec Fusion...</div></div>
-    </section>
-
-    <section class="panel hidden" id="purchases-panel">
-      <div class="panel-header">
-        <div>
-          <h3>Achats / Commandes fournisseurs</h3>
-          <span id="purchases-subtitle">Connexion...</span>
-        </div>
-      </div>
-      <div id="purchases-table"><div class="loading"><div class="spinner"></div>Connexion avec Fusion...</div></div>
-    </section>
-  </main>
-
-  <!-- Modal Ajouter produit -->
-  <div class="modal-overlay" id="product-modal">
-    <div class="modal">
-      <h2>Ajouter produit</h2>
-      <p>Ajoute un nouveau produit dans la table <strong>products</strong>.</p>
-      <div class="form-grid">
-        <div class="form-group"><label>Product name</label><input id="p-name"/></div>
-        <div class="form-group"><label>Category</label><input id="p-category" /></div>
-        <div class="form-group"><label>Current stock</label><input id="p-current" type="number" value="50" /></div>
-        <div class="form-group"><label>Minimum stock</label><input id="p-min" type="number" value="20" /></div>
-        <div class="form-group"><label>Supplier name</label><input id="p-supplier"  /></div>
-        <div class="form-group"><label>Supplier email</label><input id="p-email" type="email" placeholder="supplier@email.com" /></div>
-        <div class="form-group"><label>Temperature °C</label><input id="p-temp" type="number" value="25" /></div>
-        <div class="form-group"><label>Humidity %</label><input id="p-humidity" type="number" value="55" /></div>
-      </div>
-      <div class="modal-actions">
-        <button class="mini-btn" onclick="closeProductModal()">Annuler</button>
-        <button class="btn btn-green" onclick="addProduct()">Ajouter produit</button>
-      </div>
-    </div>
+  <div class="tabs">
+    <button class="tab-btn active" id="tab-products-btn"  onclick="switchTab('products')">📦 Produits & Stock</button>
+    <button class="tab-btn"        id="tab-purchases-btn" onclick="switchTab('purchases')">🛒 Achats / Commandes</button>
   </div>
 
-  <!-- Modal Achat -->
-  <div class="modal-overlay" id="purchase-modal">
-    <div class="modal">
-      <h2>Créer achat / commande fournisseur</h2>
-      <p>Un achat veut dire commander une quantité d’un produit chez le fournisseur. Ça va dans la table <strong>purchases</strong>.</p>
-      <div class="form-grid">
-        <div class="form-group"><label>Product name</label><input id="a-product"/></div>
-        <div class="form-group"><label>Quantity ordered</label><input id="a-quantity" type="number" value="30" /></div>
-        <div class="form-group"><label>Supplier name</label><input id="a-supplier"/></div>
-        <div class="form-group"><label>Supplier email</label><input id="a-email" type="email" placeholder="supplier@email.com" /></div>
-        <div class="form-group"><label>Status</label>
-          <select id="a-status">
-            <option value="pending">pending</option>
-            <option value="sent">sent</option>
-            <option value="delivered">delivered</option>
-            <option value="cancelled">cancelled</option>
-          </select>
-        </div>
-        <div class="form-group form-full"><label>Message</label><textarea id="a-message" placeholder="Commande fournisseur..."></textarea></div>
-      </div>
-      <div class="modal-actions">
-        <button class="mini-btn" onclick="closePurchaseModal()">Annuler</button>
-        <button class="btn btn-orange" onclick="createPurchase()">Créer achat</button>
-      </div>
+  <section class="toolbar">
+    <div class="search"><input id="search-input" placeholder="Rechercher produit, catégorie, fournisseur..." oninput="renderAll()"/></div>
+    <select id="status-filter" onchange="renderAll()">
+      <option value="ALL">Tous les statuts</option>
+      <option value="OK">Stock OK</option>
+      <option value="WARNING">Vigilance</option>
+      <option value="CRITICAL">Critique</option>
+      <option value="pending">Achat pending</option>
+      <option value="sent">Achat sent</option>
+      <option value="delivered">Achat delivered</option>
+    </select>
+  </section>
+
+  <section class="panel" id="products-panel">
+    <div class="panel-header">
+      <div><h3>Produits & Stock intelligent</h3><span id="products-subtitle">Connexion...</span></div>
+    </div>
+    <div id="products-table"><div class="loading"><div class="spinner"></div>Connexion avec Fusion...</div></div>
+  </section>
+
+  <section class="panel hidden" id="purchases-panel">
+    <div class="panel-header">
+      <div><h3>Achats / Commandes fournisseurs</h3><span id="purchases-subtitle">Connexion...</span></div>
+    </div>
+    <div id="purchases-table"><div class="loading"><div class="spinner"></div>Connexion avec Fusion...</div></div>
+  </section>
+</main>
+
+<!-- ═══════════════════ MODAL : Ajouter produit ═══════════════════ -->
+<div class="modal-overlay" id="product-modal">
+  <div class="modal">
+    <h2>Ajouter produit</h2>
+    <p>Ajoute un nouveau produit dans la table <strong>products</strong>.</p>
+    <div class="form-grid">
+      <div class="form-group"><label>Product name *</label><input id="p-name" /></div>
+      <div class="form-group"><label>Category *</label><input id="p-category" /></div>
+      <div class="form-group"><label>Stock actuel</label><input id="p-current" type="number" value="50" min="0"/></div>
+      <div class="form-group"><label>Stock minimum</label><input id="p-min" type="number" value="20" min="0"/></div>
+      <div class="form-group"><label>Supplier name</label><input id="p-supplier" placeholder="ex: MedSupply SA"/></div>
+      <div class="form-group"><label>Supplier email</label><input id="p-email" type="email" placeholder="supplier@email.com"/></div>
+      <div class="form-group"><label>Température °C</label><input id="p-temp" type="number" value="25"/></div>
+      <div class="form-group"><label>Humidité %</label><input id="p-humidity" type="number" value="55"/></div>
+    <div class="form-group"> <label>Expiration date</label> <input id="p-expiration" type="date" />
+</div>
+    </div>
+    <div class="modal-actions">
+      <button class="mini-btn" onclick="closeProductModal()">Annuler</button>
+      <button class="btn btn-green" onclick="addProduct()">✅ Ajouter produit</button>
     </div>
   </div>
+</div>
 
-  <div class="modal-overlay" id="ai-modal">
-    <div class="modal">
-      <h2>Recommandation IA</h2>
-      <p id="ai-text">—</p>
-      <div class="modal-actions"><button class="btn btn-primary" onclick="closeAiModal()">OK</button></div>
+<!-- ═══════════════════ MODAL : Créer achat ═══════════════════ -->
+<div class="modal-overlay" id="purchase-modal">
+  <div class="modal">
+    <h2>Créer achat / commande fournisseur</h2>
+    <p>Un achat = commander une quantité d'un produit chez le fournisseur. Table <strong>purchases</strong>.</p>
+    <div class="form-grid">
+  <div class="form-group">
+    <label>Product *</label>
+    <select id="a-product" onchange="fillPurchaseSupplier()"></select>
+  </div>
+        <div class="form-group"><label>Quantity ordered *</label><input id="a-quantity" type="number" value="30" min="1"/></div>
+      <div class="form-group"><label>Supplier name *</label><input id="a-supplier" placeholder="ex: MedSupply SA"/></div>
+      <div class="form-group"><label>Supplier email</label><input id="a-email" type="email" placeholder="supplier@email.com"/></div>
+      <div class="form-group"><label>Status</label>
+        <select id="a-status">
+          <option value="pending">pending</option>
+          <option value="sent">sent</option>
+          <option value="delivered">delivered</option>
+          <option value="cancelled">cancelled</option>
+        </select>
+      </div>
+      <div class="form-group form-full"><label>Message</label><textarea id="a-message" rows="3" placeholder="Commande fournisseur..."></textarea></div>
+    </div>
+    <div class="modal-actions">
+      <button class="mini-btn" onclick="closePurchaseModal()">Annuler</button>
+      <button class="btn btn-orange" onclick="createPurchase()">🛒 Créer achat</button>
     </div>
   </div>
+</div>
 
-  <div class="toast" id="toast"></div>
+<!-- ═══════════════════ MODAL : Mouvement de stock ═══════════════════ -->
+<div class="modal-overlay" id="vente-modal">
+  <div class="modal">
+    <h2>Mouvement de stock</h2>
+    <p>Enregistre une <strong>sortie</strong> (vente, consommation, perte) ou une <strong>entrée</strong> (retour, ajustement, correction) de stock.</p>
+    <div class="form-grid">
 
-  <script>
-    /*
-      IMPORTANT: remplace seulement le webhook id si besoin.
-      Fusion doit avoir 3 chemins:
-      /dashboard    -> SELECT products + SELECT purchases -> Response { products: [], purchases: [] }
-      /add-product  -> INSERT INTO products
-      /order        -> INSERT INTO purchases
-    */
+      <div class="form-group">
+        <label>Type de mouvement *</label>
+        <select id="v-type" onchange="onVenteTypeChange()">
+          <option value="OUT">⬇️ OUT — Sortie (vente, consommation, perte)</option>
+          <option value="IN">⬆️ IN — Entrée (retour, ajustement, correction)</option>
+        </select>
+      </div>
 
-const DASHBOARD_URL = "https://fusion-ai-api.medifus.dev/webhooks/webhook-e0efqcfhpjr5ulvvo06e6b32/dashboard";
-const ADD_PRODUCT_URL = "https://fusion-ai-api.medifus.dev/webhooks/webhook-cis6ls9trx767p87ljfrplxq/add-product";
+      <div class="form-group">
+        <label>Produit *</label>
+        <select id="v-product" onchange="updateStockInfo()"></select>
+      </div>
 
-    const USE_CORS_PROXY = true;
-    const AUTO_REFRESH_MS = 3000;
+      <div class="form-group">
+        <label>Quantité *</label>
+        <input id="v-quantity" type="number" value="1" min="1" oninput="updateStockInfo()"/>
+      </div>
 
-    let products = [];
-    let purchases = [];
-    let activeTab = "products";
-    let autoRefresh = true;
-    let timer = null;
+      <div class="form-group">
+        <label>Stock actuel</label>
+        <div id="v-stock-info" style="
+          padding: 12px; border-radius: 12px; background: #f8fafc;
+          border: 1.5px solid var(--border); font-weight: 900; font-size: 0.92rem;
+          display: flex; align-items: center; gap: 8px;
+        ">—</div>
+      </div>
 
-    function buildUrl(url) {
-      const bustUrl = url + (url.includes("?") ? "&" : "?") + "_=" + Date.now();
-      if (!USE_CORS_PROXY) return bustUrl;
-      return `https://corsproxy.io/?url=${encodeURIComponent(bustUrl)}`;
+      <div class="form-group form-full">
+        <label>Raison / Note</label>
+        <textarea id="v-reason" rows="2" placeholder="Ex: vente client, retour fournisseur, correction inventaire..."></textarea>
+      </div>
+
+    </div>
+    <div class="modal-actions">
+      <button class="mini-btn" onclick="closeVenteModal()">Annuler</button>
+      <button class="btn btn-orange" id="v-submit-btn" onclick="createVente()">➖ Enregistrer sortie</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ MODAL : IA ═══════════════════ -->
+<div class="modal-overlay" id="ai-modal">
+  <div class="modal">
+    <h2>Recommandation IA</h2>
+    <p id="ai-text">—</p>
+    <div class="modal-actions"><button class="btn btn-primary" onclick="closeAiModal()">OK</button></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  /* ── URLs Fusion ── */
+  const DASHBOARD_URL   = "https://fusion-ai-api.medifus.dev/webhooks/webhook-e0efqcfhpjr5ulvvo06e6b32/dashboard";
+  const ADD_PRODUCT_URL = "https://fusion-ai-api.medifus.dev/webhooks/webhook-cis6ls9trx767p87ljfrplxq/add-product";
+  const ORDER_URL       = "https://fusion-ai-api.medifus.dev/webhooks/webhook-ivyz7p0n6uoadbgsxa50e40o/achat";
+  const VENTE_URL       = "https://fusion-ai-api.medifus.dev/webhooks/webhook-zk3gbb2bj1j8d26e8q3evlcz/vente";
+
+  const USE_CORS_PROXY  = true;
+  const AUTO_REFRESH_MS = 15000;
+  const FETCH_TIMEOUT   = 25000;
+
+  let products    = [];
+  let purchases   = [];
+  let autoRefresh = true;
+  let timer       = null;
+
+  /* ── réseau ── */
+  function buildUrl(url) {
+    const bust = url + (url.includes("?") ? "&" : "?") + "_=" + Date.now();
+    return USE_CORS_PROXY ? `https://corsproxy.io/?url=${encodeURIComponent(bust)}` : bust;
+  }
+
+  async function fetchWithTimeout(url, opts = {}, ms = FETCH_TIMEOUT) {
+    const ctrl = new AbortController();
+    const id   = setTimeout(() => ctrl.abort(), ms);
+    try {
+      const res = await fetch(url, { ...opts, signal: ctrl.signal });
+      clearTimeout(id);
+      return res;
+    } catch (e) {
+      clearTimeout(id);
+      throw e.name === "AbortError" ? new Error(`Timeout ${ms/1000}s — Fusion trop lent`) : e;
     }
+  }
 
-    async function apiPost(url, body = {}) {
-      const res = await fetch(buildUrl(url), {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body)
-      });
-      if (!res.ok) throw new Error("HTTP " + res.status);
-      return await res.json();
-    }
+  async function apiPost(url, body = {}) {
+    const res = await fetchWithTimeout(buildUrl(url), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body)
+    });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    return res.json();
+  }
 
-    async function loadDashboard(manual = false) {
-      if (manual) showToast("Refresh en cours...");
-      try {
-        const data = await apiPost(DASHBOARD_URL, { action: "dashboard" });
-        products = normalizeArray(data.products || data.data || data.rows || []);
-        purchases = normalizeArray(data.purchases || data.orders || data.achats || []);
-        renderAll();
-        document.getElementById("live-status").textContent = "Connecté à Fusion";
-        if (manual) showToast("Dashboard mis à jour");
-      } catch (err) {
-        document.getElementById("products-table").innerHTML = `<div class="error"><strong>Erreur Fusion</strong><br>${escapeHtml(err.message)}<br><br>Vérifie /dashboard dans Fusion.</div>`;
-        document.getElementById("purchases-table").innerHTML = `<div class="error"><strong>Erreur Fusion</strong><br>${escapeHtml(err.message)}</div>`;
-        document.getElementById("live-status").textContent = "Erreur connexion";
-      }
-    }
+  /* ── modals — chaque fonction ferme SON modal ── */
+  function openProductModal()   { document.getElementById("product-modal").classList.add("open"); }
+  function closeProductModal()  { document.getElementById("product-modal").classList.remove("open"); }
 
-    function normalizeArray(value) {
-      if (Array.isArray(value)) return value;
-      if (typeof value === "string") {
-        try { return JSON.parse(value); } catch(e) { return []; }
-      }
-      return [];
-    }
+function openPurchaseModal() {
+  const select = document.getElementById("a-product");
 
-    function switchTab(tab) {
-      activeTab = tab;
-      document.getElementById("products-panel").classList.toggle("hidden", tab !== "products");
-      document.getElementById("purchases-panel").classList.toggle("hidden", tab !== "purchases");
-      document.getElementById("tab-products-btn").classList.toggle("active", tab === "products");
-      document.getElementById("tab-purchases-btn").classList.toggle("active", tab === "purchases");
+  select.innerHTML = products.map(p => `
+    <option value="${p.id}">
+      ${escapeHtml(p.product_name)} — stock: ${Number(p.current_stock || 0)}
+    </option>
+  `).join("");
+
+  document.getElementById("a-quantity").value = 30;
+  document.getElementById("a-status").value = "pending";
+  document.getElementById("a-message").value = "";
+
+  fillPurchaseSupplier();
+  document.getElementById("purchase-modal").classList.add("open");
+}
+
+function fillPurchaseSupplier() {
+  const productId = Number(document.getElementById("a-product").value);
+  const p = products.find(x => Number(x.id) === productId);
+
+  document.getElementById("a-supplier").value = p?.supplier_name || "";
+  document.getElementById("a-email").value = p?.supplier_email || "";
+}
+
+  function closePurchaseModal() { document.getElementById("purchase-modal").classList.remove("open"); }
+
+  function openVenteModal() {
+    const sel = document.getElementById("v-product");
+    sel.innerHTML = products.map(p =>
+      `<option value="${escapeHtml(p.product_name)}">${escapeHtml(p.product_name)} — stock: ${Number(p.current_stock||0)}</option>`
+    ).join("");
+    document.getElementById("v-type").value     = "OUT";
+    document.getElementById("v-quantity").value = 1;
+    document.getElementById("v-reason").value   = "";
+    onVenteTypeChange();
+    updateStockInfo();
+    document.getElementById("vente-modal").classList.add("open");
+  }
+  function closeVenteModal() { document.getElementById("vente-modal").classList.remove("open"); }
+  function closeAiModal()    { document.getElementById("ai-modal").classList.remove("open"); }
+
+  function onVenteTypeChange() {
+    const isOut = document.getElementById("v-type").value === "OUT";
+    const btn   = document.getElementById("v-submit-btn");
+    btn.textContent        = isOut ? "➖ Enregistrer sortie" : "➕ Enregistrer entrée";
+    btn.style.background   = isOut ? "var(--warning)"       : "var(--success)";
+    updateStockInfo();
+  }
+
+  function updateStockInfo() {
+    const productName = val("v-product");
+    const qty         = num("v-quantity");
+    const isOut       = document.getElementById("v-type") && document.getElementById("v-type").value === "OUT";
+    const p           = products.find(p => p.product_name === productName);
+    const current     = Number(p?.current_stock || 0);
+    const after       = isOut ? current - qty : current + qty;
+    const ok          = !isOut || after >= 0;
+    const info        = document.getElementById("v-stock-info");
+    if (!info) return;
+    info.style.borderColor = ok ? "var(--border)"  : "var(--danger)";
+    info.style.color       = ok ? "var(--text)"    : "var(--danger)";
+    info.innerHTML = p
+      ? `Stock: <strong>${current}</strong> → après: <strong style="color:${ok ? "var(--success)" : "var(--danger)"}">${after}</strong>${!ok ? " ❌ insuffisant" : ""}`
+      : "—";
+  }
+
+  /* ── dashboard ── */
+  async function loadDashboard(manual = false) {
+    if (manual) showToast("Refresh en cours...");
+    try {
+      const data = await apiPost(DASHBOARD_URL, { action: "dashboard" });
+      products  = normalizeArray(data.products  || data.productsJson  || data.data  || data.rows  || []);
+      purchases = normalizeArray(data.purchases || data.purchasesJson || data.orders || data.achats || []);
       renderAll();
+      setLive("Connecté à Fusion", false);
+      if (manual) showToast("✅ Dashboard mis à jour");
+    } catch (err) {
+      setLive("Erreur: " + err.message, true);
+      const msg = `<div class="error"><strong>Erreur Fusion</strong><br>${escapeHtml(err.message)}<br><br>Vérifie que ton workflow Fusion est activé (toggle ON).</div>`;
+      document.getElementById("products-table").innerHTML  = msg;
+      document.getElementById("purchases-table").innerHTML = msg;
+      if (manual) showToast("❌ " + err.message);
     }
+  }
 
-    function renderAll() {
-      updateStats();
-      renderProductsTable();
-      renderPurchasesTable();
+  function normalizeArray(v) {
+    if (Array.isArray(v)) return v;
+    if (typeof v === "string") { try { return JSON.parse(v); } catch { return []; } }
+    return [];
+  }
+
+  function setLive(text, err = false) {
+    document.getElementById("live-status").textContent = text;
+    document.getElementById("live-dot").classList.toggle("error", err);
+  }
+
+  /* ── render ── */
+  function switchTab(tab) {
+    document.getElementById("products-panel").classList.toggle("hidden",  tab !== "products");
+    document.getElementById("purchases-panel").classList.toggle("hidden", tab !== "purchases");
+    document.getElementById("tab-products-btn").classList.toggle("active",  tab === "products");
+    document.getElementById("tab-purchases-btn").classList.toggle("active", tab === "purchases");
+    renderAll();
+  }
+
+  function renderAll() { updateStats(); renderProductsTable(); renderPurchasesTable(); }
+
+  function updateStats() {
+    document.getElementById("stat-products").textContent = products.length;
+    document.getElementById("stat-ok").textContent       = products.filter(p => getRisk(p).type === "OK").length;
+    document.getElementById("stat-critical").textContent = products.filter(p => getRisk(p).type === "CRITICAL").length;
+    document.getElementById("stat-pending").textContent  = purchases.filter(p => String(p.status||"pending").toLowerCase() === "pending").length;
+    document.getElementById("stat-ordered").textContent  = purchases.reduce((s,p) => s + Number(p.quantity_ordered||p.quantity||0), 0);
+  }
+
+  function filteredProducts() {
+    const q = document.getElementById("search-input").value.trim().toLowerCase();
+    const f = document.getElementById("status-filter").value;
+    return products.filter(p => {
+      const txt = [p.product_name,p.category,p.supplier_name,p.supplier_email].join(" ").toLowerCase();
+      return (!q || txt.includes(q)) && (f === "ALL" || f === getRisk(p).type);
+    });
+  }
+
+  function filteredPurchases() {
+    const q = document.getElementById("search-input").value.trim().toLowerCase();
+    const f = document.getElementById("status-filter").value;
+    return purchases.filter(p => {
+      const st  = String(p.status||"pending").toLowerCase();
+      const txt = [p.product_name,p.supplier_name,p.supplier_email,p.message].join(" ").toLowerCase();
+      return (!q || txt.includes(q)) && (f === "ALL" || f.toLowerCase() === st || ["OK","WARNING","CRITICAL"].includes(f));
+    });
+  }
+
+  function renderProductsTable() {
+    const list = filteredProducts();
+    document.getElementById("products-subtitle").textContent = `${list.length} produit(s) affiché(s)`;
+    const c = document.getElementById("products-table");
+    if (!list.length) { c.innerHTML = `<div class="empty">Aucun produit trouvé. Clique sur Ajouter produit.</div>`; return; }
+    c.innerHTML = `<div class="table-wrap"><table>
+<thead>
+  <tr>
+    <th>ID</th><th>Produit</th><th>Supplier</th><th>Email</th>
+    <th>Quantité</th><th>Status</th><th>Message</th><th>Date</th><th>Actions</th>
+  </tr>
+</thead>
+<tbody>
+        <tbody>${list.map(productRow).join("")}</tbody>
+    </table></div>`;
+  }
+
+  function renderPurchasesTable() {
+    const list = filteredPurchases();
+    document.getElementById("purchases-subtitle").textContent = `${list.length} achat(s) affiché(s)`;
+    const c = document.getElementById("purchases-table");
+    if (!list.length) { c.innerHTML = `<div class="empty">Aucun achat trouvé. Clique sur Créer achat.</div>`; return; }
+    c.innerHTML = `<div class="table-wrap"><table>
+      <thead><tr><th>ID</th><th>Produit</th><th>Supplier</th><th>Email</th><th>Quantité</th><th>Status</th><th>Message</th><th>Date</th>
+    <th>Actions</th>
+      <tbody>${list.map(purchaseRow).join("")}</tbody>
+    </table></div>`;
+  }
+
+  function productRow(p) {
+    const risk = getRisk(p);
+    const stock = Number(p.current_stock||0), min = Number(p.minimum_stock||10);
+    const max   = Math.max(Number(p.maximum_stock||100), stock, 1);
+    const pct   = Math.min(100, Math.round((stock/max)*100));
+    const days  = daysBeforeRupture(p);
+    return `<tr>
+      <td><div class="strong">${escapeHtml(p.product_name||"—")}</div><div class="muted">ID: ${escapeHtml(p.id||p.product_id||"—")}</div></td>
+      <td><span class="badge info">${escapeHtml(p.category||"—")}</span></td>
+      <td>
+        <span class="badge ${riskClass(risk.type)}">${stock} unité(s)</span>
+        <div class="muted">Min ${min} / Max ${max}</div>
+        <div class="stock-bar"><div class="stock-fill ${riskClass(risk.type)}" style="width:${pct}%"></div></div>
+      </td>
+      <td><strong>${Number(p.forecast_demand||1)}</strong><div class="muted">unité(s)/jour</div></td>
+      <td><strong>${days} jour(s)</strong><div class="muted">Delivery: ${Number(p.delivery_time_days||3)} j</div></td>
+      <td><div class="strong">${escapeHtml(p.supplier_name||"—")}</div><div class="muted">${escapeHtml(p.supplier_email||"—")}</div></td>
+      <td><span class="badge ${iotClass(p)}">${Number(p.temperature||0)}°C / ${Number(p.humidity||0)}%</span></td>
+      <td><span class="badge ${riskClass(risk.type)}">${risk.label}</span><div class="muted">${risk.message}</div></td>
+      <td>
+        <button class="mini-btn ai"    onclick='showAI(${safeJson(p)})'>IA</button>
+        <button class="mini-btn order" onclick='openPurchaseFromProduct(${safeJson(p)})'>Commander</button>
+      </td>
+    </tr>`;
+  }
+
+  function purchaseRow(p) {
+    const st  = String(p.status||"pending").toLowerCase();
+    const cls = st==="delivered"?"ok":st==="cancelled"?"danger":st==="sent"?"info":"warning";
+    return `<tr>
+      <td>${escapeHtml(p.id||p.purchase_id||"—")}</td>
+      <td><div class="strong">${escapeHtml(p.product_name||"—")}</div></td>
+      <td>${escapeHtml(p.supplier_name||"—")}</td>
+      <td>${escapeHtml(p.supplier_email||"—")}</td>
+      <td><span class="badge info">${Number(p.quantity_ordered||p.quantity||0)}</span></td>
+      <td><span class="badge ${cls}">${escapeHtml(st)}</span></td>
+      <td><div class="muted">${escapeHtml(p.message||"—")}</div></td>
+  <td>${formatDate(p.created_at)}</td>
+  <td>
+    <button class="mini-btn" onclick='setPurchaseStatus(${p.id}, "delivered")'>✔ Deliver</button>
+    <button class="mini-btn" onclick='setPurchaseStatus(${p.id}, "cancelled")'>✖ Cancel</button>
+  </td>    </tr>`;
+  }
+async function setPurchaseStatus(id, status) {
+  try {
+    await apiPost(ORDER_URL, {
+      action: "update_status",
+      id: id,
+      status: status
+    });
+
+    showToast("Status updated ✅");
+    loadDashboard(false);
+
+  } catch (err) {
+    showToast("Erreur: " + err.message);
+  }
+}
+  /* ── logique ── */
+  function getRisk(p) {
+    const stock=Number(p.current_stock||0), min=Number(p.minimum_stock||10);
+    const days=daysBeforeRupture(p),        del=Number(p.delivery_time_days||3);
+    if (stock<=0)                       return {type:"CRITICAL",label:"Rupture",   message:"Stock épuisé"};
+    if (stock<=min || days<=del)        return {type:"CRITICAL",label:"Critique",  message:"Commander rapidement"};
+    if (stock<=min*1.7 || days<=del+2)  return {type:"WARNING", label:"Vigilance", message:"Préparer achat"};
+    return {type:"OK",label:"OK",message:"Stock sécurisé"};
+  }
+  function riskClass(t) { return t==="OK"?"ok":t==="WARNING"?"warning":t==="CRITICAL"?"danger":"gray"; }
+  function daysBeforeRupture(p) { return Math.floor(Number(p.current_stock||0)/Math.max(Number(p.forecast_demand||1),1)); }
+  function recommendedQty(p) {
+    const stock=Number(p.current_stock||0), max=Number(p.maximum_stock||100);
+    const safety=Number(p.safety_stock||p.minimum_stock||10);
+    const lead=Number(p.forecast_demand||1)*Number(p.delivery_time_days||3);
+    return Math.max(30, Math.ceil(max-stock+safety+lead-max));
+  }
+  function iotClass(p) {
+    const t=Number(p.temperature||0), h=Number(p.humidity||0);
+    return (t>32||h>75)?"danger":(t>28||h>65)?"warning":"ok";
+  }
+
+  function clearPurchaseForm() {
+    ["a-product","a-supplier","a-email","a-message"].forEach(id => document.getElementById(id).value="");
+    document.getElementById("a-quantity").value=30;
+    document.getElementById("a-status").value="pending";
+  }
+
+  function openPurchaseFromProduct(p) {
+    const qty=recommendedQty(p)||30;
+    document.getElementById("a-product").value  = p.product_name  ||"";
+    document.getElementById("a-quantity").value = qty;
+    document.getElementById("a-supplier").value = p.supplier_name ||"";
+    document.getElementById("a-email").value    = p.supplier_email||"";
+    document.getElementById("a-status").value   = "pending";
+    document.getElementById("a-message").value  = `Commande fournisseur: ${qty} unité(s) de ${p.product_name}. Stock actuel: ${p.current_stock}.`;
+    document.getElementById("purchase-modal").classList.add("open");
+  }
+
+  /* ════════════════════════════════════════════════
+     ACTIONS — chaque fonction ferme SON PROPRE modal
+     ════════════════════════════════════════════════ */
+
+  async function addProduct() {
+    const body = {
+      product_name:  val("p-name"),
+      category:      val("p-category"),
+      current_stock: num("p-current"),
+      minimum_stock: num("p-min"),
+      supplier_name: val("p-supplier"),
+      supplier_email:val("p-email"),
+      expiration_date: val("p-expiration"),
+      temperature:   num("p-temp"),
+      humidity:      num("p-humidity")
+    };
+    if (!body.product_name) { showToast("❌ Product name requis"); return; }
+    if (!body.category)     { showToast("❌ Category requis"); return; }
+
+    closeProductModal();          // ← ferme product-modal
+    showToast("Envoi à Fusion...");
+    try {
+      await apiPost(ADD_PRODUCT_URL, body);
+      showToast("✅ Produit ajouté");
+      loadDashboard(false);
+    } catch (err) {
+      showToast("❌ Erreur: " + err.message);
     }
+  }
 
-    function updateStats() {
-      document.getElementById("stat-products").textContent = products.length;
-      document.getElementById("stat-ok").textContent = products.filter(p => getRisk(p).type === "OK").length;
-      document.getElementById("stat-critical").textContent = products.filter(p => getRisk(p).type === "CRITICAL").length;
-      document.getElementById("stat-pending").textContent = purchases.filter(p => String(p.status || "pending").toLowerCase() === "pending").length;
-      document.getElementById("stat-ordered").textContent = purchases.reduce((s, p) => s + Number(p.quantity_ordered || p.quantity || 0), 0);
-    }
+  async function createPurchase() {
+  const productId = Number(document.getElementById("a-product").value);
+  const p = products.find(x => Number(x.id) === productId);
 
-    function renderProductsTable() {
-      const list = filteredProducts();
-      document.getElementById("products-subtitle").textContent = `${list.length} produit(s) affiché(s)`;
-      const container = document.getElementById("products-table");
-      if (!list.length) {
-        container.innerHTML = `<div class="empty">Aucun produit trouvé. Clique sur Ajouter produit.</div>`;
-        return;
-      }
-      container.innerHTML = `
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Produit</th><th>Catégorie</th><th>Stock</th><th>Forecast</th><th>Coverage</th><th>Supplier</th><th>IoT</th><th>Risque</th><th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>${list.map(productRow).join("")}</tbody>
-          </table>
-        </div>`;
-    }
-
-    function renderPurchasesTable() {
-      const list = filteredPurchases();
-      document.getElementById("purchases-subtitle").textContent = `${list.length} achat(s) affiché(s)`;
-      const container = document.getElementById("purchases-table");
-      if (!list.length) {
-        container.innerHTML = `<div class="empty">Aucun achat trouvé. Clique sur Créer achat.</div>`;
-        return;
-      }
-      container.innerHTML = `
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>ID</th><th>Produit</th><th>Supplier</th><th>Email</th><th>Quantité</th><th>Status</th><th>Message</th><th>Date</th>
-              </tr>
-            </thead>
-            <tbody>${list.map(purchaseRow).join("")}</tbody>
-          </table>
-        </div>`;
-    }
-
-    function filteredProducts() {
-      const search = document.getElementById("search-input").value.trim().toLowerCase();
-      const filter = document.getElementById("status-filter").value;
-      return products.filter(p => {
-        const risk = getRisk(p).type;
-        const text = [p.product_name, p.category, p.supplier_name, p.supplier_email].join(" ").toLowerCase();
-        const okSearch = !search || text.includes(search);
-        const okFilter = filter === "ALL" || filter === risk;
-        return okSearch && okFilter;
-      });
-    }
-
-    function filteredPurchases() {
-      const search = document.getElementById("search-input").value.trim().toLowerCase();
-      const filter = document.getElementById("status-filter").value;
-      return purchases.filter(p => {
-        const status = String(p.status || "pending").toLowerCase();
-        const text = [p.product_name, p.supplier_name, p.supplier_email, p.message].join(" ").toLowerCase();
-        const okSearch = !search || text.includes(search);
-        const okFilter = filter === "ALL" || filter.toLowerCase() === status || ["OK", "WARNING", "CRITICAL"].includes(filter);
-        return okSearch && okFilter;
-      });
-    }
-
-    function productRow(p) {
-      const risk = getRisk(p);
-      const stock = Number(p.current_stock || 0);
-      const min = Number(p.minimum_stock || 10);
-      const max = Math.max(Number(p.maximum_stock || 100), stock, 1);
-      const pct = Math.min(100, Math.round((stock / max) * 100));
-      const days = daysBeforeRupture(p);
-      const qty = recommendedQty(p);
-
-      return `
-        <tr>
-          <td><div class="strong">${escapeHtml(p.product_name || "—")}</div><div class="muted">ID: ${escapeHtml(p.id || p.product_id || "—")}</div></td>
-          <td><span class="badge info">${escapeHtml(p.category || "—")}</span></td>
-          <td>
-            <span class="badge ${riskClass(risk.type)}">${stock} unité(s)</span>
-            <div class="muted">Min ${min} / Max ${max}</div>
-            <div class="stock-bar"><div class="stock-fill ${riskClass(risk.type)}" style="width:${pct}%"></div></div>
-          </td>
-          <td><strong>${Number(p.forecast_demand || 1)}</strong><div class="muted">unité(s)/jour</div></td>
-          <td><strong>${days} jour(s)</strong><div class="muted">Delivery: ${Number(p.delivery_time_days || 3)} j</div></td>
-          <td><div class="strong">${escapeHtml(p.supplier_name || "—")}</div><div class="muted">${escapeHtml(p.supplier_email || "—")}</div></td>
-          <td><span class="badge ${iotClass(p)}">${Number(p.temperature || 0)}°C / ${Number(p.humidity || 0)}%</span></td>
-          <td><span class="badge ${riskClass(risk.type)}">${risk.label}</span><div class="muted">${risk.message}</div></td>
-          <td>
-            <button class="mini-btn ai" onclick='showAI(${safeJson(p)})'>IA</button>
-            <button class="mini-btn order" onclick='openPurchaseFromProduct(${safeJson(p)})'>Commander</button>
-          </td>
-        </tr>`;
-    }
-
-    function purchaseRow(p) {
-      const status = String(p.status || "pending").toLowerCase();
-      const cls = status === "delivered" ? "ok" : status === "cancelled" ? "danger" : status === "sent" ? "info" : "warning";
-      return `
-        <tr>
-          <td>${escapeHtml(p.id || p.purchase_id || "—")}</td>
-          <td><div class="strong">${escapeHtml(p.product_name || "—")}</div></td>
-          <td>${escapeHtml(p.supplier_name || "—")}</td>
-          <td>${escapeHtml(p.supplier_email || "—")}</td>
-          <td><span class="badge info">${Number(p.quantity_ordered || p.quantity || 0)}</span></td>
-          <td><span class="badge ${cls}">${escapeHtml(status)}</span></td>
-          <td><div class="muted">${escapeHtml(p.message || "—")}</div></td>
-          <td>${formatDate(p.created_at)}</td>
-        </tr>`;
-    }
-
-    function getRisk(p) {
-      const stock = Number(p.current_stock || 0);
-      const min = Number(p.minimum_stock || 10);
-      const days = daysBeforeRupture(p);
-      const delivery = Number(p.delivery_time_days || 3);
-      if (stock <= 0) return { type: "CRITICAL", label: "Rupture", message: "Stock épuisé" };
-      if (stock <= min || days <= delivery) return { type: "CRITICAL", label: "Critique", message: "Commander rapidement" };
-      if (stock <= min * 1.7 || days <= delivery + 2) return { type: "WARNING", label: "Vigilance", message: "Préparer achat" };
-      return { type: "OK", label: "OK", message: "Stock sécurisé" };
-    }
-
-    function riskClass(type) {
-      if (type === "OK") return "ok";
-      if (type === "WARNING") return "warning";
-      if (type === "CRITICAL") return "danger";
-      return "gray";
-    }
-
-    function daysBeforeRupture(p) {
-      const stock = Number(p.current_stock || 0);
-      const demand = Math.max(Number(p.forecast_demand || 1), 1);
-      return Math.floor(stock / demand);
-    }
-
-    function recommendedQty(p) {
-      const stock = Number(p.current_stock || 0);
-      const max = Number(p.maximum_stock || 100);
-      const safety = Number(p.safety_stock || p.minimum_stock || 10);
-      const leadDemand = Number(p.forecast_demand || 1) * Number(p.delivery_time_days || 3);
-      return Math.max(0, Math.ceil(max - stock + safety + leadDemand - max));
-    }
-
-    function iotClass(p) {
-      const temp = Number(p.temperature || 0);
-      const hum = Number(p.humidity || 0);
-      if (temp > 32 || hum > 75) return "danger";
-      if (temp > 28 || hum > 65 ) return "warning";
-      return "ok";
-    }
-
-    function openProductModal() { document.getElementById("product-modal").classList.add("open"); }
-    function closeProductModal() { document.getElementById("product-modal").classList.remove("open"); }
-    function openPurchaseModal() { clearPurchaseForm(); document.getElementById("purchase-modal").classList.add("open"); }
-    function closePurchaseModal() { document.getElementById("purchase-modal").classList.remove("open"); }
-    function closeAiModal() { document.getElementById("ai-modal").classList.remove("open"); }
-
-    function clearPurchaseForm() {
-      document.getElementById("a-product").value = "";
-      document.getElementById("a-quantity").value = 30;
-      document.getElementById("a-supplier").value = "";
-      document.getElementById("a-email").value = "";
-      document.getElementById("a-status").value = "pending";
-      document.getElementById("a-message").value = "";
-    }
-
-    function openPurchaseFromProduct(p) {
-      const qty = recommendedQty(p) || 30;
-      document.getElementById("a-product").value = p.product_name || "";
-      document.getElementById("a-quantity").value = qty;
-      document.getElementById("a-supplier").value = p.supplier_name || "";
-      document.getElementById("a-email").value = p.supplier_email || "";
-      document.getElementById("a-status").value = "pending";
-      document.getElementById("a-message").value = `Commande fournisseur: ${qty} unité(s) de ${p.product_name}. Stock actuel: ${p.current_stock}.`;
-      document.getElementById("purchase-modal").classList.add("open");
-    }
-
-async function addProduct() {
   const body = {
-    product_name: val("p-name"),
-    category: val("p-category"),
-    current_stock: num("p-current"),
-    minimum_stock: num("p-min"),
-    supplier_name: val("p-supplier"),
-    supplier_email: val("p-email"),
-    temperature: num("p-temp"),
-    humidity: num("p-humidity")
+    product_id: productId,
+    product_name: p?.product_name || "",
+    quantity_ordered: num("a-quantity"),
+    supplier_name: val("a-supplier"),
+    supplier_email: val("a-email"),
+    status: val("a-status") || "pending",
+    message: val("a-message")
   };
 
-  if (!body.product_name || !body.category) {
-    showToast("Vérifie product name et category");
+  if (!body.product_id || body.quantity_ordered <= 0) {
+    showToast("Vérifie produit et quantité");
     return;
   }
 
+  closePurchaseModal();
+
   try {
-    await apiPost(ADD_PRODUCT_URL, body);
-    showToast("Produit ajouté ✅");
-    closeProductModal();
+    await apiPost(ORDER_URL, body);
+    showToast("✅ Achat créé");
     loadDashboard(false);
   } catch (err) {
-    showToast("Erreur ajout: " + err.message);
+    showToast("❌ Erreur: " + err.message);
   }
 }
-    async function createPurchase() {
-      const body = {
-        product_name: val("a-product"),
-        quantity_ordered: num("a-quantity"),
-        supplier_name: val("a-supplier"),
-        supplier_email: val("a-email"),
-        status: val("a-status") || "pending",
-        message: val("a-message")
-      };
+  async function createVente() {
+    const productName = val("v-product");
+    const quantity    = num("v-quantity");
+    const reason      = val("v-reason");
+    const type        = document.getElementById("v-type").value; // "IN" ou "OUT"
+    const isOut       = type === "OUT";
 
-      if (!body.product_name || body.quantity_ordered <= 0 || !body.supplier_name) {
-        showToast("Vérifie produit, quantité et supplier");
-        return;
-      }
+    if (!productName || quantity <= 0) { showToast("❌ Vérifie produit et quantité"); return; }
 
-      try {
-        await apiPost(ORDER_URL, body);
-        showToast("Achat créé");
-        closePurchaseModal();
-        loadDashboard(false);
-      } catch (err) {
-        showToast("Erreur achat: " + err.message);
-      }
+    // Vérification stock suffisant seulement pour les sorties (OUT)
+    if (isOut) {
+      const sel       = products.find(p => p.product_name === productName);
+      const available = Number(sel?.current_stock || 0);
+      if (quantity > available) { showToast(`❌ Stock insuffisant — disponible: ${available}`); return; }
     }
 
-    function showAI(p) {
-      const risk = getRisk(p);
-      const days = daysBeforeRupture(p);
-      const qty = recommendedQty(p) || 30;
-      let text = "";
-      if (risk.type === "CRITICAL") text = `Produit critique: ${p.product_name}. Stock disponible ${p.current_stock}. Couverture ${days} jour(s). Recommandation: créer un achat de ${qty} unité(s) chez ${p.supplier_name}.`;
-      else if (risk.type === "WARNING") text = `Produit en vigilance: ${p.product_name}. Préparer une commande fournisseur de ${qty} unité(s) pour éviter une rupture.`;
-      else text = `Produit stable: ${p.product_name}. Aucun achat urgent. Continuer la surveillance.`;
-      document.getElementById("ai-text").textContent = text;
-      document.getElementById("ai-modal").classList.add("open");
+    closeVenteModal();
+    showToast("Envoi à Fusion...");
+    try {
+      await apiPost(VENTE_URL, { product_name: productName, quantity, reason, type });
+      showToast(isOut ? "✅ Sortie enregistrée" : "✅ Entrée enregistrée");
+      loadDashboard(false);
+    } catch (err) {
+      showToast("❌ Erreur: " + err.message);
     }
+  }
 
-    function toggleAutoRefresh() {
-      autoRefresh = !autoRefresh;
-      document.getElementById("auto-btn").textContent = autoRefresh ? "Pause auto" : "Activer auto";
-      document.getElementById("live-status").textContent = autoRefresh ? "Auto-refresh actif" : "Auto-refresh pause";
-      if (autoRefresh) startAutoRefresh(); else clearInterval(timer);
-    }
+  /* ── IA ── */
+  function showAI(p) {
+    const risk=getRisk(p), days=daysBeforeRupture(p), qty=recommendedQty(p)||30;
+    const text = risk.type==="CRITICAL"
+      ? `🔴 Critique: ${p.product_name}. Stock: ${p.current_stock}. Couverture: ${days} j. Commander ${qty} unité(s) chez ${p.supplier_name||"le fournisseur"}.`
+      : risk.type==="WARNING"
+      ? `🟡 Vigilance: ${p.product_name}. Couverture: ${days} j. Préparer ${qty} unité(s).`
+      : `🟢 Stable: ${p.product_name}. Stock: ${p.current_stock}. Couverture: ${days} j. Aucun achat urgent.`;
+    document.getElementById("ai-text").textContent = text;
+    document.getElementById("ai-modal").classList.add("open");
+  }
 
-    function startAutoRefresh() {
-      clearInterval(timer);
-      timer = setInterval(() => { if (autoRefresh) loadDashboard(false); }, AUTO_REFRESH_MS);
-    }
+  /* ── auto-refresh ── */
+  function toggleAutoRefresh() {
+    autoRefresh = !autoRefresh;
+    document.getElementById("auto-btn").textContent = autoRefresh ? "Pause auto" : "Activer auto";
+    setLive(autoRefresh ? "Auto-refresh actif" : "Auto-refresh en pause", false);
+    autoRefresh ? startAutoRefresh() : clearInterval(timer);
+  }
+  function startAutoRefresh() {
+    clearInterval(timer);
+    timer = setInterval(() => { if (autoRefresh) loadDashboard(false); }, AUTO_REFRESH_MS);
+  }
 
-    function val(id) { return document.getElementById(id).value.trim(); }
-    function num(id) { return Number(document.getElementById(id).value || 0); }
-    function showToast(msg) {
-      const t = document.getElementById("toast");
-      t.textContent = msg;
-      t.classList.add("show");
-      setTimeout(() => t.classList.remove("show"), 2400);
-    }
-    function escapeHtml(s) {
-      return String(s ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
-    }
-    function safeJson(obj) { return JSON.stringify(obj).replace(/</g, "\\u003c").replace(/'/g, "&#39;"); }
-    function formatDate(v) {
-      if (!v) return "—";
-      const d = new Date(v);
-      if (isNaN(d)) return escapeHtml(v);
-      return d.toLocaleString("fr-FR");
-    }
+  /* ── utils ── */
+  function val(id) { const el=document.getElementById(id); return el ? el.value.trim() : ""; }
+  function num(id) { const el=document.getElementById(id); return el ? Number(el.value||0) : 0; }
+  function showToast(msg) {
+    const t=document.getElementById("toast");
+    t.textContent=msg; t.classList.add("show");
+    setTimeout(()=>t.classList.remove("show"), 2800);
+  }
+  function escapeHtml(s) {
+    return String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+  }
+  function safeJson(o) { return JSON.stringify(o).replace(/</g,"\\u003c").replace(/'/g,"&#39;"); }
+  function formatDate(v) {
+    if (!v) return "—";
+    const d=new Date(v);
+    return isNaN(d) ? escapeHtml(v) : d.toLocaleString("fr-FR");
+  }
 
-    loadDashboard();
-    startAutoRefresh();
-  </script>
+  loadDashboard();
+  startAutoRefresh();
+</script>
 </body>
 </html>
