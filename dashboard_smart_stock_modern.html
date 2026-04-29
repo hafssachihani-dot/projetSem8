@@ -29,10 +29,17 @@
     .toast { position:fixed; right:20px; bottom:20px; background:#0f172a; color:white; padding:12px 16px; border-radius:12px; opacity:0; transform:translateY(15px); transition:.2s; z-index:100; font-weight:700; }
     .toast.show { opacity:1; transform:translateY(0); }
     .tab-btn.active { background:#22c55e; color:white; }
+    .nav-btn { width:100%; display:flex; align-items:center; gap:12px; padding:12px 20px; color:#cbd5e1; font-size:0.875rem; transition:background .15s; cursor:pointer; border:none; background:transparent; text-align:left; }
+    .nav-btn:hover { background:rgba(255,255,255,0.07); }
+    .nav-btn.active { background:rgba(255,255,255,0.1); border-left:2px solid #22c55e; color:white; }
+    /* Pages */
+    .page { display:none; }
+    .page.active { display:block; }
   </style>
 </head>
 <body class="bg-background min-h-screen text-slate-800">
 <div class="flex min-h-screen">
+  <!-- SIDEBAR -->
   <aside class="hidden lg:flex w-64 bg-sidebar text-slate-200 flex-col">
     <div class="px-5 py-6 border-b border-slate-700 flex items-center gap-3">
       <div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white font-bold">📦</div>
@@ -42,15 +49,13 @@
       </div>
     </div>
     <nav class="flex-1 py-4">
-      <button class="w-full flex items-center gap-3 px-5 py-3 bg-slate-700/60 border-l-2 border-primary text-sm">📊 Dashboard</button>
-      <button class="w-full flex items-center gap-3 px-5 py-3 text-slate-300 hover:bg-slate-700/40 text-sm">📦 Produits</button>
-      <button class="w-full flex items-center gap-3 px-5 py-3 text-slate-300 hover:bg-slate-700/40 text-sm">🛒 Achats</button>
-      <button class="w-full flex items-center gap-3 px-5 py-3 text-slate-300 hover:bg-slate-700/40 text-sm">🔔 Alertes IA</button>
-      <button class="w-full flex items-center gap-3 px-5 py-3 text-slate-300 hover:bg-slate-700/40 text-sm">📈 Analytics</button>
-      <button class="w-full flex items-center gap-3 px-5 py-3 text-slate-300 hover:bg-slate-700/40 text-sm">⚙️ Paramètres</button>
+      <button class="nav-btn active" id="nav-dashboard" onclick="navigateTo('dashboard')">📊 Dashboard</button>
+      <button class="nav-btn" id="nav-products" onclick="navigateTo('products')">📦 Produits</button>
+      <button class="nav-btn" id="nav-purchases" onclick="navigateTo('purchases')">🛒 Achats</button>
+      <button class="nav-btn" id="nav-alerts" onclick="navigateTo('alerts')">🔔 Alertes IA</button>
+      <button class="nav-btn" id="nav-analytics" onclick="navigateTo('analytics')">📈 Analytics</button>
+      <button class="nav-btn" id="nav-settings" onclick="navigateTo('settings')">⚙️ Paramètres</button>
     </nav>
-
-    
     <div class="p-4 border-t border-slate-700">
       <div class="flex items-center gap-3">
         <div class="w-9 h-9 rounded-full bg-slate-700 flex items-center justify-center">AD</div>
@@ -63,10 +68,11 @@
   </aside>
 
   <div class="flex-1 flex flex-col min-w-0">
+    <!-- HEADER -->
     <header class="bg-card border-b border-border px-4 lg:px-6 py-4 sticky top-0 z-30">
       <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         <div>
-          <h1 class="text-xl font-bold">Dashboard</h1>
+          <h1 id="page-title" class="text-xl font-bold">Dashboard</h1>
           <p class="text-sm text-slate-500">Prévention des ruptures de stock avec IA</p>
         </div>
         <div class="flex flex-wrap items-center gap-3">
@@ -87,53 +93,125 @@
     </header>
 
     <main class="flex-1 p-4 lg:p-6 overflow-auto">
-      <section class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-        <div class="bg-card rounded-xl border border-border p-4 shadow-sm"><p class="text-xs font-bold text-slate-500 uppercase">Total Produits</p><p id="stat-products" class="text-2xl font-black mt-1">—</p></div>
-        <div class="bg-card rounded-xl border border-border p-4 shadow-sm"><p class="text-xs font-bold text-slate-500 uppercase">Stock OK</p><p id="stat-ok" class="text-2xl font-black mt-1">—</p></div>
-        <div class="bg-card rounded-xl border border-border p-4 shadow-sm"><p class="text-xs font-bold text-slate-500 uppercase">Critiques</p><p id="stat-critical" class="text-2xl font-black mt-1">—</p></div>
-        <div class="bg-card rounded-xl border border-border p-4 shadow-sm"><p class="text-xs font-bold text-slate-500 uppercase">Achats Pending</p><p id="stat-pending" class="text-2xl font-black mt-1">—</p></div>
-        <div class="bg-card rounded-xl border border-border p-4 shadow-sm"><p class="text-xs font-bold text-slate-500 uppercase">Qté Commandée</p><p id="stat-ordered" class="text-2xl font-black mt-1">—</p></div>
-      </section>
 
-      <section class="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-6">
-        <div class="lg:col-span-2 bg-card rounded-xl border border-border shadow-sm">
-          <div class="p-4 border-b border-border flex justify-between items-center"><h3 class="font-bold">🔔 Notifications IA</h3><span id="notif-count" class="hidden px-2 py-1 rounded-full bg-destructive text-white text-xs font-bold">0</span></div>
-          <div id="notifications-container" class="p-4 space-y-3"><div class="text-center text-slate-500 py-6">Aucune notification</div></div>
-        </div>
-        <div class="bg-card rounded-xl border border-border p-4 shadow-sm">
-          <h3 class="font-bold mb-3">Répartition des stocks</h3>
-          <div class="h-56"><canvas id="stockPieChart"></canvas></div>
-        </div>
-      </section>
+      <!-- ===== PAGE: DASHBOARD ===== -->
+      <div id="page-dashboard" class="page active">
+        <section class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+          <div class="bg-card rounded-xl border border-border p-4 shadow-sm"><p class="text-xs font-bold text-slate-500 uppercase">Total Produits</p><p id="stat-products" class="text-2xl font-black mt-1">—</p></div>
+          <div class="bg-card rounded-xl border border-border p-4 shadow-sm"><p class="text-xs font-bold text-slate-500 uppercase">Stock OK</p><p id="stat-ok" class="text-2xl font-black mt-1">—</p></div>
+          <div class="bg-card rounded-xl border border-border p-4 shadow-sm"><p class="text-xs font-bold text-slate-500 uppercase">Critiques</p><p id="stat-critical" class="text-2xl font-black mt-1">—</p></div>
+          <div class="bg-card rounded-xl border border-border p-4 shadow-sm"><p class="text-xs font-bold text-slate-500 uppercase">Achats Pending</p><p id="stat-pending" class="text-2xl font-black mt-1">—</p></div>
+          <div class="bg-card rounded-xl border border-border p-4 shadow-sm"><p class="text-xs font-bold text-slate-500 uppercase">Qté Commandée</p><p id="stat-ordered" class="text-2xl font-black mt-1">—</p></div>
+        </section>
 
-      <section class="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-6">
-        <div class="bg-card rounded-xl border border-border p-4 shadow-sm">
-          <h3 class="font-bold mb-3">Stock par produit</h3>
-          <div class="h-64"><canvas id="stockBarChart"></canvas></div>
-        </div>
-        <div class="bg-card rounded-xl border border-border p-4 shadow-sm">
-          <h3 class="font-bold mb-3">Achats par status</h3>
-          <div class="h-64"><canvas id="purchaseChart"></canvas></div>
-        </div>
-      </section>
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-6">
+          <div class="lg:col-span-2 bg-card rounded-xl border border-border shadow-sm">
+            <div class="p-4 border-b border-border flex justify-between items-center"><h3 class="font-bold">🔔 Notifications IA</h3><span id="notif-count" class="hidden px-2 py-1 rounded-full bg-destructive text-white text-xs font-bold">0</span></div>
+            <div id="notifications-container" class="p-4 space-y-3"><div class="text-center text-slate-500 py-6">Aucune notification</div></div>
+          </div>
+          <div class="bg-card rounded-xl border border-border p-4 shadow-sm">
+            <h3 class="font-bold mb-3">Répartition des stocks</h3>
+            <div class="h-56"><canvas id="stockPieChart"></canvas></div>
+          </div>
+        </section>
 
-      <div class="flex flex-wrap gap-2 mt-6 mb-4">
-        <button id="tab-products-btn" onclick="switchTab('products')" class="tab-btn active px-4 py-2 rounded-full border border-border bg-white text-sm font-bold">📦 Produits & Stock</button>
-        <button id="tab-purchases-btn" onclick="switchTab('purchases')" class="tab-btn px-4 py-2 rounded-full border border-border bg-white text-sm font-bold">🛒 Achats / Commandes</button>
-        <select id="status-filter" onchange="renderAll()" class="ml-auto px-3 py-2 rounded-lg border border-border bg-white text-sm font-semibold">
-          <option value="ALL">Tous les statuts</option><option value="OK">Stock OK</option><option value="WARNING">Vigilance</option><option value="CRITICAL">Critique</option><option value="pending">Achat pending</option><option value="sent">Achat sent</option><option value="delivered">Achat delivered</option>
-        </select>
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-6">
+          <div class="bg-card rounded-xl border border-border p-4 shadow-sm">
+            <h3 class="font-bold mb-3">Stock par produit</h3>
+            <div class="h-64"><canvas id="stockBarChart"></canvas></div>
+          </div>
+          <div class="bg-card rounded-xl border border-border p-4 shadow-sm">
+            <h3 class="font-bold mb-3">Achats par status</h3>
+            <div class="h-64"><canvas id="purchaseChart"></canvas></div>
+          </div>
+        </section>
       </div>
 
-      <section id="products-panel" class="bg-card rounded-xl border border-border shadow-sm overflow-hidden">
-        <div class="p-4 border-b border-border"><h3 class="font-bold">Produits & Stock intelligent</h3><p id="products-subtitle" class="text-sm text-slate-500">Connexion...</p></div>
-        <div id="products-table" class="overflow-x-auto"><div class="p-10 text-center text-slate-500">Chargement...</div></div>
-      </section>
+      <!-- ===== PAGE: PRODUITS ===== -->
+      <div id="page-products" class="page">
+        <div class="flex flex-wrap gap-2 mb-4 items-center">
+          <select id="status-filter-products" onchange="renderProductsTable()" class="px-3 py-2 rounded-lg border border-border bg-white text-sm font-semibold">
+            <option value="ALL">Tous les statuts</option>
+            <option value="OK">Stock OK</option>
+            <option value="WARNING">Vigilance</option>
+            <option value="CRITICAL">Critique</option>
+          </select>
+          <button onclick="openProductModal()" class="ml-auto px-4 py-2 rounded-lg bg-primary text-white text-sm font-semibold">➕ Ajouter produit</button>
+        </div>
+        <section class="bg-card rounded-xl border border-border shadow-sm overflow-hidden">
+          <div class="p-4 border-b border-border flex justify-between items-center">
+            <div>
+              <h3 class="font-bold">📦 Produits & Stock intelligent</h3>
+              <p id="products-subtitle" class="text-sm text-slate-500">Chargement...</p>
+            </div>
+          </div>
+          <div id="products-table" class="overflow-x-auto"><div class="p-10 text-center text-slate-500">Chargement...</div></div>
+        </section>
+      </div>
 
-      <section id="purchases-panel" class="hidden bg-card rounded-xl border border-border shadow-sm overflow-hidden">
-        <div class="p-4 border-b border-border"><h3 class="font-bold">Achats / Commandes fournisseurs</h3><p id="purchases-subtitle" class="text-sm text-slate-500">Connexion...</p></div>
-        <div id="purchases-table" class="overflow-x-auto"><div class="p-10 text-center text-slate-500">Chargement...</div></div>
-      </section>
+      <!-- ===== PAGE: ACHATS ===== -->
+      <div id="page-purchases" class="page">
+        <div class="flex flex-wrap gap-2 mb-4 items-center">
+          <select id="status-filter-purchases" onchange="renderPurchasesTable()" class="px-3 py-2 rounded-lg border border-border bg-white text-sm font-semibold">
+            <option value="ALL">Tous les statuts</option>
+            <option value="pending">Pending</option>
+            <option value="sent">Sent</option>
+            <option value="delivered">Delivered</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+          <button onclick="openPurchaseModal()" class="ml-auto px-4 py-2 rounded-lg bg-accent text-white text-sm font-semibold">🛒 Créer achat</button>
+        </div>
+        <section class="bg-card rounded-xl border border-border shadow-sm overflow-hidden">
+          <div class="p-4 border-b border-border">
+            <h3 class="font-bold">🛒 Achats / Commandes fournisseurs</h3>
+            <p id="purchases-subtitle" class="text-sm text-slate-500">Chargement...</p>
+          </div>
+          <div id="purchases-table" class="overflow-x-auto"><div class="p-10 text-center text-slate-500">Chargement...</div></div>
+        </section>
+      </div>
+
+      <!-- ===== PAGE: ALERTES IA ===== -->
+      <div id="page-alerts" class="page">
+        <section class="bg-card rounded-xl border border-border shadow-sm">
+          <div class="p-4 border-b border-border flex justify-between items-center">
+            <h3 class="font-bold">🔔 Alertes IA</h3>
+            <span id="notif-count-alerts" class="hidden px-2 py-1 rounded-full bg-destructive text-white text-xs font-bold">0</span>
+          </div>
+          <div id="notifications-container-alerts" class="p-4 space-y-3"><div class="text-center text-slate-500 py-6">Aucune notification</div></div>
+        </section>
+      </div>
+
+      <!-- ===== PAGE: ANALYTICS ===== -->
+      <div id="page-analytics" class="page">
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div class="bg-card rounded-xl border border-border p-4 shadow-sm">
+            <h3 class="font-bold mb-3">Répartition des stocks</h3>
+            <div class="h-72"><canvas id="stockPieChart2"></canvas></div>
+          </div>
+          <div class="bg-card rounded-xl border border-border p-4 shadow-sm">
+            <h3 class="font-bold mb-3">Stock par produit</h3>
+            <div class="h-72"><canvas id="stockBarChart2"></canvas></div>
+          </div>
+          <div class="bg-card rounded-xl border border-border p-4 shadow-sm lg:col-span-2">
+            <h3 class="font-bold mb-3">Achats par status</h3>
+            <div class="h-64"><canvas id="purchaseChart2"></canvas></div>
+          </div>
+        </section>
+      </div>
+
+      <!-- ===== PAGE: PARAMÈTRES ===== -->
+      <div id="page-settings" class="page">
+        <div class="bg-card rounded-xl border border-border p-6 shadow-sm max-w-xl">
+          <h3 class="font-bold text-lg mb-4">⚙️ Paramètres</h3>
+          <p class="text-slate-500 text-sm">Configuration de la plateforme Smart Stock.</p>
+          <div class="mt-4 space-y-3">
+            <label class="flex items-center gap-3 text-sm font-semibold">
+              <input type="checkbox" checked onchange="toggleAutoRefresh()" class="w-4 h-4 accent-green-500"> Auto-refresh (15s)
+            </label>
+          </div>
+        </div>
+      </div>
+
     </main>
   </div>
 </div>
@@ -143,19 +221,16 @@
   <h2 class="text-xl font-bold mb-1">Ajouter produit</h2><p class="text-sm text-slate-500 mb-5">Ajoute un nouveau produit dans products.</p>
   <div class="grid md:grid-cols-2 gap-4">
     <label class="text-sm font-bold">Product name *<input id="p-name" class="field mt-1"></label>
-<label class="text-sm font-bold">
-  Category *
-  <select id="p-category" class="field mt-1">
-    <option value="">Choisir une catégorie</option>
-    
-    <option value="Consommables">Consommables</option>
-    <option value="Matériel informatique">Matériel informatique</option>
-    <option value="Mobilier">Mobilier</option>
-    <option value="Matériel d’exploitation">Matériel d’exploitation</option>
-    <option value="Fournitures clients">Fournitures clients</option>
-
-  </select>
-</label>
+    <label class="text-sm font-bold">Category *
+      <select id="p-category" class="field mt-1">
+        <option value="">Choisir une catégorie</option>
+        <option value="Consommables">Consommables</option>
+        <option value="Matériel informatique">Matériel informatique</option>
+        <option value="Mobilier">Mobilier</option>
+        <option value="Matériel d'exploitation">Matériel d'exploitation</option>
+        <option value="Fournitures clients">Fournitures clients</option>
+      </select>
+    </label>
     <label class="text-sm font-bold">Stock actuel<input id="p-current" type="number" value="50" class="field mt-1"></label>
     <label class="text-sm font-bold">Stock minimum<input id="p-min" type="number" value="20" class="field mt-1"></label>
     <label class="text-sm font-bold">Supplier name<input id="p-supplier" class="field mt-1"></label>
@@ -198,121 +273,204 @@
 <div id="toast" class="toast"></div>
 
 <script>
-const DASHBOARD_URL   = "https://fusion-ai-api.medifus.dev/webhooks/webhook-e0efqcfhpjr5ulvvo06e6b32/dashboard";
+const DASHBOARD_URL   = "https://fusion-ai-api.medifus.dev/webhooks/webhook-xxfpu33os15qyhhu3vv9oodb/dashboard";
 const ADD_PRODUCT_URL = "https://fusion-ai-api.medifus.dev/webhooks/webhook-cis6ls9trx767p87ljfrplxq/add-product";
 const ORDER_URL       = "https://fusion-ai-api.medifus.dev/webhooks/webhook-ivyz7p0n6uoadbgsxa50e40o/achat";
 const VENTE_URL       = "https://fusion-ai-api.medifus.dev/webhooks/webhook-zk3gbb2bj1j8d26e8q3evlcz/vente";
 const USE_CORS_PROXY = true, AUTO_REFRESH_MS = 15000, FETCH_TIMEOUT = 25000;
 const NOTIF_STORAGE_KEY = "stock_notifications_modern_v1";
 let products=[], purchases=[], notifications={alerts:[], tendances:[]}, autoRefresh=true, timer=null;
-let stockPieChart, stockBarChart, purchaseChart;
+let stockPieChart, stockBarChart, purchaseChart, stockPieChart2, stockBarChart2, purchaseChart2;
+let currentPage = 'dashboard';
 
+// ===== NAVIGATION =====
+const PAGE_TITLES = {
+  dashboard: 'Dashboard',
+  products: 'Produits & Stock',
+  purchases: 'Achats / Commandes',
+  alerts: 'Alertes IA',
+  analytics: 'Analytics',
+  settings: 'Paramètres'
+};
+
+function navigateTo(page) {
+  // Hide all pages
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  // Remove active from all nav buttons
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+
+  // Show selected page
+  document.getElementById('page-' + page).classList.add('active');
+  document.getElementById('nav-' + page).classList.add('active');
+  document.getElementById('page-title').textContent = PAGE_TITLES[page] || page;
+  currentPage = page;
+
+  // Render content for the page
+  if (page === 'products') renderProductsTable();
+  if (page === 'purchases') renderPurchasesTable();
+  if (page === 'alerts') renderAlertsPage();
+  if (page === 'analytics') renderAnalyticsCharts();
+}
+
+// ===== UTILS =====
 function buildUrl(url){ const bust=url+(url.includes('?')?'&':'?')+'_='+Date.now(); return USE_CORS_PROXY?`https://corsproxy.io/?url=${encodeURIComponent(bust)}`:bust; }
 async function fetchWithTimeout(url, opts={}, ms=FETCH_TIMEOUT){ const c=new AbortController(); const id=setTimeout(()=>c.abort(),ms); try{ const r=await fetch(url,{...opts,signal:c.signal}); clearTimeout(id); return r; }catch(e){ clearTimeout(id); throw e.name==='AbortError'?new Error(`Timeout ${ms/1000}s`):e; } }
 async function apiPost(url, body={}){ const res=await fetchWithTimeout(buildUrl(url),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}); if(!res.ok) throw new Error('HTTP '+res.status); return res.json(); }
 function normalizeArray(v) {
   if (Array.isArray(v)) return v;
-  if (typeof v === 'string') {
-    const trimmed = v.trim();
-    // String template non résolue → ignorer
-    if (trimmed.startsWith('{{') || trimmed === '' || trimmed === 'null') return [];
-    try { 
-      const parsed = JSON.parse(trimmed);
-      return Array.isArray(parsed) ? parsed : [];
-    } catch { return []; }
-  }
+  if (typeof v === 'string') { const t=v.trim(); if(t.startsWith('{{')||t===''||t==='null') return []; try{ const p=JSON.parse(t); return Array.isArray(p)?p:[]; }catch{return [];} }
   if (v && typeof v === 'object') return [v];
   return [];
 }
-function val(id){return (document.getElementById(id)?.value||'').trim()} function num(id){return Number(document.getElementById(id)?.value||0)}
-function esc(s){return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;')} function safeJson(o){return JSON.stringify(o).replace(/</g,'\\u003c').replace(/'/g,'&#39;')} function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2600)}
+function val(id){return (document.getElementById(id)?.value||'').trim()}
+function num(id){return Number(document.getElementById(id)?.value||0)}
+function esc(s){return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;')}
+function safeJson(o){return JSON.stringify(o).replace(/</g,'\\u003c').replace(/'/g,'&#39;')}
+function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2600)}
 
+// ===== NOTIFICATIONS =====
 function loadStoredNotifications(){try{return JSON.parse(localStorage.getItem(NOTIF_STORAGE_KEY)||'{"alerts":[],"tendances":[]}')}catch{return {alerts:[],tendances:[]}}}
 function saveNotifications(n){localStorage.setItem(NOTIF_STORAGE_KEY,JSON.stringify(n))}
 function mergeNotifications(data){ let alerts=normalizeArray(data.notificationsJson||[]), tendances=normalizeArray(data.tendanceJson||[]); let stored=loadStoredNotifications(); const stamp=(n,type)=>({...n,_id:`${type}_${n.product_id||n.product_name}`}); alerts.forEach(n=>{const id=`alert_${n.product_id||n.product_name}`; const i=stored.alerts.findIndex(x=>x._id===id); i>=0?stored.alerts[i]=stamp(n,'alert'):stored.alerts.push(stamp(n,'alert'));}); tendances.forEach(n=>{const id=`tendance_${n.product_id||n.product_name}`; const i=stored.tendances.findIndex(x=>x._id===id); i>=0?stored.tendances[i]=stamp(n,'tendance'):stored.tendances.push(stamp(n,'tendance'));}); saveNotifications(stored); return stored; }
 function renderNotifications(data) {
-  // Parser si c'est une string
-  let alerts = normalizeArray(
-    typeof data.notificationsJson === 'string'
-      ? data.notificationsJson
-      : data.notificationsJson
-  );
-  let tendances = normalizeArray(
-    typeof data.tendanceJson === 'string'
-      ? data.tendanceJson
-      : data.tendanceJson
-  );
-  
-  // Vérifier que ce ne sont pas des templates non résolus
-  if (alerts.length === 0 && tendances.length === 0) {
-    renderNotificationsFromStorage();
-    return;
-  }
-  
+  let alerts=normalizeArray(data.notificationsJson), tendances=normalizeArray(data.tendanceJson);
+  if (!alerts.length && !tendances.length) { renderNotificationsFromStorage(); return; }
   notifications = mergeNotifications({ notificationsJson: alerts, tendanceJson: tendances });
   renderNotificationsUI();
 }
 function renderNotificationsFromStorage(){ notifications=loadStoredNotifications(); renderNotificationsUI(); }
 function removeNotification(id){ notifications.alerts=notifications.alerts.filter(n=>n._id!==id); notifications.tendances=notifications.tendances.filter(n=>n._id!==id); saveNotifications(notifications); renderNotificationsUI(); }
-function clearAllNotifications(){ notifications={alerts:[],tendances:[]}; saveNotifications(notifications); renderNotificationsUI(); }
-function renderNotificationsUI(){ const c=document.getElementById('notifications-container'), b=document.getElementById('notif-count'); const total=notifications.alerts.length+notifications.tendances.length; b.textContent=total; b.classList.toggle('hidden',total===0); if(!total){c.innerHTML='<div class="text-center text-slate-500 py-6">✅ Aucune notification en attente</div>'; return;} c.innerHTML=`${notifications.alerts.map(n=>`<div class="flex items-start justify-between gap-3 rounded-xl border border-red-100 bg-red-50 p-3"><div><div class="font-bold text-red-700">⚠️ ${esc(n.product_name)}</div><div class="text-sm text-slate-600">${esc(n.reason||n.message||'')}</div><div class="text-xs text-slate-500 mt-1">Commander: ${Number(n.recommended_order_quantity||0)} unités</div></div><div class="flex gap-2"><button class="px-3 py-1 rounded-lg border bg-white text-xs font-bold" onclick="removeNotification('${esc(n._id)}')">Annuler</button><button class="px-3 py-1 rounded-lg bg-accent text-white text-xs font-bold" onclick='commanderFromNotif(${safeJson(n)})'>Commander</button></div></div>`).join('')}${notifications.tendances.map(n=>`<div class="flex items-start justify-between gap-3 rounded-xl border border-amber-100 bg-amber-50 p-3"><div><div class="font-bold text-amber-700">📈 ${esc(n.product_name)}</div><div class="text-sm text-slate-600">${esc(n.reason||n.message||'Produit tendance')}</div></div><button class="px-3 py-1 rounded-lg border bg-white text-xs font-bold" onclick="removeNotification('${esc(n._id)}')">OK</button></div>`).join('')}`; }
+function renderNotificationsUI(){
+  const total=notifications.alerts.length+notifications.tendances.length;
+  // Update badge on dashboard
+  const b=document.getElementById('notif-count'); b.textContent=total; b.classList.toggle('hidden',total===0);
+  const html = total === 0
+    ? '<div class="text-center text-slate-500 py-6">✅ Aucune notification en attente</div>'
+    : `${notifications.alerts.map(n=>`<div class="flex items-start justify-between gap-3 rounded-xl border border-red-100 bg-red-50 p-3"><div><div class="font-bold text-red-700">⚠️ ${esc(n.product_name)}</div><div class="text-sm text-slate-600">${esc(n.reason||n.message||'')}</div><div class="text-xs text-slate-500 mt-1">Commander: ${Number(n.recommended_order_quantity||0)} unités</div></div><div class="flex gap-2"><button class="px-3 py-1 rounded-lg border bg-white text-xs font-bold" onclick="removeNotification('${esc(n._id)}')">Annuler</button><button class="px-3 py-1 rounded-lg bg-accent text-white text-xs font-bold" onclick='commanderFromNotif(${safeJson(n)})'>Commander</button></div></div>`).join('')}${notifications.tendances.map(n=>`<div class="flex items-start justify-between gap-3 rounded-xl border border-amber-100 bg-amber-50 p-3"><div><div class="font-bold text-amber-700">📈 ${esc(n.product_name)}</div><div class="text-sm text-slate-600">${esc(n.reason||n.message||'Produit tendance')}</div></div><button class="px-3 py-1 rounded-lg border bg-white text-xs font-bold" onclick="removeNotification('${esc(n._id)}')">OK</button></div>`).join('')}`;
+  document.getElementById('notifications-container').innerHTML = html;
+  // Also update alerts page if visible
+  renderAlertsPage();
+}
+function renderAlertsPage() {
+  const total=notifications.alerts.length+notifications.tendances.length;
+  const b2=document.getElementById('notif-count-alerts'); b2.textContent=total; b2.classList.toggle('hidden',total===0);
+  const html = total === 0
+    ? '<div class="text-center text-slate-500 py-6">✅ Aucune notification en attente</div>'
+    : `${notifications.alerts.map(n=>`<div class="flex items-start justify-between gap-3 rounded-xl border border-red-100 bg-red-50 p-3 mb-3"><div><div class="font-bold text-red-700">⚠️ ${esc(n.product_name)}</div><div class="text-sm text-slate-600">${esc(n.reason||n.message||'')}</div><div class="text-xs text-slate-500 mt-1">Commander: ${Number(n.recommended_order_quantity||0)} unités</div></div><div class="flex gap-2"><button class="px-3 py-1 rounded-lg border bg-white text-xs font-bold" onclick="removeNotification('${esc(n._id)}')">Annuler</button><button class="px-3 py-1 rounded-lg bg-accent text-white text-xs font-bold" onclick='commanderFromNotif(${safeJson(n)})'>Commander</button></div></div>`).join('')}${notifications.tendances.map(n=>`<div class="flex items-start justify-between gap-3 rounded-xl border border-amber-100 bg-amber-50 p-3 mb-3"><div><div class="font-bold text-amber-700">📈 ${esc(n.product_name)}</div><div class="text-sm text-slate-600">${esc(n.reason||n.message||'Produit tendance')}</div></div><button class="px-3 py-1 rounded-lg border bg-white text-xs font-bold" onclick="removeNotification('${esc(n._id)}')">OK</button></div>`).join('')}`;
+  document.getElementById('notifications-container-alerts').innerHTML = html;
+}
 async function commanderFromNotif(n){ try{ await apiPost(ORDER_URL,{product_id:n.product_id,product_name:n.product_name,quantity_ordered:Number(n.recommended_order_quantity||0),supplier_name:n.supplier_name||'',supplier_email:n.supplier_email||'',status:'pending',message:'Auto order from AI notification'}); showToast('Commande créée ✅'); removeNotification(n._id); loadDashboard(false);}catch(e){showToast('Erreur commande: '+e.message)} }
 
-async function loadDashboard(manual=false){ if(manual) showToast('Refresh...'); try{ const data=await apiPost(DASHBOARD_URL,{action:'dashboard'}); products=normalizeArray(data.products||data.productsJson||data.data||data.rows||[]); purchases=normalizeArray(data.purchases||data.purchasesJson||data.orders||data.achats||[]); renderAll(); if(data.notificationsJson||data.tendanceJson) renderNotifications(data); else renderNotificationsFromStorage(); setLive('Connecté',false); if(manual) showToast('Dashboard mis à jour ✅'); }catch(e){ setLive('Erreur: '+e.message,true); showToast('Erreur Fusion: '+e.message); renderNotificationsFromStorage(); } }
+// ===== DASHBOARD =====
+async function loadDashboard(manual=false){
+  if(manual) showToast('Refresh...');
+  try{
+    const data=await apiPost(DASHBOARD_URL,{action:'dashboard'});
+    products=normalizeArray(data.products||data.productsJson||data.data||data.rows||[]);
+    purchases=normalizeArray(data.purchases||data.purchasesJson||data.orders||data.achats||[]);
+    renderAll();
+    if(data.notificationsJson||data.tendanceJson) renderNotifications(data);
+    else renderNotificationsFromStorage();
+    setLive('Connecté',false);
+    if(manual) showToast('Dashboard mis à jour ✅');
+  }catch(e){
+    setLive('Erreur: '+e.message,true);
+    showToast('Erreur Fusion: '+e.message);
+    renderNotificationsFromStorage();
+  }
+}
 function setLive(t,err=false){document.getElementById('live-status').textContent=t; document.getElementById('live-dot').className='w-2 h-2 rounded-full animate-pulse '+(err?'bg-destructive':'bg-primary')}
+
+// ===== RISK =====
 function getRisk(p){ const stock=Number(p.current_stock||0), min=Number(p.minimum_stock||10), days=daysBeforeRupture(p), del=Number(p.delivery_time_days||3); if(stock<=0) return {type:'CRITICAL',label:'Rupture',message:'Stock épuisé'}; if(stock<=min||days<=del) return {type:'CRITICAL',label:'Critique',message:'Commander rapidement'}; if(stock<=min*1.7||days<=del+2) return {type:'WARNING',label:'Vigilance',message:'Préparer achat'}; return {type:'OK',label:'OK',message:'Stock sécurisé'} }
-function daysBeforeRupture(p){return Math.floor(Number(p.current_stock||0)/Math.max(Number(p.forecast_demand||1),1))} function riskBadge(t){return t==='OK'?'bg-green-100 text-green-700':t==='WARNING'?'bg-amber-100 text-amber-700':'bg-red-100 text-red-700'}
-function filteredProducts(){ const q=val('search-input').toLowerCase(), f=val('status-filter'); return products.filter(p=>{const txt=[p.product_name,p.category,p.supplier_name,p.supplier_email].join(' ').toLowerCase(); return (!q||txt.includes(q))&&(f==='ALL'||f===getRisk(p).type)}) }
-function filteredPurchases(){ const q=val('search-input').toLowerCase(), f=val('status-filter'); return purchases.filter(p=>{const st=String(p.status||'pending').toLowerCase(), txt=[p.product_name,p.supplier_name,p.supplier_email,p.message].join(' ').toLowerCase(); return (!q||txt.includes(q))&&(f==='ALL'||f.toLowerCase()===st||['OK','WARNING','CRITICAL'].includes(f))}) }
-function renderAll(){ updateStats(); renderProductsTable(); renderPurchasesTable(); renderCharts(); }
+function daysBeforeRupture(p){return Math.floor(Number(p.current_stock||0)/Math.max(Number(p.forecast_demand||1),1))}
+function riskBadge(t){return t==='OK'?'bg-green-100 text-green-700':t==='WARNING'?'bg-amber-100 text-amber-700':'bg-red-100 text-red-700'}
+
+// ===== FILTERS =====
+function filteredProducts(){
+  const q=val('search-input').toLowerCase();
+  const f=val('status-filter-products')||'ALL';
+  return products.filter(p=>{const txt=[p.product_name,p.category,p.supplier_name,p.supplier_email].join(' ').toLowerCase(); return (!q||txt.includes(q))&&(f==='ALL'||f===getRisk(p).type)});
+}
+function filteredPurchases(){
+  const q=val('search-input').toLowerCase();
+  const f=val('status-filter-purchases')||'ALL';
+  return purchases.filter(p=>{const st=String(p.status||'pending').toLowerCase(), txt=[p.product_name,p.supplier_name,p.supplier_email,p.message].join(' ').toLowerCase(); return (!q||txt.includes(q))&&(f==='ALL'||f.toLowerCase()===st)});
+}
+
+// ===== RENDER =====
+function renderAll(){ updateStats(); if(currentPage==='products') renderProductsTable(); if(currentPage==='purchases') renderPurchasesTable(); if(currentPage==='analytics') renderAnalyticsCharts(); renderCharts(); }
 function updateStats(){ document.getElementById('stat-products').textContent=products.length; document.getElementById('stat-ok').textContent=products.filter(p=>getRisk(p).type==='OK').length; document.getElementById('stat-critical').textContent=products.filter(p=>getRisk(p).type==='CRITICAL').length; document.getElementById('stat-pending').textContent=purchases.filter(p=>String(p.status||'pending').toLowerCase()==='pending').length; document.getElementById('stat-ordered').textContent=purchases.reduce((s,p)=>s+Number(p.quantity_ordered||p.quantity||0),0); }
-function renderProductsTable(){ const list=filteredProducts(); document.getElementById('products-subtitle').textContent=`${list.length} produit(s) affiché(s)`; if(!list.length){document.getElementById('products-table').innerHTML='<div class="p-10 text-center text-slate-500">Aucun produit trouvé</div>';return} document.getElementById('products-table').innerHTML=`<table class="w-full text-sm"><thead class="bg-slate-50 text-slate-500 uppercase text-xs"><tr><th class="p-3 text-left">Produit</th><th class="p-3 text-left">Catégorie</th><th class="p-3 text-left">Stock</th><th class="p-3 text-left">Coverage</th><th class="p-3 text-left">Supplier</th><th class="p-3 text-left">IoT</th><th class="p-3 text-left">Risque</th><th class="p-3 text-left">Actions</th></tr></thead><tbody>${list.map(productRow).join('')}</tbody></table>` }
+
+function renderProductsTable(){
+  const list=filteredProducts();
+  document.getElementById('products-subtitle').textContent=`${list.length} produit(s) affiché(s)`;
+  if(!list.length){document.getElementById('products-table').innerHTML='<div class="p-10 text-center text-slate-500">Aucun produit trouvé</div>';return}
+  document.getElementById('products-table').innerHTML=`<table class="w-full text-sm"><thead class="bg-slate-50 text-slate-500 uppercase text-xs"><tr><th class="p-3 text-left">Produit</th><th class="p-3 text-left">Catégorie</th><th class="p-3 text-left">Stock</th><th class="p-3 text-left">Coverage</th><th class="p-3 text-left">Supplier</th><th class="p-3 text-left">IoT</th><th class="p-3 text-left">Risque</th><th class="p-3 text-left">Actions</th></tr></thead><tbody>${list.map(productRow).join('')}</tbody></table>`;
+}
 function productRow(p){ const r=getRisk(p), stock=Number(p.current_stock||0), min=Number(p.minimum_stock||10); return `<tr class="border-t border-border hover:bg-slate-50"><td class="p-3 font-bold">${esc(p.product_name)}<div class="text-xs text-slate-500">ID: ${esc(p.id||'—')}</div></td><td class="p-3"><span class="px-2 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-bold">${esc(p.category||'—')}</span></td><td class="p-3"><b>${stock}</b><div class="text-xs text-slate-500">Min ${min}</div></td><td class="p-3">${daysBeforeRupture(p)} jour(s)</td><td class="p-3"><b>${esc(p.supplier_name||'—')}</b><div class="text-xs text-slate-500">${esc(p.supplier_email||'—')}</div></td><td class="p-3">${Number(p.temperature||0)}°C / ${Number(p.humidity||0)}%</td><td class="p-3"><span class="px-2 py-1 rounded-full text-xs font-bold ${riskBadge(r.type)}">${r.label}</span><div class="text-xs text-slate-500 mt-1">${r.message}</div></td><td class="p-3"><button class="px-2 py-1 rounded-lg bg-purple-50 text-purple-700 text-xs font-bold" onclick='showAI(${safeJson(p)})'>IA</button> <button class="px-2 py-1 rounded-lg bg-amber-50 text-amber-700 text-xs font-bold" onclick='openPurchaseFromProduct(${safeJson(p)})'>Commander</button></td></tr>` }
-function renderPurchasesTable(){ const list=filteredPurchases(); document.getElementById('purchases-subtitle').textContent=`${list.length} achat(s) affiché(s)`; if(!list.length){document.getElementById('purchases-table').innerHTML='<div class="p-10 text-center text-slate-500">Aucun achat trouvé</div>';return} document.getElementById('purchases-table').innerHTML=`<table class="w-full text-sm"><thead class="bg-slate-50 text-slate-500 uppercase text-xs"><tr><th class="p-3 text-left">ID</th><th class="p-3 text-left">Produit</th><th class="p-3 text-left">Supplier</th><th class="p-3 text-left">Quantité</th><th class="p-3 text-left">Status</th><th class="p-3 text-left">Date</th><th class="p-3 text-left">Actions</th></tr></thead><tbody>${list.map(purchaseRow).join('')}</tbody></table>` }
+
+function renderPurchasesTable(){
+  const list=filteredPurchases();
+  document.getElementById('purchases-subtitle').textContent=`${list.length} achat(s) affiché(s)`;
+  if(!list.length){document.getElementById('purchases-table').innerHTML='<div class="p-10 text-center text-slate-500">Aucun achat trouvé</div>';return}
+  document.getElementById('purchases-table').innerHTML=`<table class="w-full text-sm"><thead class="bg-slate-50 text-slate-500 uppercase text-xs"><tr><th class="p-3 text-left">ID</th><th class="p-3 text-left">Produit</th><th class="p-3 text-left">Supplier</th><th class="p-3 text-left">Quantité</th><th class="p-3 text-left">Status</th><th class="p-3 text-left">Date</th><th class="p-3 text-left">Actions</th></tr></thead><tbody>${list.map(purchaseRow).join('')}</tbody></table>`;
+}
 function purchaseRow(p){ const st=String(p.status||'pending').toLowerCase(), cls=st==='delivered'?'bg-green-100 text-green-700':st==='cancelled'?'bg-red-100 text-red-700':'bg-amber-100 text-amber-700'; return `<tr class="border-t border-border hover:bg-slate-50"><td class="p-3">${esc(p.id||'—')}</td><td class="p-3 font-bold">${esc(p.product_name||'—')}</td><td class="p-3">${esc(p.supplier_name||'—')}<div class="text-xs text-slate-500">${esc(p.supplier_email||'—')}</div></td><td class="p-3"><b>${Number(p.quantity_ordered||p.quantity||0)}</b></td><td class="p-3"><span class="px-2 py-1 rounded-full text-xs font-bold ${cls}">${esc(st)}</span></td><td class="p-3 text-xs text-slate-500">${formatDate(p.created_at)}</td><td class="p-3"><button class="px-2 py-1 rounded-lg border text-xs font-bold" onclick='setPurchaseStatus(${p.id},"delivered")'>Deliver</button> <button class="px-2 py-1 rounded-lg border text-xs font-bold" onclick='setPurchaseStatus(${p.id},"cancelled")'>Cancel</button></td></tr>` }
 function formatDate(v){if(!v)return'—';const d=new Date(v);return isNaN(d)?esc(v):d.toLocaleString('fr-FR')}
-function renderCharts(){ const ok=products.filter(p=>getRisk(p).type==='OK').length, warn=products.filter(p=>getRisk(p).type==='WARNING').length, crit=products.filter(p=>getRisk(p).type==='CRITICAL').length; const top=[...products].slice(0,8); const statuses=['pending','sent','delivered','cancelled']; const pc=statuses.map(s=>purchases.filter(p=>String(p.status||'pending').toLowerCase()===s).length); makeChart('stockPieChart','doughnut',{labels:['OK','Vigilance','Critique'],datasets:[{data:[ok,warn,crit],backgroundColor:['#22c55e','#f59e0b','#ef4444']}]},stockPieChart,c=>stockPieChart=c); makeChart('stockBarChart','bar',{labels:top.map(p=>p.product_name),datasets:[{label:'Stock',data:top.map(p=>Number(p.current_stock||0)),backgroundColor:'#22c55e'}]},stockBarChart,c=>stockBarChart=c); makeChart('purchaseChart','bar',{labels:statuses,datasets:[{label:'Achats',data:pc,backgroundColor:'#f59e0b'}]},purchaseChart,c=>purchaseChart=c); }
+
+// ===== CHARTS =====
+function renderCharts(){
+  const ok=products.filter(p=>getRisk(p).type==='OK').length, warn=products.filter(p=>getRisk(p).type==='WARNING').length, crit=products.filter(p=>getRisk(p).type==='CRITICAL').length;
+  const top=[...products].slice(0,8);
+  const statuses=['pending','sent','delivered','cancelled'];
+  const pc=statuses.map(s=>purchases.filter(p=>String(p.status||'pending').toLowerCase()===s).length);
+  makeChart('stockPieChart','doughnut',{labels:['OK','Vigilance','Critique'],datasets:[{data:[ok,warn,crit],backgroundColor:['#22c55e','#f59e0b','#ef4444']}]},stockPieChart,c=>stockPieChart=c);
+  makeChart('stockBarChart','bar',{labels:top.map(p=>p.product_name),datasets:[{label:'Stock',data:top.map(p=>Number(p.current_stock||0)),backgroundColor:'#22c55e'}]},stockBarChart,c=>stockBarChart=c);
+  makeChart('purchaseChart','bar',{labels:statuses,datasets:[{label:'Achats',data:pc,backgroundColor:'#f59e0b'}]},purchaseChart,c=>purchaseChart=c);
+}
+function renderAnalyticsCharts(){
+  const ok=products.filter(p=>getRisk(p).type==='OK').length, warn=products.filter(p=>getRisk(p).type==='WARNING').length, crit=products.filter(p=>getRisk(p).type==='CRITICAL').length;
+  const top=[...products].slice(0,8);
+  const statuses=['pending','sent','delivered','cancelled'];
+  const pc=statuses.map(s=>purchases.filter(p=>String(p.status||'pending').toLowerCase()===s).length);
+  makeChart('stockPieChart2','doughnut',{labels:['OK','Vigilance','Critique'],datasets:[{data:[ok,warn,crit],backgroundColor:['#22c55e','#f59e0b','#ef4444']}]},stockPieChart2,c=>stockPieChart2=c);
+  makeChart('stockBarChart2','bar',{labels:top.map(p=>p.product_name),datasets:[{label:'Stock',data:top.map(p=>Number(p.current_stock||0)),backgroundColor:'#22c55e'}]},stockBarChart2,c=>stockBarChart2=c);
+  makeChart('purchaseChart2','bar',{labels:statuses,datasets:[{label:'Achats',data:pc,backgroundColor:'#f59e0b'}]},purchaseChart2,c=>purchaseChart2=c);
+}
 function makeChart(id,type,data,old,setter){ const ctx=document.getElementById(id); if(!ctx||!window.Chart)return; if(old)old.destroy(); setter(new Chart(ctx,{type,data,options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:type==='doughnut'}},scales:type==='doughnut'?{}:{y:{beginAtZero:true}}}})); }
-function switchTab(tab){ document.getElementById('products-panel').classList.toggle('hidden',tab!=='products'); document.getElementById('purchases-panel').classList.toggle('hidden',tab!=='purchases'); document.getElementById('tab-products-btn').classList.toggle('active',tab==='products'); document.getElementById('tab-purchases-btn').classList.toggle('active',tab==='purchases'); renderAll(); }
-function openProductModal(){document.getElementById('product-modal').classList.add('open')} function closeProductModal(){document.getElementById('product-modal').classList.remove('open')} function closePurchaseModal(){document.getElementById('purchase-modal').classList.remove('open')} function closeVenteModal(){document.getElementById('vente-modal').classList.remove('open')} function closeAiModal(){document.getElementById('ai-modal').classList.remove('open')}
+
+// ===== MODALS =====
+function openProductModal(){document.getElementById('product-modal').classList.add('open')}
+function closeProductModal(){document.getElementById('product-modal').classList.remove('open')}
+function closePurchaseModal(){document.getElementById('purchase-modal').classList.remove('open')}
+function closeVenteModal(){document.getElementById('vente-modal').classList.remove('open')}
+function closeAiModal(){document.getElementById('ai-modal').classList.remove('open')}
+
 function openPurchaseModal(){ const s=document.getElementById('a-product'); s.innerHTML=products.map(p=>`<option value="${p.id}">${esc(p.product_name)} — stock: ${Number(p.current_stock||0)}</option>`).join(''); document.getElementById('a-quantity').value=30; document.getElementById('a-status').value='pending'; document.getElementById('a-message').value=''; fillPurchaseSupplier(); document.getElementById('purchase-modal').classList.add('open') }
 function fillPurchaseSupplier(){ const id=Number(val('a-product')); const p=products.find(x=>Number(x.id)===id); document.getElementById('a-supplier').value=p?.supplier_name||''; document.getElementById('a-email').value=p?.supplier_email||''; }
 function openPurchaseFromProduct(p){ openPurchaseModal(); document.getElementById('a-product').value=p.id; fillPurchaseSupplier(); document.getElementById('a-quantity').value=Math.max(30, Number(p.minimum_stock||10)*2); document.getElementById('a-message').value=`Commande fournisseur pour ${p.product_name}. Stock actuel: ${p.current_stock}.`; }
 function openVenteModal(){ const s=document.getElementById('v-product'); s.innerHTML=products.map(p=>`<option value="${esc(p.product_name)}">${esc(p.product_name)} — stock: ${Number(p.current_stock||0)}</option>`).join(''); document.getElementById('v-type').value='OUT'; document.getElementById('v-quantity').value=1; document.getElementById('v-reason').value=''; onVenteTypeChange(); updateStockInfo(); document.getElementById('vente-modal').classList.add('open') }
 function onVenteTypeChange(){ const isOut=val('v-type')==='OUT'; const b=document.getElementById('v-submit-btn'); b.textContent=isOut?'Enregistrer sortie':'Enregistrer entrée'; b.className=`px-4 py-2 rounded-lg ${isOut?'bg-accent':'bg-primary'} text-white font-bold`; updateStockInfo(); }
 function updateStockInfo(){ const p=products.find(x=>x.product_name===val('v-product')), q=num('v-quantity'), isOut=val('v-type')==='OUT', cur=Number(p?.current_stock||0), after=isOut?cur-q:cur+q; document.getElementById('v-stock-info').innerHTML=p?`Stock: <b>${cur}</b> → après: <b class="${after<0?'text-red-600':'text-green-600'}">${after}</b>${after<0?' ❌ insuffisant':''}`:'—'; }
+
+// ===== ACTIONS =====
 async function addProduct(){ const body={product_name:val('p-name'),category:val('p-category'),current_stock:num('p-current'),minimum_stock:num('p-min'),supplier_name:val('p-supplier'),supplier_email:val('p-email'),expiration_date:val('p-expiration'),temperature:num('p-temp'),humidity:num('p-humidity')}; if(!body.product_name||!body.category){showToast('Product name et category requis');return} closeProductModal(); try{await apiPost(ADD_PRODUCT_URL,body); showToast('Produit ajouté ✅'); loadDashboard(false)}catch(e){showToast('Erreur: '+e.message)} }
 async function createPurchase(){ const id=Number(val('a-product')), p=products.find(x=>Number(x.id)===id); const body={product_id:id,product_name:p?.product_name||'',quantity_ordered:num('a-quantity'),supplier_name:val('a-supplier'),supplier_email:val('a-email'),status:val('a-status')||'pending',message:val('a-message')}; if(!body.product_id||body.quantity_ordered<=0){showToast('Produit/quantité invalide');return} closePurchaseModal(); try{await apiPost(ORDER_URL,body); showToast('Achat créé ✅'); loadDashboard(false)}catch(e){showToast('Erreur: '+e.message)} }
 async function createVente() {
-  const productName = val('v-product'), quantity = num('v-quantity'),
-        reason = val('v-reason'), type = val('v-type'), isOut = type === 'OUT';
-  if (!productName || quantity <= 0) { showToast('Vérifie produit et quantité'); return; }
-  if (isOut) {
-    const p = products.find(x => x.product_name === productName);
-    if (quantity > Number(p?.current_stock || 0)) { showToast('Stock insuffisant'); return; }
-  }
+  const productName=val('v-product'), quantity=num('v-quantity'), reason=val('v-reason'), type=val('v-type'), isOut=type==='OUT';
+  if (!productName||quantity<=0){showToast('Vérifie produit et quantité');return}
+  if (isOut){const p=products.find(x=>x.product_name===productName); if(quantity>Number(p?.current_stock||0)){showToast('Stock insuffisant');return}}
   closeVenteModal();
-  try {
-    const result = await apiPost(VENTE_URL, { product_name: productName, quantity, reason, type });
-    
-    // DEBUG — voir ce que le webhook retourne vraiment
-    console.log('Vente result:', JSON.stringify(result));
-    
-    showToast(isOut ? 'Sortie enregistrée ✅' : 'Entrée enregistrée ✅');
-    
-    // Vérifier si les notifs sont présentes et non vides
-    const hasNotifs = result.notificationsJson || result.tendanceJson;
-    if (hasNotifs) {
-      renderNotifications(result);
-    }
-    
-    loadDashboard(false);
-  } catch(e) { showToast('Erreur: ' + e.message); }
+  try{ const result=await apiPost(VENTE_URL,{product_name:productName,quantity,reason,type}); showToast(isOut?'Sortie enregistrée ✅':'Entrée enregistrée ✅'); if(result.notificationsJson||result.tendanceJson) renderNotifications(result); loadDashboard(false); }catch(e){showToast('Erreur: '+e.message)}
 }
 async function setPurchaseStatus(id,status){try{await apiPost(ORDER_URL,{action:'update_status',id,status}); showToast('Status updated ✅'); loadDashboard(false)}catch(e){showToast('Erreur: '+e.message)}}
 function showAI(p){ const r=getRisk(p); document.getElementById('ai-text').textContent=`${p.product_name}: ${r.message}. Stock: ${p.current_stock}. Couverture: ${daysBeforeRupture(p)} jour(s).`; document.getElementById('ai-modal').classList.add('open'); }
-function toggleAutoRefresh(){autoRefresh=!autoRefresh; autoRefresh?startAutoRefresh():clearInterval(timer)} function startAutoRefresh(){clearInterval(timer); timer=setInterval(()=>{if(autoRefresh)loadDashboard(false)},AUTO_REFRESH_MS)}
-loadDashboard(); startAutoRefresh();
+function toggleAutoRefresh(){autoRefresh=!autoRefresh; autoRefresh?startAutoRefresh():clearInterval(timer)}
+function startAutoRefresh(){clearInterval(timer); timer=setInterval(()=>{if(autoRefresh)loadDashboard(false)},AUTO_REFRESH_MS)}
+
+loadDashboard();
+startAutoRefresh();
 </script>
 </body>
 </html>
