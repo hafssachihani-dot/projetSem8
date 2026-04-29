@@ -1,48 +1,11 @@
 [
   {
-    "_id": "69ef372365ba93c1d2d6801e",
-    "userId": "3cb6231c-b74a-48a7-8a40-71a046f4dc4f",
-    "name": "control8",
+    "_id": "65ef372365ba93c1d2d6801e",
+    "userId": "0305ea16-b47f-494a-a883-73f70aa7c7eb",
+    "name": "ProjetSem8",
     "variables": {},
     "secrets": {},
     "nodes": [
-      {
-        "position": {
-          "x": -133.533312960769,
-          "y": 429.28477112040105
-        },
-        "width": 64,
-        "height": 64,
-        "id": "cis6ls9trx767p87ljfrplxq",
-        "type": "trigger",
-        "data": {
-          "description": "Triggers workflow on incoming HTTP requests",
-          "showRunningStatus": false,
-          "_morphing": false,
-          "name": "webhook",
-          "label": "WebhookProduct",
-          "inputs": {},
-          "outputs": {
-            "success": {
-              "label": "Success",
-              "isConnectable": null
-            },
-            "error": {
-              "label": "Error",
-              "isConnectable": null
-            }
-          },
-          "parameters": {
-            "method": "post",
-            "respondType": "deferred",
-            "responseCode": 200,
-            "path": "/add-product"
-          },
-          "defaultOutput": null
-        },
-        "inputs": null,
-        "outputs": null
-      },
       {
         "position": {
           "x": -788.0326779207054,
@@ -51,7 +14,7 @@
         "width": 256,
         "height": 100,
         "dragHandle": ".drag-handle__custom",
-        "id": "nwtzkapyx2doaiglzc5zvqne",
+        "id": "b3c7c01e-e1e7-4a64-a322-11d8eba3ce7a",
         "type": "display",
         "data": {
           "description": "Logs the input data to the console.",
@@ -78,50 +41,13 @@
       },
       {
         "position": {
-          "x": -178.717703058603,
-          "y": 83.85804423835074
-        },
-        "width": 64,
-        "height": 64,
-        "id": "e0efqcfhpjr5ulvvo06e6b32",
-        "type": "trigger",
-        "data": {
-          "description": "Triggers workflow on incoming HTTP requests",
-          "showRunningStatus": false,
-          "_morphing": false,
-          "name": "webhook",
-          "label": "Webhook Trigger1",
-          "inputs": {},
-          "outputs": {
-            "success": {
-              "label": "Success",
-              "isConnectable": null
-            },
-            "error": {
-              "label": "Error",
-              "isConnectable": null
-            }
-          },
-          "parameters": {
-            "method": "post",
-            "respondType": "deferred",
-            "responseCode": 200,
-            "path": "/dashboard"
-          },
-          "defaultOutput": null
-        },
-        "inputs": null,
-        "outputs": null
-      },
-      {
-        "position": {
           "x": -480.66221844433227,
           "y": -135.72466021199625
         },
         "width": 256,
         "height": 100,
         "dragHandle": ".drag-handle__custom",
-        "id": "ljle8rmi55ufixxxh1nlk7us",
+        "id": "406fd393-eca8-49e7-baea-d9fbd80b6df7",
         "type": "display",
         "data": {
           "description": "Logs the input data to the console.",
@@ -153,7 +79,8 @@
         },
         "width": 64,
         "height": 64,
-        "id": "kulojtiplzufezafsli76zdb",
+        "selected": false,
+        "id": "916e28bc-47cb-4ae4-b6e3-6aed16d6ccb6",
         "type": "action",
         "data": {
           "description": "Execute PostgreSQL operations (select, insert, update, delete)",
@@ -181,24 +108,14 @@
             "schemaName": "public",
             "connectionTimeoutMillis": 5000,
             "host": "aws-0-eu-west-1.pooler.supabase.com",
-            "user": "postgres.sefwdcdembztgpxikqfn",
-            "password": "HAFSSACHIHANI",
+            "user": "postgres.zxirphsgznlgwdfxpoyj",
+            "password": "Essaad4121@@",
             "database": "postgres",
             "operation": "Execute SQL query",
             "executeQueryParams": {
               "query": "INSERT INTO products    (product_name, category, current_stock, minimum_stock, supplier_name, supplier_email,  expiration_date, temperature, humidity) VALUES    (     '{{outputs.WebhookProduct.success.body.product_name}}',     '{{outputs.WebhookProduct.success.body.category}}',     {{outputs.WebhookProduct.success.body.current_stock}},     {{outputs.WebhookProduct.success.body.minimum_stock}},     '{{outputs.WebhookProduct.body.supplier_name}}',     '{{outputs.WebhookProduct.success.body.supplier_email}}',   '{{outputs.WebhookProduct.success.body.expiration_date}}',     {{outputs.WebhookProduct.success.body.temperature}},     {{outputs.WebhookProduct.success.body.humidity}}   );"
             },
-            "tableName": "products    ",
-            "replaceEmptyStringWithNull": false,
-            "selectParams": {
-              "returnAll": false
-            },
-            "insertParams": {
-              "skipOnConflict": false
-            },
-            "deleteParams": {
-              "cascade": false
-            }
+            "tableName": "products    "
           },
           "defaultOutput": null
         },
@@ -207,13 +124,14 @@
       },
       {
         "position": {
-          "x": 1.6258033213798626,
-          "y": 325.6735204470414
+          "x": -5.629130733620286,
+          "y": 290.6080058478741
         },
         "width": 256,
         "height": 100,
         "dragHandle": ".drag-handle__custom",
-        "id": "vvvwexk8fuud64syrzsvt8ax",
+        "selected": false,
+        "id": "42f9e119-07b4-48cd-8353-96677053a8f8",
         "type": "display",
         "data": {
           "description": "Logs the input data to the console.",
@@ -240,51 +158,13 @@
       },
       {
         "position": {
-          "x": -229.30888278330406,
-          "y": 745.974574578504
-        },
-        "width": 64,
-        "height": 64,
-        "id": "ivyz7p0n6uoadbgsxa50e40o",
-        "type": "trigger",
-        "data": {
-          "description": "Triggers workflow on incoming HTTP requests",
-          "showRunningStatus": false,
-          "_morphing": false,
-          "name": "webhook",
-          "label": "WebhookAchat",
-          "inputs": {},
-          "outputs": {
-            "success": {
-              "label": "Success",
-              "isConnectable": null
-            },
-            "error": {
-              "label": "Error",
-              "isConnectable": null
-            }
-          },
-          "parameters": {
-            "method": "post",
-            "respondType": "deferred",
-            "responseCode": 200,
-            "path": "/achat"
-          },
-          "defaultOutput": null
-        },
-        "inputs": null,
-        "outputs": null
-      },
-      {
-        "position": {
           "x": -421.92456608286705,
           "y": 925.0038882882297
         },
         "width": 256,
         "height": 100,
         "dragHandle": ".drag-handle__custom",
-        "selected": false,
-        "id": "dx6th4bn20e6yfmocyob9soq",
+        "id": "b67ea131-bf5b-4f07-ae6d-d2b0a693687a",
         "type": "display",
         "data": {
           "description": "Logs the input data to the console.",
@@ -316,7 +196,8 @@
         },
         "width": 64,
         "height": 64,
-        "id": "crngoktvzzp5lejxkgl6210u",
+        "selected": false,
+        "id": "904de66c-e11a-4904-8ac3-330cbc0b7a51",
         "type": "action",
         "data": {
           "description": "Execute PostgreSQL operations (select, insert, update, delete)",
@@ -344,14 +225,24 @@
             "schemaName": "public",
             "connectionTimeoutMillis": 5000,
             "host": "aws-0-eu-west-1.pooler.supabase.com",
-            "user": "postgres.sefwdcdembztgpxikqfn",
-            "password": "HAFSSACHIHANI",
+            "user": "postgres.zxirphsgznlgwdfxpoyj",
+            "password": "Essaad4121@@",
             "database": "postgres",
             "operation": "Execute SQL query",
             "executeQueryParams": {
               "query": "INSERT INTO purchases (   product_id,   product_name,   quantity_ordered,   supplier_name,   supplier_email,   status,   message ) VALUES (   {{outputs.WebhookAchat.success.body.product_id}},   '{{outputs.WebhookAchat.success.body.product_name}}',   {{outputs.WebhookAchat.success.body.quantity_ordered}},   '{{outputs.WebhookAchat.success.body.supplier_name}}',   '{{outputs.WebhookAchat.success.body.supplier_email}}',   '{{outputs.WebhookAchat.success.body.status}}',   '{{outputs.WebhookAchat.success.body.message}}' );"
             },
-            "tableName": "purchases "
+            "tableName": "purchases ",
+            "replaceEmptyStringWithNull": false,
+            "selectParams": {
+              "returnAll": false
+            },
+            "insertParams": {
+              "skipOnConflict": false
+            },
+            "deleteParams": {
+              "cascade": false
+            }
           },
           "defaultOutput": null
         },
@@ -366,7 +257,7 @@
         "width": 256,
         "height": 100,
         "dragHandle": ".drag-handle__custom",
-        "id": "n1n68xun2uyj82y1irecr6v1",
+        "id": "37cafd01-0779-4fd6-8006-f03a3a0de104",
         "type": "display",
         "data": {
           "description": "Logs the input data to the console.",
@@ -398,7 +289,8 @@
         },
         "width": 64,
         "height": 64,
-        "id": "hs8d652dcvf1syyfpy1owb0s",
+        "selected": false,
+        "id": "b9a85920-3eed-403f-ad19-d72e61a6a85f",
         "type": "action",
         "data": {
           "description": "Execute PostgreSQL operations (select, insert, update, delete)",
@@ -426,13 +318,23 @@
             "schemaName": "public",
             "connectionTimeoutMillis": 5000,
             "host": "aws-0-eu-west-1.pooler.supabase.com",
-            "user": "postgres.sefwdcdembztgpxikqfn",
-            "password": "HAFSSACHIHANI",
+            "user": "postgres.zxirphsgznlgwdfxpoyj",
+            "password": "Essaad4121@@",
             "database": "postgres",
             "operation": "Execute SQL query",
             "tableName": "products    ",
             "executeQueryParams": {
               "query": "SELECT   id,   product_name,   category,   current_stock,   minimum_stock,   supplier_name,   supplier_email,   temperature,   humidity,   created_at,    CASE     WHEN current_stock = 0 THEN 'RUPTURE'     WHEN current_stock <= minimum_stock THEN 'COMMANDER'     ELSE 'OK'   END AS stock_status,    CASE     WHEN current_stock = 0 THEN 'RED'     WHEN current_stock <= minimum_stock THEN 'ORANGE'     ELSE 'GREEN'   END AS stock_color  FROM products ORDER BY current_stock ASC;"
+            },
+            "replaceEmptyStringWithNull": false,
+            "selectParams": {
+              "returnAll": false
+            },
+            "insertParams": {
+              "skipOnConflict": false
+            },
+            "deleteParams": {
+              "cascade": false
             }
           },
           "defaultOutput": null
@@ -447,7 +349,8 @@
         },
         "width": 64,
         "height": 64,
-        "id": "ketqa1t9mgv67xwu15soucqa",
+        "selected": false,
+        "id": "aa7d470f-fffa-4136-af22-3d7c905cb8b0",
         "type": "action",
         "data": {
           "description": "Execute PostgreSQL operations (select, insert, update, delete)",
@@ -475,14 +378,24 @@
             "schemaName": "public",
             "connectionTimeoutMillis": 5000,
             "host": "aws-0-eu-west-1.pooler.supabase.com",
-            "user": "postgres.sefwdcdembztgpxikqfn",
-            "password": "HAFSSACHIHANI",
+            "user": "postgres.zxirphsgznlgwdfxpoyj",
+            "password": "Essaad4121@@",
             "database": "postgres",
             "operation": "Execute SQL query",
             "executeQueryParams": {
               "query": "SELECT   id,   product_name,   quantity_ordered,   supplier_name,   supplier_email,   status,   message,   created_at FROM purchases ORDER BY created_at DESC;"
             },
-            "tableName": "purchases "
+            "tableName": "purchases ",
+            "replaceEmptyStringWithNull": false,
+            "selectParams": {
+              "returnAll": false
+            },
+            "insertParams": {
+              "skipOnConflict": false
+            },
+            "deleteParams": {
+              "cascade": false
+            }
           },
           "defaultOutput": null
         },
@@ -496,7 +409,7 @@
         },
         "width": 64,
         "height": 64,
-        "id": "omkloozg0cml2wsj16wb5vjg",
+        "id": "7dee1884-b9b2-4b21-9d1c-95d5bf6bbe23",
         "type": "action",
         "data": {
           "description": "Executes custom JavaScript code on the input data.",
@@ -535,8 +448,7 @@
         "width": 256,
         "height": 100,
         "dragHandle": ".drag-handle__custom",
-        "selected": false,
-        "id": "jit44u253o0l03ou4m4k9oqs",
+        "id": "132167ea-7f04-4800-a006-626a859cd035",
         "type": "display",
         "data": {
           "description": "Logs the input data to the console.",
@@ -569,8 +481,7 @@
         "width": 256,
         "height": 100,
         "dragHandle": ".drag-handle__custom",
-        "selected": false,
-        "id": "g3oy72jguoecaygsmm26dtkx",
+        "id": "c98fef37-7a5c-4634-a179-067b6796adb0",
         "type": "display",
         "data": {
           "description": "Logs the input data to the console.",
@@ -603,8 +514,7 @@
         "width": 256,
         "height": 100,
         "dragHandle": ".drag-handle__custom",
-        "selected": false,
-        "id": "k8z5oes3pqm3woc76ok76ihc",
+        "id": "31d6b33b-4271-48db-9269-8f4eeeb378ad",
         "type": "display",
         "data": {
           "description": "Logs the input data to the console.",
@@ -636,7 +546,8 @@
         },
         "width": 64,
         "height": 64,
-        "id": "dnwqex0tzszeakkr2trphhna",
+        "selected": false,
+        "id": "cc206b53-525e-4c7f-89cf-3ae0b42085cc",
         "type": "action",
         "data": {
           "description": "Responds to a webhook with a specific message.",
@@ -682,7 +593,7 @@
         "width": 256,
         "height": 100,
         "dragHandle": ".drag-handle__custom",
-        "id": "x9bes0d5812vpv7eoq5y3ptv",
+        "id": "285cea14-3f57-4bbe-83ab-27199616633d",
         "type": "display",
         "data": {
           "description": "Logs the input data to the console.",
@@ -709,51 +620,13 @@
       },
       {
         "position": {
-          "x": -562.3407898061055,
-          "y": 1682.7518707934246
-        },
-        "width": 64,
-        "height": 64,
-        "id": "zk3gbb2bj1j8d26e8q3evlcz",
-        "type": "trigger",
-        "data": {
-          "description": "Triggers workflow on incoming HTTP requests",
-          "showRunningStatus": false,
-          "_morphing": false,
-          "name": "webhook",
-          "label": "WebhookVente",
-          "inputs": {},
-          "outputs": {
-            "success": {
-              "label": "Success",
-              "isConnectable": null
-            },
-            "error": {
-              "label": "Error",
-              "isConnectable": null
-            }
-          },
-          "parameters": {
-            "method": "post",
-            "respondType": "deferred",
-            "responseCode": 200,
-            "path": "/vente"
-          },
-          "defaultOutput": null
-        },
-        "inputs": null,
-        "outputs": null
-      },
-      {
-        "position": {
           "x": -662.878561862598,
           "y": 1851.2333047506015
         },
         "width": 256,
         "height": 100,
         "dragHandle": ".drag-handle__custom",
-        "selected": false,
-        "id": "gwenglt93o1mwzh6zpzk46s5",
+        "id": "281620c1-2593-4c0f-bb2e-cf5626467c06",
         "type": "display",
         "data": {
           "description": "Logs the input data to the console.",
@@ -785,7 +658,8 @@
         },
         "width": 64,
         "height": 64,
-        "id": "fpvl8dxtrbnzemin2u4ur83k",
+        "selected": false,
+        "id": "83d399a5-7a8b-410f-b7da-719774f2d9c2",
         "type": "action",
         "data": {
           "description": "Execute PostgreSQL operations (select, insert, update, delete)",
@@ -813,14 +687,24 @@
             "schemaName": "public",
             "connectionTimeoutMillis": 5000,
             "host": "aws-0-eu-west-1.pooler.supabase.com",
-            "user": "postgres.sefwdcdembztgpxikqfn",
-            "password": "HAFSSACHIHANI",
+            "user": "postgres.zxirphsgznlgwdfxpoyj",
+            "password": "Essaad4121@@",
             "database": "postgres",
             "operation": "Execute SQL query",
             "executeQueryParams": {
               "query": "UPDATE products SET current_stock =   CASE     WHEN '{{outputs.WebhookVente.success.body.type}}' = 'OUT'       THEN current_stock - {{outputs.WebhookVente.success.body.quantity}}     WHEN '{{outputs.WebhookVente.success.body.type}}' = 'IN'       THEN current_stock + {{outputs.WebhookVente.success.body.quantity}}     ELSE current_stock   END WHERE product_name = '{{outputs.WebhookVente.success.body.product_name}}' AND (   '{{outputs.WebhookVente.success.body.type}}' = 'IN'   OR current_stock >= {{outputs.WebhookVente.success.body.quantity}} );"
             },
-            "tableName": "products "
+            "tableName": "products ",
+            "replaceEmptyStringWithNull": false,
+            "selectParams": {
+              "returnAll": false
+            },
+            "insertParams": {
+              "skipOnConflict": false
+            },
+            "deleteParams": {
+              "cascade": false
+            }
           },
           "defaultOutput": null
         },
@@ -835,8 +719,7 @@
         "width": 256,
         "height": 100,
         "dragHandle": ".drag-handle__custom",
-        "selected": false,
-        "id": "voj9ef9lhrml557xhilwb26l",
+        "id": "04b2b8b7-01d1-48a9-9d89-20c0c5cec36c",
         "type": "display",
         "data": {
           "description": "Logs the input data to the console.",
@@ -868,7 +751,8 @@
         },
         "width": 64,
         "height": 64,
-        "id": "sfdwuweowxk837vzh9p2odf0",
+        "selected": false,
+        "id": "05fa61cb-bb64-4c14-b0fd-611e905ac4db",
         "type": "action",
         "data": {
           "description": "Execute PostgreSQL operations (select, insert, update, delete)",
@@ -896,14 +780,24 @@
             "schemaName": "public",
             "connectionTimeoutMillis": 5000,
             "host": "aws-0-eu-west-1.pooler.supabase.com",
-            "user": "postgres.sefwdcdembztgpxikqfn",
-            "password": "HAFSSACHIHANI",
+            "user": "postgres.zxirphsgznlgwdfxpoyj",
+            "password": "Essaad4121@@",
             "database": "postgres",
             "operation": "Execute SQL query",
             "executeQueryParams": {
               "query": "INSERT INTO stock_movements (   product_name,   movement_type,   quantity,   reason,   created_at ) VALUES (   '{{outputs.WebhookVente.success.body.product_name}}',   '{{outputs.WebhookVente.success.body.type}}',   {{outputs.WebhookVente.success.body.quantity}},   '{{outputs.WebhookVente.success.body.reason}}',   NOW() );"
             },
-            "tableName": "stock_movements "
+            "tableName": "stock_movements ",
+            "replaceEmptyStringWithNull": false,
+            "selectParams": {
+              "returnAll": false
+            },
+            "insertParams": {
+              "skipOnConflict": false
+            },
+            "deleteParams": {
+              "cascade": false
+            }
           },
           "defaultOutput": null
         },
@@ -918,8 +812,7 @@
         "width": 256,
         "height": 100,
         "dragHandle": ".drag-handle__custom",
-        "selected": false,
-        "id": "jb8yshiiigpfd650knlplyxx",
+        "id": "1b813dc8-0ac3-406a-a40c-17b4644d1424",
         "type": "display",
         "data": {
           "description": "Logs the input data to the console.",
@@ -951,8 +844,7 @@
         },
         "width": 64,
         "height": 68,
-        "selected": false,
-        "id": "ihmo3dcxh0slj6aeod30m4aa",
+        "id": "df7f85dd-d08a-43ff-b30c-0de375d24041",
         "type": "utility",
         "data": {
           "description": "Executes different branches based on a condition",
@@ -994,8 +886,8 @@
         },
         "width": 64,
         "height": 64,
-        "selected": true,
-        "id": "egejw4i5ytxhsfyiwfok5axs",
+        "selected": false,
+        "id": "b6fa84e9-6c7e-4364-8124-e59bef511df8",
         "type": "action",
         "data": {
           "description": "Execute PostgreSQL operations (select, insert, update, delete)",
@@ -1023,14 +915,24 @@
             "schemaName": "public",
             "connectionTimeoutMillis": 5000,
             "host": "aws-0-eu-west-1.pooler.supabase.com",
-            "user": "postgres.sefwdcdembztgpxikqfn",
-            "password": "HAFSSACHIHANI",
+            "user": "postgres.zxirphsgznlgwdfxpoyj",
+            "password": "Essaad4121@@",
             "database": "postgres",
             "operation": "Execute SQL query",
             "executeQueryParams": {
               "query": "UPDATE purchases SET status = '{{outputs.WebhookAchat.success.body.status}}' WHERE id = {{outputs.WebhookAchat.success.body.id}};"
             },
-            "tableName": "purchases "
+            "tableName": "purchases ",
+            "replaceEmptyStringWithNull": false,
+            "selectParams": {
+              "returnAll": false
+            },
+            "insertParams": {
+              "skipOnConflict": false
+            },
+            "deleteParams": {
+              "cascade": false
+            }
           },
           "defaultOutput": null
         },
@@ -1045,8 +947,7 @@
         "width": 256,
         "height": 100,
         "dragHandle": ".drag-handle__custom",
-        "selected": false,
-        "id": "dfxyz2da8b7qmzos3sxn2w10",
+        "id": "fd1637b4-4b2c-487b-affd-0bc79b6facbd",
         "type": "display",
         "data": {
           "description": "Logs the input data to the console.",
@@ -1078,8 +979,7 @@
         },
         "width": 64,
         "height": 68,
-        "selected": false,
-        "id": "wqlphxffik0vkvk4viwtcnpp",
+        "id": "7c74eea9-7e84-46ec-96c0-fa0d192d10fe",
         "type": "utility",
         "data": {
           "description": "Executes different branches based on a condition",
@@ -1121,7 +1021,8 @@
         },
         "width": 64,
         "height": 64,
-        "id": "x08qfi6tkr5ajlfgxhhcpx4n",
+        "selected": false,
+        "id": "41e0cb99-5ced-4fb0-9ce4-a150db703955",
         "type": "action",
         "data": {
           "description": "Execute PostgreSQL operations (select, insert, update, delete)",
@@ -1149,23 +1050,13 @@
             "schemaName": "public",
             "connectionTimeoutMillis": 5000,
             "host": "aws-0-eu-west-1.pooler.supabase.com",
-            "user": "postgres.sefwdcdembztgpxikqfn",
-            "password": "HAFSSACHIHANI",
+            "user": "postgres.zxirphsgznlgwdfxpoyj",
+            "password": "Essaad4121@@",
             "database": "postgres",
             "tableName": "purchases ",
             "operation": "Execute SQL query",
             "executeQueryParams": {
               "query": "SELECT    product_id,   product_name,   quantity_ordered FROM purchases WHERE id = {{outputs.WebhookAchat.success.body.id}};"
-            },
-            "replaceEmptyStringWithNull": false,
-            "selectParams": {
-              "returnAll": false
-            },
-            "insertParams": {
-              "skipOnConflict": false
-            },
-            "deleteParams": {
-              "cascade": false
             }
           },
           "defaultOutput": null
@@ -1181,8 +1072,7 @@
         "width": 256,
         "height": 100,
         "dragHandle": ".drag-handle__custom",
-        "selected": false,
-        "id": "i76i43bnmi0otoeaecn7oyba",
+        "id": "451e6e42-6868-443f-9a48-474f6ddae8f4",
         "type": "display",
         "data": {
           "description": "Logs the input data to the console.",
@@ -1214,7 +1104,8 @@
         },
         "width": 64,
         "height": 64,
-        "id": "fpcogsv03aoapu5ejaajb0c4",
+        "selected": false,
+        "id": "3a1a36c7-2b7d-48e4-9412-093da6f103e4",
         "type": "action",
         "data": {
           "description": "Execute PostgreSQL operations (select, insert, update, delete)",
@@ -1242,13 +1133,23 @@
             "schemaName": "public",
             "connectionTimeoutMillis": 5000,
             "host": "aws-0-eu-west-1.pooler.supabase.com",
-            "user": "postgres.sefwdcdembztgpxikqfn",
-            "password": "HAFSSACHIHANI",
+            "user": "postgres.zxirphsgznlgwdfxpoyj",
+            "password": "Essaad4121@@",
             "database": "postgres",
             "tableName": "products ",
             "operation": "Execute SQL query",
             "executeQueryParams": {
               "query": "INSERT INTO stock_movements (   product_name,   movement_type,   quantity,   reason,   created_at ) VALUES (   '{{outputs.SelectPurchase.success.rows.0.product_name}}',   'IN',   {{outputs.SelectPurchase.success.rows.0.quantity_ordered}},   'Purchase delivered',   NOW() );"
+            },
+            "replaceEmptyStringWithNull": false,
+            "selectParams": {
+              "returnAll": false
+            },
+            "insertParams": {
+              "skipOnConflict": false
+            },
+            "deleteParams": {
+              "cascade": false
             }
           },
           "defaultOutput": null
@@ -1264,8 +1165,7 @@
         "width": 256,
         "height": 100,
         "dragHandle": ".drag-handle__custom",
-        "selected": false,
-        "id": "rp6nzqg08piy9qmb40mhto8g",
+        "id": "dedfaedd-11ca-48af-8b84-b3637c72654c",
         "type": "display",
         "data": {
           "description": "Logs the input data to the console.",
@@ -1297,7 +1197,8 @@
         },
         "width": 64,
         "height": 64,
-        "id": "xvz8fa1a3h4w2cju2t50oau4",
+        "selected": false,
+        "id": "f26d05d4-3dc2-43c1-81fd-9b6f100717f6",
         "type": "action",
         "data": {
           "description": "Execute PostgreSQL operations (select, insert, update, delete)",
@@ -1325,13 +1226,23 @@
             "schemaName": "public",
             "connectionTimeoutMillis": 5000,
             "host": "aws-0-eu-west-1.pooler.supabase.com",
-            "user": "postgres.sefwdcdembztgpxikqfn",
-            "password": "HAFSSACHIHANI",
+            "user": "postgres.zxirphsgznlgwdfxpoyj",
+            "password": "Essaad4121@@",
             "database": "postgres",
             "tableName": "products    ",
             "operation": "Execute SQL query",
             "executeQueryParams": {
               "query": "UPDATE products SET current_stock = current_stock + {{outputs.SelectPurchase.success.rows.0.quantity_ordered}} WHERE id = {{outputs.SelectPurchase.success.rows.0.product_id}};"
+            },
+            "replaceEmptyStringWithNull": false,
+            "selectParams": {
+              "returnAll": false
+            },
+            "insertParams": {
+              "skipOnConflict": false
+            },
+            "deleteParams": {
+              "cascade": false
             }
           },
           "defaultOutput": null
@@ -1347,7 +1258,7 @@
         "width": 256,
         "height": 100,
         "dragHandle": ".drag-handle__custom",
-        "id": "pg5kfuxnhof1e7tl30lrfev0",
+        "id": "35a04675-2d6a-4efa-908a-0eec92cb7670",
         "type": "display",
         "data": {
           "description": "Logs the input data to the console.",
@@ -1380,8 +1291,7 @@
         "width": 256,
         "height": 100,
         "dragHandle": ".drag-handle__custom",
-        "selected": false,
-        "id": "vy8188j9etcl3xrlh73p35gs",
+        "id": "2a3040c2-91a2-4a1d-b769-41e2635719ed",
         "type": "display",
         "data": {
           "description": "Logs the input data to the console.",
@@ -1413,7 +1323,8 @@
         },
         "width": 64,
         "height": 64,
-        "id": "t8iu4gbcjlmrtwmw26ffhdcy",
+        "selected": false,
+        "id": "96bcfca1-7f19-440c-ac52-cf6e9db5c988",
         "type": "action",
         "data": {
           "description": "Execute PostgreSQL operations (select, insert, update, delete)",
@@ -1440,19 +1351,9 @@
             "port": 6543,
             "schemaName": "public",
             "connectionTimeoutMillis": 5000,
-            "replaceEmptyStringWithNull": false,
-            "selectParams": {
-              "returnAll": false
-            },
-            "insertParams": {
-              "skipOnConflict": false
-            },
-            "deleteParams": {
-              "cascade": false
-            },
             "host": "aws-0-eu-west-1.pooler.supabase.com",
-            "user": "postgres.sefwdcdembztgpxikqfn",
-            "password": "HAFSSACHIHANI",
+            "user": "postgres.zxirphsgznlgwdfxpoyj",
+            "password": "Essaad4121@@",
             "database": "postgres",
             "operation": "Execute SQL query",
             "executeQueryParams": {
@@ -1472,7 +1373,8 @@
         },
         "width": 64,
         "height": 64,
-        "id": "s2iwt7jx1yw1e61zy4hk69a0",
+        "selected": false,
+        "id": "970ca03b-ba9d-402c-b5b6-0e5a7ffce8f8",
         "type": "action",
         "data": {
           "description": "Execute PostgreSQL operations (select, insert, update, delete)",
@@ -1499,19 +1401,9 @@
             "port": 6543,
             "schemaName": "public",
             "connectionTimeoutMillis": 5000,
-            "replaceEmptyStringWithNull": false,
-            "selectParams": {
-              "returnAll": false
-            },
-            "insertParams": {
-              "skipOnConflict": false
-            },
-            "deleteParams": {
-              "cascade": false
-            },
             "host": "aws-0-eu-west-1.pooler.supabase.com",
-            "user": "postgres.sefwdcdembztgpxikqfn",
-            "password": "HAFSSACHIHANI",
+            "user": "postgres.zxirphsgznlgwdfxpoyj",
+            "password": "Essaad4121@@",
             "database": "postgres",
             "operation": "Execute SQL query",
             "executeQueryParams": {
@@ -1532,7 +1424,7 @@
         "width": 256,
         "height": 100,
         "dragHandle": ".drag-handle__custom",
-        "id": "n0vvnvn5rjncpwlnfo6r2x63",
+        "id": "17522ced-7f39-4218-8a8d-044e699ea407",
         "type": "display",
         "data": {
           "description": "Logs the input data to the console.",
@@ -1565,8 +1457,7 @@
         "width": 256,
         "height": 100,
         "dragHandle": ".drag-handle__custom",
-        "selected": false,
-        "id": "klj32mghqeyesr38gma9u17y",
+        "id": "ff819f2a-a3c2-4fa8-85fc-672c508f9fe6",
         "type": "display",
         "data": {
           "description": "Logs the input data to the console.",
@@ -1598,7 +1489,7 @@
         },
         "width": 64,
         "height": 64,
-        "id": "t5hfwc7nzi9opszfgwu27edi",
+        "id": "87f10dce-6c2b-463a-b69e-c05334dfdb08",
         "type": "utility",
         "data": {
           "description": "Merges multiple branches. Example: waits for all 2 branches → merges results, or continues when first completes (mode dependent)",
@@ -1641,7 +1532,7 @@
         "width": 256,
         "height": 100,
         "dragHandle": ".drag-handle__custom",
-        "id": "ufebbnmqtdlybhucg4n7989d",
+        "id": "43e6725e-500a-482a-8766-d563eff2e544",
         "type": "display",
         "data": {
           "description": "Logs the input data to the console.",
@@ -1673,7 +1564,7 @@
         },
         "width": 64,
         "height": 64,
-        "id": "bl73evftchythoplycmgeza3",
+        "id": "9630d66c-51b9-4a7c-a6b7-61a4bf7507bd",
         "type": "action",
         "data": {
           "description": "Executes custom JavaScript code on the input data.",
@@ -1712,7 +1603,7 @@
         "width": 64,
         "height": 64,
         "selected": false,
-        "id": "cd0s0gy3nlja4onth9b5y1bp",
+        "id": "af58fcf8-d50b-424f-87bc-a3983c5eba35",
         "type": "agent",
         "data": {
           "description": "An AI agent that can perform tasks using nodes as tools based on user input.",
@@ -1752,8 +1643,7 @@
         "width": 256,
         "height": 100,
         "dragHandle": ".drag-handle__custom",
-        "selected": false,
-        "id": "seflsuzkegdibb73oet705vt",
+        "id": "dfdea3be-6556-4fbc-9e0a-7f3ea3ccf656",
         "type": "display",
         "data": {
           "description": "Logs the input data to the console.",
@@ -1786,7 +1676,7 @@
         "width": 64,
         "height": 64,
         "selected": false,
-        "id": "wh7g216srhbsh6gxqtf011dg",
+        "id": "f9a91ca2-37bf-4f0c-b343-6af182d55db9",
         "type": "action",
         "data": {
           "description": "Executes custom JavaScript code on the input data.",
@@ -1810,7 +1700,7 @@
             }
           },
           "parameters": {
-            "code": "let data = input;\n\n// إذا Agent رجع string\nif (typeof data === \"string\") {\n  data = JSON.parse(data);\n}\n\n// إذا Agent رجع داخل output أو text\nif (input.output) data = input.output;\nif (input.text) data = JSON.parse(input.text);\n\nconst alertStock = data.Alert_Stock || [];\nconst tendance = data.TENDANCE || [];\nconst ok = data.OK || [];\n\nconst notifications = alertStock.map(p => ({\n  type: \"ALERT_STOCK\",\n  product_id: p.product_id,\n  product_name: p.product_name,\n  risk_level: p.risk_level,\n  reason: p.reason,\n  recommended_order_quantity: p.recommended_order_quantity,\n  supplier_name: p.supplier_name,\n  supplier_email: p.supplier_email\n}));\n\nconst tendanceNotifications = tendance.map(p => ({\n  type: \"TENDANCE\",\n  product_id: p.product_id,\n  product_name: p.product_name,\n  risk_level: p.risk_level,\n  reason: p.reason\n}));\n\nreturn {\n  success: true,\n  notifications,\n  tendanceNotifications,\n  analysis: {\n    alert_count: alertStock.length,\n    tendance_count: tendance.length,\n    ok_count: ok.length\n  },\n  notificationsJson: JSON.stringify(notifications),\n  tendanceJson: JSON.stringify(tendanceNotifications)\n};"
+            "code": "let data = input;\n\n// 1. Sécurisation du Parsing JSON\ntry {\n  if (typeof data === \"string\") data = JSON.parse(data);\n  if (input.output) data = typeof input.output === \"string\" ? JSON.parse(input.output) : input.output;\n  if (input.text) data = typeof input.text === \"string\" ? JSON.parse(input.text) : input.text;\n} catch (e) {\n  console.log(\"Erreur de parsing JSON\", e);\n}\n\n// 2. L'arme secrète : Une fonction qui transforme tout en tableau\nfunction forceArray(val) {\n  if (!val) return []; // Si c'est null ou undefined -> []\n  if (Array.isArray(val)) return val; // Si c'est déjà un tableau -> on le garde\n  if (typeof val === 'object') return [val]; // SI C'EST L'OBJET DE VOTRE AGENT -> on le met dans un tableau : [{...}]\n  return [];\n}\n\n// 3. On applique la fonction\nconst alertStock = forceArray(data.Alert_Stock);\nconst tendance = forceArray(data.TENDANCE);\nconst ok = forceArray(data.OK);\n\n// 4. Maintenant les .map() fonctionneront à 100%\nconst notifications = alertStock.map(p => ({\n  type: \"ALERT_STOCK\",\n  product_id: p.product_id,\n  product_name: p.product_name,\n  risk_level: p.risk_level,\n  reason: p.reason,\n  recommended_order_quantity: p.recommended_order_quantity,\n  supplier_name: p.supplier_name,\n  supplier_email: p.supplier_email\n}));\n\nconst tendanceNotifications = tendance.map(p => ({\n  type: \"TENDANCE\",\n  product_id: p.product_id,\n  product_name: p.product_name,\n  risk_level: p.risk_level,\n  reason: p.reason\n}));\n\nreturn {\n  success: true,\n  notifications,\n  tendanceNotifications,\n  analysis: {\n    alert_count: alertStock.length,\n    tendance_count: tendance.length,\n    ok_count: ok.length\n  },\n  notificationsJson: JSON.stringify(notifications),\n  tendanceJson: JSON.stringify(tendanceNotifications)\n};"
           },
           "defaultOutput": null
         },
@@ -1825,8 +1715,7 @@
         "width": 256,
         "height": 100,
         "dragHandle": ".drag-handle__custom",
-        "selected": false,
-        "id": "oleef0kgbphnqaiyz79phd2g",
+        "id": "babc1eb2-714e-4a44-bb51-df8f6b9b0b85",
         "type": "display",
         "data": {
           "description": "Logs the input data to the console.",
@@ -1859,7 +1748,7 @@
         "width": 256,
         "height": 100,
         "dragHandle": ".drag-handle__custom",
-        "id": "gq69hot9upjil3yx2buuj7jc",
+        "id": "65890d9a-aa5d-4866-aa6f-96128b173902",
         "type": "display",
         "data": {
           "description": "Logs the input data to the console.",
@@ -1891,7 +1780,8 @@
         },
         "width": 64,
         "height": 64,
-        "id": "g0dz4hhyoosj2qp38wnnx71n",
+        "selected": false,
+        "id": "90e0882d-ca21-4fd0-be4a-57b87e44975d",
         "type": "agent-llm",
         "data": {
           "description": "A node that uses Google's LLM models.",
@@ -1915,7 +1805,7 @@
             }
           },
           "parameters": {
-            "apiKey": "AIzaSyBHodmuJOMGOtJldcj7JpvE1DqEV8qUHXA",
+            "apiKey": "AIzaSyBYHpcykc9L5UoR9im2IzAU2x5bbzF09r0",
             "model": "gemini-flash-lite-latest"
           },
           "defaultOutput": null
@@ -1931,7 +1821,7 @@
         "width": 64,
         "height": 64,
         "selected": false,
-        "id": "vfvo3k1moax512dkib4romtw",
+        "id": "cf395e9e-b2dc-48b9-b251-4217d4861c1b",
         "type": "action",
         "data": {
           "description": "Responds to a webhook with a specific message.",
@@ -1967,61 +1857,169 @@
         },
         "inputs": null,
         "outputs": null
+      },
+      {
+        "position": {
+          "x": -187.22656997142687,
+          "y": 67.08783504160763
+        },
+        "width": 64,
+        "height": 64,
+        "selected": false,
+        "id": "d0giczyvk94wy7g084dyidiq",
+        "type": "trigger",
+        "data": {
+          "description": "Triggers workflow on incoming HTTP requests",
+          "showRunningStatus": false,
+          "_morphing": false,
+          "name": "webhook",
+          "label": "Webhook Trigger",
+          "inputs": {},
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": null
+            },
+            "error": {
+              "label": "Error",
+              "isConnectable": null
+            }
+          },
+          "parameters": {
+            "method": "post",
+            "respondType": "deferred",
+            "responseCode": 200,
+            "path": "/dashboard"
+          },
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": -217.90105577825807,
+          "y": 432.98402968056723
+        },
+        "width": 64,
+        "height": 64,
+        "selected": false,
+        "id": "yg9qb2wh9ewomrtgfyhhqvs9",
+        "type": "trigger",
+        "data": {
+          "description": "Triggers workflow on incoming HTTP requests",
+          "showRunningStatus": false,
+          "_morphing": false,
+          "name": "webhook",
+          "label": "WebhookProduct",
+          "inputs": {},
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": null
+            },
+            "error": {
+              "label": "Error",
+              "isConnectable": null
+            }
+          },
+          "parameters": {
+            "method": "post",
+            "respondType": "deferred",
+            "responseCode": 200,
+            "path": "/add-product"
+          },
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": -235.54358622727122,
+          "y": 736.3056308803808
+        },
+        "width": 64,
+        "height": 64,
+        "selected": false,
+        "id": "ibvcovotet1u57r07o6duq2p",
+        "type": "trigger",
+        "data": {
+          "description": "Triggers workflow on incoming HTTP requests",
+          "showRunningStatus": false,
+          "_morphing": false,
+          "name": "webhook",
+          "label": "WebhookAchat",
+          "inputs": {},
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": null
+            },
+            "error": {
+              "label": "Error",
+              "isConnectable": null
+            }
+          },
+          "parameters": {
+            "method": "post",
+            "respondType": "deferred",
+            "responseCode": 200,
+            "path": "/achat"
+          },
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": -513.0285920868474,
+          "y": 1646.9284370258454
+        },
+        "width": 64,
+        "height": 64,
+        "selected": false,
+        "id": "m4iyuzlkmkgogu53ihrgvxrg",
+        "type": "trigger",
+        "data": {
+          "description": "Triggers workflow on incoming HTTP requests",
+          "showRunningStatus": false,
+          "_morphing": false,
+          "name": "webhook",
+          "label": "WebhookVente",
+          "inputs": {},
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": null
+            },
+            "error": {
+              "label": "Error",
+              "isConnectable": null
+            }
+          },
+          "parameters": {
+            "method": "post",
+            "respondType": "deferred",
+            "responseCode": 200,
+            "path": "/vente"
+          },
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
       }
     ],
     "connections": [
-      {
-        "type": "directed",
-        "id": "xy-edge__cis6ls9trx767p87ljfrplxqsuccess-nwtzkapyx2doaiglzc5zvqneinput",
-        "data": {
-          "isAnimated": false
-        },
-        "source": "cis6ls9trx767p87ljfrplxq",
-        "target": "nwtzkapyx2doaiglzc5zvqne",
-        "sourceHandle": "success",
-        "targetHandle": "input"
-      },
-      {
-        "type": "directed",
-        "id": "xy-edge__e0efqcfhpjr5ulvvo06e6b32success-ljle8rmi55ufixxxh1nlk7usinput",
-        "data": {
-          "isAnimated": false
-        },
-        "source": "e0efqcfhpjr5ulvvo06e6b32",
-        "target": "ljle8rmi55ufixxxh1nlk7us",
-        "sourceHandle": "success",
-        "targetHandle": "input"
-      },
-      {
-        "type": "directed",
-        "id": "xy-edge__cis6ls9trx767p87ljfrplxqsuccess-kulojtiplzufezafsli76zdbinput",
-        "data": {
-          "isAnimated": false
-        },
-        "source": "cis6ls9trx767p87ljfrplxq",
-        "target": "kulojtiplzufezafsli76zdb",
-        "sourceHandle": "success",
-        "targetHandle": "input"
-      },
       {
         "type": "directed",
         "id": "xy-edge__kulojtiplzufezafsli76zdbsuccess-vvvwexk8fuud64syrzsvt8axinput",
         "data": {
           "isAnimated": false
         },
-        "source": "kulojtiplzufezafsli76zdb",
-        "target": "vvvwexk8fuud64syrzsvt8ax",
-        "sourceHandle": "success",
-        "targetHandle": "input"
-      },
-      {
-        "type": "directed",
-        "id": "xy-edge__ivyz7p0n6uoadbgsxa50e40osuccess-dx6th4bn20e6yfmocyob9soqinput",
-        "data": {
-          "isAnimated": false
-        },
-        "source": "ivyz7p0n6uoadbgsxa50e40o",
-        "target": "dx6th4bn20e6yfmocyob9soq",
+        "source": "916e28bc-47cb-4ae4-b6e3-6aed16d6ccb6",
+        "target": "42f9e119-07b4-48cd-8353-96677053a8f8",
         "sourceHandle": "success",
         "targetHandle": "input"
       },
@@ -2031,30 +2029,8 @@
         "data": {
           "isAnimated": false
         },
-        "source": "crngoktvzzp5lejxkgl6210u",
-        "target": "n1n68xun2uyj82y1irecr6v1",
-        "sourceHandle": "success",
-        "targetHandle": "input"
-      },
-      {
-        "type": "directed",
-        "id": "xy-edge__e0efqcfhpjr5ulvvo06e6b32success-hs8d652dcvf1syyfpy1owb0sinput",
-        "data": {
-          "isAnimated": false
-        },
-        "source": "e0efqcfhpjr5ulvvo06e6b32",
-        "target": "hs8d652dcvf1syyfpy1owb0s",
-        "sourceHandle": "success",
-        "targetHandle": "input"
-      },
-      {
-        "type": "directed",
-        "id": "xy-edge__e0efqcfhpjr5ulvvo06e6b32success-ketqa1t9mgv67xwu15soucqainput",
-        "data": {
-          "isAnimated": false
-        },
-        "source": "e0efqcfhpjr5ulvvo06e6b32",
-        "target": "ketqa1t9mgv67xwu15soucqa",
+        "source": "904de66c-e11a-4904-8ac3-330cbc0b7a51",
+        "target": "37cafd01-0779-4fd6-8006-f03a3a0de104",
         "sourceHandle": "success",
         "targetHandle": "input"
       },
@@ -2064,8 +2040,8 @@
         "data": {
           "isAnimated": false
         },
-        "source": "hs8d652dcvf1syyfpy1owb0s",
-        "target": "omkloozg0cml2wsj16wb5vjg",
+        "source": "b9a85920-3eed-403f-ad19-d72e61a6a85f",
+        "target": "7dee1884-b9b2-4b21-9d1c-95d5bf6bbe23",
         "sourceHandle": "success",
         "targetHandle": "input"
       },
@@ -2075,8 +2051,8 @@
         "data": {
           "isAnimated": false
         },
-        "source": "ketqa1t9mgv67xwu15soucqa",
-        "target": "omkloozg0cml2wsj16wb5vjg",
+        "source": "aa7d470f-fffa-4136-af22-3d7c905cb8b0",
+        "target": "7dee1884-b9b2-4b21-9d1c-95d5bf6bbe23",
         "sourceHandle": "success",
         "targetHandle": "input"
       },
@@ -2086,8 +2062,8 @@
         "data": {
           "isAnimated": false
         },
-        "source": "ketqa1t9mgv67xwu15soucqa",
-        "target": "jit44u253o0l03ou4m4k9oqs",
+        "source": "aa7d470f-fffa-4136-af22-3d7c905cb8b0",
+        "target": "132167ea-7f04-4800-a006-626a859cd035",
         "sourceHandle": "success",
         "targetHandle": "input"
       },
@@ -2097,8 +2073,8 @@
         "data": {
           "isAnimated": false
         },
-        "source": "hs8d652dcvf1syyfpy1owb0s",
-        "target": "g3oy72jguoecaygsmm26dtkx",
+        "source": "b9a85920-3eed-403f-ad19-d72e61a6a85f",
+        "target": "c98fef37-7a5c-4634-a179-067b6796adb0",
         "sourceHandle": "success",
         "targetHandle": "input"
       },
@@ -2108,8 +2084,8 @@
         "data": {
           "isAnimated": false
         },
-        "source": "omkloozg0cml2wsj16wb5vjg",
-        "target": "k8z5oes3pqm3woc76ok76ihc",
+        "source": "7dee1884-b9b2-4b21-9d1c-95d5bf6bbe23",
+        "target": "31d6b33b-4271-48db-9269-8f4eeeb378ad",
         "sourceHandle": "success",
         "targetHandle": "input"
       },
@@ -2119,8 +2095,8 @@
         "data": {
           "isAnimated": false
         },
-        "source": "omkloozg0cml2wsj16wb5vjg",
-        "target": "dnwqex0tzszeakkr2trphhna",
+        "source": "7dee1884-b9b2-4b21-9d1c-95d5bf6bbe23",
+        "target": "cc206b53-525e-4c7f-89cf-3ae0b42085cc",
         "sourceHandle": "success",
         "targetHandle": "input"
       },
@@ -2130,30 +2106,8 @@
         "data": {
           "isAnimated": false
         },
-        "source": "dnwqex0tzszeakkr2trphhna",
-        "target": "x9bes0d5812vpv7eoq5y3ptv",
-        "sourceHandle": "success",
-        "targetHandle": "input"
-      },
-      {
-        "type": "directed",
-        "id": "xy-edge__zk3gbb2bj1j8d26e8q3evlczsuccess-gwenglt93o1mwzh6zpzk46s5input",
-        "data": {
-          "isAnimated": false
-        },
-        "source": "zk3gbb2bj1j8d26e8q3evlcz",
-        "target": "gwenglt93o1mwzh6zpzk46s5",
-        "sourceHandle": "success",
-        "targetHandle": "input"
-      },
-      {
-        "type": "directed",
-        "id": "xy-edge__zk3gbb2bj1j8d26e8q3evlczsuccess-fpvl8dxtrbnzemin2u4ur83kinput",
-        "data": {
-          "isAnimated": false
-        },
-        "source": "zk3gbb2bj1j8d26e8q3evlcz",
-        "target": "fpvl8dxtrbnzemin2u4ur83k",
+        "source": "cc206b53-525e-4c7f-89cf-3ae0b42085cc",
+        "target": "285cea14-3f57-4bbe-83ab-27199616633d",
         "sourceHandle": "success",
         "targetHandle": "input"
       },
@@ -2163,19 +2117,8 @@
         "data": {
           "isAnimated": false
         },
-        "source": "fpvl8dxtrbnzemin2u4ur83k",
-        "target": "voj9ef9lhrml557xhilwb26l",
-        "sourceHandle": "success",
-        "targetHandle": "input"
-      },
-      {
-        "type": "directed",
-        "id": "xy-edge__zk3gbb2bj1j8d26e8q3evlczsuccess-sfdwuweowxk837vzh9p2odf0input",
-        "data": {
-          "isAnimated": false
-        },
-        "source": "zk3gbb2bj1j8d26e8q3evlcz",
-        "target": "sfdwuweowxk837vzh9p2odf0",
+        "source": "83d399a5-7a8b-410f-b7da-719774f2d9c2",
+        "target": "04b2b8b7-01d1-48a9-9d89-20c0c5cec36c",
         "sourceHandle": "success",
         "targetHandle": "input"
       },
@@ -2185,19 +2128,8 @@
         "data": {
           "isAnimated": false
         },
-        "source": "sfdwuweowxk837vzh9p2odf0",
-        "target": "jb8yshiiigpfd650knlplyxx",
-        "sourceHandle": "success",
-        "targetHandle": "input"
-      },
-      {
-        "type": "directed",
-        "id": "xy-edge__ivyz7p0n6uoadbgsxa50e40osuccess-ihmo3dcxh0slj6aeod30m4aainput",
-        "data": {
-          "isAnimated": false
-        },
-        "source": "ivyz7p0n6uoadbgsxa50e40o",
-        "target": "ihmo3dcxh0slj6aeod30m4aa",
+        "source": "05fa61cb-bb64-4c14-b0fd-611e905ac4db",
+        "target": "1b813dc8-0ac3-406a-a40c-17b4644d1424",
         "sourceHandle": "success",
         "targetHandle": "input"
       },
@@ -2207,8 +2139,8 @@
         "data": {
           "isAnimated": false
         },
-        "source": "ihmo3dcxh0slj6aeod30m4aa",
-        "target": "crngoktvzzp5lejxkgl6210u",
+        "source": "df7f85dd-d08a-43ff-b30c-0de375d24041",
+        "target": "904de66c-e11a-4904-8ac3-330cbc0b7a51",
         "sourceHandle": "false",
         "targetHandle": "input"
       },
@@ -2218,8 +2150,8 @@
         "data": {
           "isAnimated": false
         },
-        "source": "ihmo3dcxh0slj6aeod30m4aa",
-        "target": "egejw4i5ytxhsfyiwfok5axs",
+        "source": "df7f85dd-d08a-43ff-b30c-0de375d24041",
+        "target": "b6fa84e9-6c7e-4364-8124-e59bef511df8",
         "sourceHandle": "true",
         "targetHandle": "input"
       },
@@ -2229,8 +2161,8 @@
         "data": {
           "isAnimated": false
         },
-        "source": "egejw4i5ytxhsfyiwfok5axs",
-        "target": "dfxyz2da8b7qmzos3sxn2w10",
+        "source": "b6fa84e9-6c7e-4364-8124-e59bef511df8",
+        "target": "fd1637b4-4b2c-487b-affd-0bc79b6facbd",
         "sourceHandle": "success",
         "targetHandle": "input"
       },
@@ -2240,8 +2172,8 @@
         "data": {
           "isAnimated": false
         },
-        "source": "egejw4i5ytxhsfyiwfok5axs",
-        "target": "wqlphxffik0vkvk4viwtcnpp",
+        "source": "b6fa84e9-6c7e-4364-8124-e59bef511df8",
+        "target": "7c74eea9-7e84-46ec-96c0-fa0d192d10fe",
         "sourceHandle": "success",
         "targetHandle": "input"
       },
@@ -2251,8 +2183,8 @@
         "data": {
           "isAnimated": false
         },
-        "source": "wqlphxffik0vkvk4viwtcnpp",
-        "target": "x08qfi6tkr5ajlfgxhhcpx4n",
+        "source": "7c74eea9-7e84-46ec-96c0-fa0d192d10fe",
+        "target": "41e0cb99-5ced-4fb0-9ce4-a150db703955",
         "sourceHandle": "true",
         "targetHandle": "input"
       },
@@ -2262,8 +2194,8 @@
         "data": {
           "isAnimated": false
         },
-        "source": "wqlphxffik0vkvk4viwtcnpp",
-        "target": "i76i43bnmi0otoeaecn7oyba",
+        "source": "7c74eea9-7e84-46ec-96c0-fa0d192d10fe",
+        "target": "451e6e42-6868-443f-9a48-474f6ddae8f4",
         "sourceHandle": "true",
         "targetHandle": "input"
       },
@@ -2273,8 +2205,8 @@
         "data": {
           "isAnimated": false
         },
-        "source": "x08qfi6tkr5ajlfgxhhcpx4n",
-        "target": "fpcogsv03aoapu5ejaajb0c4",
+        "source": "41e0cb99-5ced-4fb0-9ce4-a150db703955",
+        "target": "3a1a36c7-2b7d-48e4-9412-093da6f103e4",
         "sourceHandle": "success",
         "targetHandle": "input"
       },
@@ -2284,8 +2216,8 @@
         "data": {
           "isAnimated": false
         },
-        "source": "fpcogsv03aoapu5ejaajb0c4",
-        "target": "rp6nzqg08piy9qmb40mhto8g",
+        "source": "3a1a36c7-2b7d-48e4-9412-093da6f103e4",
+        "target": "dedfaedd-11ca-48af-8b84-b3637c72654c",
         "sourceHandle": "success",
         "targetHandle": "input"
       },
@@ -2295,8 +2227,8 @@
         "data": {
           "isAnimated": false
         },
-        "source": "fpcogsv03aoapu5ejaajb0c4",
-        "target": "xvz8fa1a3h4w2cju2t50oau4",
+        "source": "3a1a36c7-2b7d-48e4-9412-093da6f103e4",
+        "target": "f26d05d4-3dc2-43c1-81fd-9b6f100717f6",
         "sourceHandle": "success",
         "targetHandle": "input"
       },
@@ -2306,8 +2238,8 @@
         "data": {
           "isAnimated": false
         },
-        "source": "xvz8fa1a3h4w2cju2t50oau4",
-        "target": "pg5kfuxnhof1e7tl30lrfev0",
+        "source": "f26d05d4-3dc2-43c1-81fd-9b6f100717f6",
+        "target": "35a04675-2d6a-4efa-908a-0eec92cb7670",
         "sourceHandle": "success",
         "targetHandle": "input"
       },
@@ -2317,8 +2249,8 @@
         "data": {
           "isAnimated": false
         },
-        "source": "x08qfi6tkr5ajlfgxhhcpx4n",
-        "target": "vy8188j9etcl3xrlh73p35gs",
+        "source": "41e0cb99-5ced-4fb0-9ce4-a150db703955",
+        "target": "2a3040c2-91a2-4a1d-b769-41e2635719ed",
         "sourceHandle": "success",
         "targetHandle": "input"
       },
@@ -2328,8 +2260,8 @@
         "data": {
           "isAnimated": false
         },
-        "source": "s2iwt7jx1yw1e61zy4hk69a0",
-        "target": "n0vvnvn5rjncpwlnfo6r2x63",
+        "source": "970ca03b-ba9d-402c-b5b6-0e5a7ffce8f8",
+        "target": "17522ced-7f39-4218-8a8d-044e699ea407",
         "sourceHandle": "success",
         "targetHandle": "input"
       },
@@ -2339,8 +2271,8 @@
         "data": {
           "isAnimated": false
         },
-        "source": "t8iu4gbcjlmrtwmw26ffhdcy",
-        "target": "klj32mghqeyesr38gma9u17y",
+        "source": "96bcfca1-7f19-440c-ac52-cf6e9db5c988",
+        "target": "ff819f2a-a3c2-4fa8-85fc-672c508f9fe6",
         "sourceHandle": "success",
         "targetHandle": "input"
       },
@@ -2350,8 +2282,8 @@
         "data": {
           "isAnimated": false
         },
-        "source": "t8iu4gbcjlmrtwmw26ffhdcy",
-        "target": "t5hfwc7nzi9opszfgwu27edi",
+        "source": "96bcfca1-7f19-440c-ac52-cf6e9db5c988",
+        "target": "87f10dce-6c2b-463a-b69e-c05334dfdb08",
         "sourceHandle": "success",
         "targetHandle": "input1"
       },
@@ -2361,8 +2293,8 @@
         "data": {
           "isAnimated": false
         },
-        "source": "s2iwt7jx1yw1e61zy4hk69a0",
-        "target": "t5hfwc7nzi9opszfgwu27edi",
+        "source": "970ca03b-ba9d-402c-b5b6-0e5a7ffce8f8",
+        "target": "87f10dce-6c2b-463a-b69e-c05334dfdb08",
         "sourceHandle": "success",
         "targetHandle": "input2"
       },
@@ -2372,8 +2304,8 @@
         "data": {
           "isAnimated": false
         },
-        "source": "t5hfwc7nzi9opszfgwu27edi",
-        "target": "ufebbnmqtdlybhucg4n7989d",
+        "source": "87f10dce-6c2b-463a-b69e-c05334dfdb08",
+        "target": "43e6725e-500a-482a-8766-d563eff2e544",
         "sourceHandle": "success",
         "targetHandle": "input"
       },
@@ -2383,8 +2315,8 @@
         "data": {
           "isAnimated": false
         },
-        "source": "t5hfwc7nzi9opszfgwu27edi",
-        "target": "bl73evftchythoplycmgeza3",
+        "source": "87f10dce-6c2b-463a-b69e-c05334dfdb08",
+        "target": "9630d66c-51b9-4a7c-a6b7-61a4bf7507bd",
         "sourceHandle": "success",
         "targetHandle": "input"
       },
@@ -2394,8 +2326,8 @@
         "data": {
           "isAnimated": false
         },
-        "source": "bl73evftchythoplycmgeza3",
-        "target": "cd0s0gy3nlja4onth9b5y1bp",
+        "source": "9630d66c-51b9-4a7c-a6b7-61a4bf7507bd",
+        "target": "af58fcf8-d50b-424f-87bc-a3983c5eba35",
         "sourceHandle": "success",
         "targetHandle": "input"
       },
@@ -2405,8 +2337,8 @@
         "data": {
           "isAnimated": false
         },
-        "source": "cd0s0gy3nlja4onth9b5y1bp",
-        "target": "seflsuzkegdibb73oet705vt",
+        "source": "af58fcf8-d50b-424f-87bc-a3983c5eba35",
+        "target": "dfdea3be-6556-4fbc-9e0a-7f3ea3ccf656",
         "sourceHandle": "success",
         "targetHandle": "input"
       },
@@ -2416,8 +2348,8 @@
         "data": {
           "isAnimated": false
         },
-        "source": "cd0s0gy3nlja4onth9b5y1bp",
-        "target": "wh7g216srhbsh6gxqtf011dg",
+        "source": "af58fcf8-d50b-424f-87bc-a3983c5eba35",
+        "target": "f9a91ca2-37bf-4f0c-b343-6af182d55db9",
         "sourceHandle": "success",
         "targetHandle": "input"
       },
@@ -2427,8 +2359,8 @@
         "data": {
           "isAnimated": false
         },
-        "source": "wh7g216srhbsh6gxqtf011dg",
-        "target": "oleef0kgbphnqaiyz79phd2g",
+        "source": "f9a91ca2-37bf-4f0c-b343-6af182d55db9",
+        "target": "babc1eb2-714e-4a44-bb51-df8f6b9b0b85",
         "sourceHandle": "success",
         "targetHandle": "input"
       },
@@ -2438,8 +2370,8 @@
         "data": {
           "isAnimated": false
         },
-        "source": "g0dz4hhyoosj2qp38wnnx71n",
-        "target": "cd0s0gy3nlja4onth9b5y1bp",
+        "source": "90e0882d-ca21-4fd0-be4a-57b87e44975d",
+        "target": "af58fcf8-d50b-424f-87bc-a3983c5eba35",
         "sourceHandle": "llm",
         "targetHandle": "llm"
       },
@@ -2449,8 +2381,8 @@
         "data": {
           "isAnimated": false
         },
-        "source": "wh7g216srhbsh6gxqtf011dg",
-        "target": "vfvo3k1moax512dkib4romtw",
+        "source": "f9a91ca2-37bf-4f0c-b343-6af182d55db9",
+        "target": "cf395e9e-b2dc-48b9-b251-4217d4861c1b",
         "sourceHandle": "success",
         "targetHandle": "input"
       },
@@ -2460,8 +2392,8 @@
         "data": {
           "isAnimated": false
         },
-        "source": "vfvo3k1moax512dkib4romtw",
-        "target": "gq69hot9upjil3yx2buuj7jc",
+        "source": "cf395e9e-b2dc-48b9-b251-4217d4861c1b",
+        "target": "65890d9a-aa5d-4866-aa6f-96128b173902",
         "sourceHandle": "success",
         "targetHandle": "input"
       },
@@ -2471,8 +2403,8 @@
         "data": {
           "isAnimated": false
         },
-        "source": "fpvl8dxtrbnzemin2u4ur83k",
-        "target": "t8iu4gbcjlmrtwmw26ffhdcy",
+        "source": "83d399a5-7a8b-410f-b7da-719774f2d9c2",
+        "target": "96bcfca1-7f19-440c-ac52-cf6e9db5c988",
         "sourceHandle": "success",
         "targetHandle": "input"
       },
@@ -2482,16 +2414,126 @@
         "data": {
           "isAnimated": false
         },
-        "source": "sfdwuweowxk837vzh9p2odf0",
-        "target": "s2iwt7jx1yw1e61zy4hk69a0",
+        "source": "05fa61cb-bb64-4c14-b0fd-611e905ac4db",
+        "target": "970ca03b-ba9d-402c-b5b6-0e5a7ffce8f8",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__d0giczyvk94wy7g084dyidiqsuccess-aa7d470f-fffa-4136-af22-3d7c905cb8b0input",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "d0giczyvk94wy7g084dyidiq",
+        "target": "aa7d470f-fffa-4136-af22-3d7c905cb8b0",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__d0giczyvk94wy7g084dyidiqsuccess-406fd393-eca8-49e7-baea-d9fbd80b6df7input",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "d0giczyvk94wy7g084dyidiq",
+        "target": "406fd393-eca8-49e7-baea-d9fbd80b6df7",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__d0giczyvk94wy7g084dyidiqsuccess-b9a85920-3eed-403f-ad19-d72e61a6a85finput",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "d0giczyvk94wy7g084dyidiq",
+        "target": "b9a85920-3eed-403f-ad19-d72e61a6a85f",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__yg9qb2wh9ewomrtgfyhhqvs9success-916e28bc-47cb-4ae4-b6e3-6aed16d6ccb6input",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "yg9qb2wh9ewomrtgfyhhqvs9",
+        "target": "916e28bc-47cb-4ae4-b6e3-6aed16d6ccb6",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__yg9qb2wh9ewomrtgfyhhqvs9success-b3c7c01e-e1e7-4a64-a322-11d8eba3ce7ainput",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "yg9qb2wh9ewomrtgfyhhqvs9",
+        "target": "b3c7c01e-e1e7-4a64-a322-11d8eba3ce7a",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__ibvcovotet1u57r07o6duq2psuccess-df7f85dd-d08a-43ff-b30c-0de375d24041input",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "ibvcovotet1u57r07o6duq2p",
+        "target": "df7f85dd-d08a-43ff-b30c-0de375d24041",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__ibvcovotet1u57r07o6duq2psuccess-b67ea131-bf5b-4f07-ae6d-d2b0a693687ainput",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "ibvcovotet1u57r07o6duq2p",
+        "target": "b67ea131-bf5b-4f07-ae6d-d2b0a693687a",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__m4iyuzlkmkgogu53ihrgvxrgsuccess-83d399a5-7a8b-410f-b7da-719774f2d9c2input",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "m4iyuzlkmkgogu53ihrgvxrg",
+        "target": "83d399a5-7a8b-410f-b7da-719774f2d9c2",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__m4iyuzlkmkgogu53ihrgvxrgsuccess-05fa61cb-bb64-4c14-b0fd-611e905ac4dbinput",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "m4iyuzlkmkgogu53ihrgvxrg",
+        "target": "05fa61cb-bb64-4c14-b0fd-611e905ac4db",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__m4iyuzlkmkgogu53ihrgvxrgsuccess-281620c1-2593-4c0f-bb2e-cf5626467c06input",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "m4iyuzlkmkgogu53ihrgvxrg",
+        "target": "281620c1-2593-4c0f-bb2e-cf5626467c06",
         "sourceHandle": "success",
         "targetHandle": "input"
       }
     ],
     "status": "stopped",
-    "id": "36f4191e-9ead-48e4-9c57-226791850a9c",
-    "createdAt": 1777284899273,
-    "updatedAt": "2026-04-28T19:09:12.548Z",
+    "id": "2f2ed942-ff96-470b-a532-45a07b0db9b7",
+    "createdAt": 1777415253631,
+    "updatedAt": "2026-04-29T00:58:49.064Z",
     "previousStatus": "running"
   }
 ]
