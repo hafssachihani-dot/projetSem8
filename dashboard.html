@@ -1,1071 +1,781 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Smart Stock Forecast Dashboard</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    :root {
-      --primary: #2563eb;
-      --purple: #7c3aed;
-      --success: #16a34a;
-      --warning: #f59e0b;
-      --danger: #dc2626;
-      --text: #0f172a;
-      --muted: #64748b;
-      --border: #e2e8f0;
-      --bg: #f8fafc;
-      --radius: 18px;
-    }
-
-    body {
-      font-family: "Segoe UI", system-ui, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      background-image:
-        radial-gradient(circle at 10% 10%, rgba(37,99,235,0.12), transparent 28%),
-        radial-gradient(circle at 90% 20%, rgba(124,58,237,0.10), transparent 26%);
-    }
-
-    .navbar {
-      background: rgba(255,255,255,0.95);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
-      padding: 16px 30px;
-      display: flex; justify-content: space-between; align-items: center; gap: 16px;
-      position: sticky; top: 0; z-index: 10;
-    }
-    .brand { display: flex; align-items: center; gap: 12px; font-weight: 900; font-size: 1.1rem; }
-    .brand-icon {
-      width: 42px; height: 42px; border-radius: 14px;
-      display: grid; place-items: center; color: white;
-      background: linear-gradient(135deg, var(--primary), var(--purple));
-    }
-    .actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
-    .btn {
-      border: 0; border-radius: 12px; padding: 10px 15px;
-      cursor: pointer; font-weight: 800; transition: 0.15s;
-      display: inline-flex; align-items: center; gap: 8px; justify-content: center;
-    }
-    .btn:hover { transform: translateY(-1px); }
-    .btn-primary { color: white; background: linear-gradient(135deg, var(--primary), var(--purple)); }
-    .btn-soft    { color: #1e40af; background: #dbeafe; }
-    .btn-green   { color: white; background: var(--success); }
-    .btn-orange  { color: white; background: var(--warning); }
-
-    .live-pill {
-      display: flex; align-items: center; gap: 8px;
-      background: white; border: 1px solid var(--border); border-radius: 999px;
-      padding: 8px 12px; color: var(--muted); font-size: 0.82rem; font-weight: 800;
-    }
-    .live-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--success); box-shadow: 0 0 0 5px rgba(22,163,74,0.14); }
-    .live-dot.error { background: var(--danger); box-shadow: 0 0 0 5px rgba(220,38,38,0.14); }
-
-    .main { max-width: 1280px; margin: 0 auto; padding: 30px 20px 60px; }
-    .header { margin-bottom: 22px; }
-    .header h1 { font-size: 2rem; margin-bottom: 8px; }
-    .header p  { color: var(--muted); line-height: 1.5; }
-
-    .stats-grid { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 15px; margin-bottom: 22px; }
-    .stat-card, .panel {
-      background: rgba(255,255,255,0.95); border: 1px solid var(--border);
-      border-radius: var(--radius); box-shadow: 0 10px 30px rgba(15,23,42,0.06);
-    }
-    .stat-card { padding: 18px; }
-    .stat-label { color: var(--muted); font-size: 0.75rem; font-weight: 900; text-transform: uppercase; }
-    .stat-value { font-size: 1.9rem; font-weight: 950; margin-top: 8px; }
-
-    .tabs { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
-    .tab-btn {
-      border: 1px solid var(--border); background: white; color: var(--muted);
-      padding: 11px 16px; border-radius: 999px; cursor: pointer; font-weight: 900;
-    }
-    .tab-btn.active { color: white; background: linear-gradient(135deg, var(--primary), var(--purple)); border-color: transparent; }
-
-    .toolbar {
-      display: flex; gap: 12px; justify-content: space-between; align-items: center;
-      background: white; border: 1px solid var(--border); border-radius: var(--radius);
-      padding: 14px; margin-bottom: 16px; flex-wrap: wrap;
-    }
-    .search { flex: 1; min-width: 260px; }
-    input, select, textarea {
-      width: 100%; border: 1.5px solid var(--border); border-radius: 12px;
-      padding: 12px; outline: none; background: #f8fafc; font-size: 0.92rem;
-    }
-    input:focus, select:focus, textarea:focus {
-      border-color: var(--primary); background: white;
-      box-shadow: 0 0 0 4px rgba(37,99,235,0.10);
-    }
-    select { width: 220px; font-weight: 800; color: var(--muted); }
-
-    .panel-header {
-      padding: 17px 20px; border-bottom: 1px solid var(--border);
-      display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;
-    }
-    .panel-header h3  { font-size: 1.05rem; }
-    .panel-header span { color: var(--muted); font-size: 0.86rem; }
-
-    .table-wrap { overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; min-width: 1120px; }
-    th, td { padding: 14px 16px; border-bottom: 1px solid var(--border); text-align: left; font-size: 0.88rem; vertical-align: middle; }
-    th { background: #f8fafc; color: var(--muted); text-transform: uppercase; font-size: 0.72rem; letter-spacing: 0.6px; }
-    tbody tr:hover { background: #f8fafc; }
-    .strong { font-weight: 900; }
-    .muted  { color: var(--muted); font-size: 0.8rem; margin-top: 4px; }
-
-    .badge {
-      display: inline-flex; align-items: center; gap: 6px;
-      padding: 6px 10px; border-radius: 999px; font-size: 0.75rem; font-weight: 900; white-space: nowrap;
-    }
-    .badge.ok      { background: #dcfce7; color: #166534; }
-    .badge.warning { background: #fef3c7; color: #92400e; }
-    .badge.danger  { background: #fee2e2; color: #991b1b; }
-    .badge.info    { background: #dbeafe; color: #1e40af; }
-    .badge.gray    { background: #f1f5f9; color: #475569; }
-
-    .mini-btn { border: 1px solid var(--border); background: white; color: var(--text); border-radius: 10px; padding: 8px 10px; cursor: pointer; font-size: 0.78rem; font-weight: 900; }
-    .mini-btn.order { border-color: #fed7aa; color: #9a3412; background: #fff7ed; }
-    .mini-btn.ai    { border-color: #c4b5fd; color: #5b21b6; background: #f5f3ff; }
-    .mini-btn.cancel-notif { border-color: #fecaca; color: #991b1b; background: #fff1f2; }
-
-    .stock-bar  { width: 120px; height: 8px; background: #e2e8f0; border-radius: 999px; overflow: hidden; margin-top: 7px; }
-    .stock-fill { height: 100%; border-radius: 999px; }
-    .stock-fill.ok      { background: var(--success); }
-    .stock-fill.warning { background: var(--warning); }
-    .stock-fill.danger  { background: var(--danger); }
-
-    .hidden { display: none; }
-    .empty, .loading, .error { padding: 48px 18px; text-align: center; color: var(--muted); }
-    .spinner { width: 34px; height: 34px; border-radius: 50%; border: 3px solid #dbeafe; border-top-color: var(--primary); animation: spin 0.75s linear infinite; margin: 0 auto 12px; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    .modal-overlay {
-      position: fixed; inset: 0; background: rgba(15,23,42,0.48);
-      display: none; align-items: center; justify-content: center; padding: 16px; z-index: 100;
-    }
-    .modal-overlay.open { display: flex; }
-    .modal {
-      width: 100%; max-width: 760px; max-height: 92vh; overflow-y: auto;
-      background: white; border-radius: 20px; padding: 26px;
-      box-shadow: 0 24px 70px rgba(15,23,42,0.28);
-    }
-    .modal h2 { margin-bottom: 8px; }
-    .modal > p { color: var(--muted); margin-bottom: 18px; line-height: 1.45; }
-    .form-grid  { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 14px; }
-    .form-group label { display: block; font-size: 0.82rem; font-weight: 900; margin-bottom: 6px; }
-    .form-full  { grid-column: 1 / -1; }
-    .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 18px; flex-wrap: wrap; }
-
-    .toast {
-      position: fixed; right: 22px; bottom: 22px; background: #0f172a; color: white;
-      padding: 13px 16px; border-radius: 13px; box-shadow: 0 18px 45px rgba(15,23,42,0.25);
-      opacity: 0; transform: translateY(20px); transition: 0.2s; pointer-events: none; z-index: 200; font-weight: 800;
-    }
-    .toast.show { opacity: 1; transform: translateY(0); }
-
-    @media (max-width: 1000px) { .stats-grid { grid-template-columns: repeat(2, minmax(0,1fr)); } }
-    @media (max-width: 640px) {
-      .navbar { align-items: flex-start; flex-direction: column; padding: 14px 16px; }
-      .actions, .btn, select { width: 100%; }
-      .stats-grid, .form-grid { grid-template-columns: 1fr; }
-      .form-full { grid-column: auto; }
-      .main { padding: 22px 14px 50px; }
-    }
-
-    /* ── Notifications ── */
-    .notif-panel-body { padding: 14px 16px; }
-
-    .risk-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      padding: 14px 16px;
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      margin-bottom: 10px;
-      background: white;
-      gap: 12px;
-      transition: opacity 0.25s, transform 0.25s;
-    }
-    .risk-item.removing {
-      opacity: 0;
-      transform: translateX(30px);
-      pointer-events: none;
-    }
-    .risk-item-actions { display: flex; gap: 8px; flex-shrink: 0; align-items: center; }
-    .risk-item-text .small-muted { color: var(--muted); font-size: 0.8rem; margin-top: 4px; }
-
-    .notif-empty { padding: 24px; text-align: center; color: var(--muted); font-size: 0.9rem; }
-    .notif-header-actions { display: flex; gap: 8px; align-items: center; }
-    .notif-count {
-      background: var(--danger); color: white;
-      border-radius: 999px; padding: 2px 8px; font-size: 0.75rem; font-weight: 900;
-    }
-  </style>
-</head>
-<body>
-
-<nav class="navbar">
-  <div class="brand">
-    <div class="brand-icon">📦</div>
-    <span>Smart Stock Forecast</span>
-  </div>
-  <div class="actions">
-    <button class="btn btn-green"   onclick="openProductModal()">➕ Ajouter produit</button>
-    <button class="btn btn-orange"  onclick="openPurchaseModal()">🛒 Créer achat</button>
-    <button class="btn btn-orange"  onclick="openVenteModal()">➖ Enregistrer vente</button>
-    <div class="live-pill"><span class="live-dot" id="live-dot"></span><span id="live-status">Connexion...</span></div>
-    <button class="btn btn-soft"    onclick="toggleAutoRefresh()" id="auto-btn">Pause auto</button>
-    <button class="btn btn-primary" onclick="loadDashboard(true)">↻ Refresh</button>
-  </div>
-</nav>
-
-<main class="main">
-
-  <!-- ═══ NOTIFICATIONS PANEL ═══ -->
-  <div class="panel" style="margin-bottom: 22px;">
-    <div class="panel-header">
-      <div style="display:flex; align-items:center; gap:10px;">
-        <h3>🔔 Notifications IA</h3>
-        <span class="notif-count hidden" id="notif-count">0</span>
-      </div>
-      <div class="notif-header-actions">
-        <button class="mini-btn" onclick="clearAllNotifications()" style="font-size:0.78rem;">🗑 Tout effacer</button>
-      </div>
-    </div>
-    <div id="notifications-container" class="notif-panel-body"></div>
-  </div>
-
-  <section class="header">
-    <h1>Prévention des ruptures de stock</h1>
-    <p>Dashboard avec produits, catégories, fournisseurs, capteurs IoT, forecast et achats/commandes fournisseurs.</p>
-  </section>
-
-  <section class="stats-grid">
-    <div class="stat-card"><div class="stat-label">Produits</div><div class="stat-value" id="stat-products">—</div></div>
-    <div class="stat-card"><div class="stat-label">Stock OK</div><div class="stat-value" id="stat-ok">—</div></div>
-    <div class="stat-card"><div class="stat-label">Critiques</div><div class="stat-value" id="stat-critical">—</div></div>
-    <div class="stat-card"><div class="stat-label">Achats pending</div><div class="stat-value" id="stat-pending">—</div></div>
-    <div class="stat-card"><div class="stat-label">Quantité commandée</div><div class="stat-value" id="stat-ordered">—</div></div>
-  </section>
-
-  <div class="tabs">
-    <button class="tab-btn active" id="tab-products-btn"  onclick="switchTab('products')">📦 Produits & Stock</button>
-    <button class="tab-btn"        id="tab-purchases-btn" onclick="switchTab('purchases')">🛒 Achats / Commandes</button>
-  </div>
-
-  <section class="toolbar">
-    <div class="search"><input id="search-input" placeholder="Rechercher produit, catégorie, fournisseur..." oninput="renderAll()"/></div>
-    <select id="status-filter" onchange="renderAll()">
-      <option value="ALL">Tous les statuts</option>
-      <option value="OK">Stock OK</option>
-      <option value="WARNING">Vigilance</option>
-      <option value="CRITICAL">Critique</option>
-      <option value="pending">Achat pending</option>
-      <option value="sent">Achat sent</option>
-      <option value="delivered">Achat delivered</option>
-    </select>
-  </section>
-
-  <section class="panel" id="products-panel">
-    <div class="panel-header">
-      <div><h3>Produits & Stock intelligent</h3><span id="products-subtitle">Connexion...</span></div>
-    </div>
-    <div id="products-table"><div class="loading"><div class="spinner"></div>Connexion avec Fusion...</div></div>
-  </section>
-
-  <section class="panel hidden" id="purchases-panel">
-    <div class="panel-header">
-      <div><h3>Achats / Commandes fournisseurs</h3><span id="purchases-subtitle">Connexion...</span></div>
-    </div>
-    <div id="purchases-table"><div class="loading"><div class="spinner"></div>Connexion avec Fusion...</div></div>
-  </section>
-</main>
-
-<!-- ═══════════════════ MODAL : Ajouter produit ═══════════════════ -->
-<div class="modal-overlay" id="product-modal">
-  <div class="modal">
-    <h2>Ajouter produit</h2>
-    <p>Ajoute un nouveau produit dans la table <strong>products</strong>.</p>
-    <div class="form-grid">
-      <div class="form-group"><label>Product name *</label><input id="p-name" /></div>
-      <div class="form-group"><label>Category *</label><input id="p-category" /></div>
-      <div class="form-group"><label>Stock actuel</label><input id="p-current" type="number" value="50" min="0"/></div>
-      <div class="form-group"><label>Stock minimum</label><input id="p-min" type="number" value="20" min="0"/></div>
-      <div class="form-group"><label>Supplier name</label><input id="p-supplier" placeholder="ex: MedSupply SA"/></div>
-      <div class="form-group"><label>Supplier email</label><input id="p-email" type="email" placeholder="supplier@email.com"/></div>
-      <div class="form-group"><label>Température °C</label><input id="p-temp" type="number" value="25"/></div>
-      <div class="form-group"><label>Humidité %</label><input id="p-humidity" type="number" value="55"/></div>
-      <div class="form-group"><label>Expiration date</label><input id="p-expiration" type="date" /></div>
-    </div>
-    <div class="modal-actions">
-      <button class="mini-btn" onclick="closeProductModal()">Annuler</button>
-      <button class="btn btn-green" onclick="addProduct()">✅ Ajouter produit</button>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════════════════ MODAL : Créer achat ═══════════════════ -->
-<div class="modal-overlay" id="purchase-modal">
-  <div class="modal">
-    <h2>Créer achat / commande fournisseur</h2>
-    <p>Un achat = commander une quantité d'un produit chez le fournisseur. Table <strong>purchases</strong>.</p>
-    <div class="form-grid">
-      <div class="form-group">
-        <label>Product *</label>
-        <select id="a-product" onchange="fillPurchaseSupplier()"></select>
-      </div>
-      <div class="form-group"><label>Quantity ordered *</label><input id="a-quantity" type="number" value="30" min="1"/></div>
-      <div class="form-group"><label>Supplier name *</label><input id="a-supplier" placeholder="ex: MedSupply SA"/></div>
-      <div class="form-group"><label>Supplier email</label><input id="a-email" type="email" placeholder="supplier@email.com"/></div>
-      <div class="form-group"><label>Status</label>
-        <select id="a-status">
-          <option value="pending">pending</option>
-          <option value="sent">sent</option>
-          <option value="delivered">delivered</option>
-          <option value="cancelled">cancelled</option>
-        </select>
-      </div>
-      <div class="form-group form-full"><label>Message</label><textarea id="a-message" rows="3" placeholder="Commande fournisseur..."></textarea></div>
-    </div>
-    <div class="modal-actions">
-      <button class="mini-btn" onclick="closePurchaseModal()">Annuler</button>
-      <button class="btn btn-orange" onclick="createPurchase()">🛒 Créer achat</button>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════════════════ MODAL : Mouvement de stock ═══════════════════ -->
-<div class="modal-overlay" id="vente-modal">
-  <div class="modal">
-    <h2>Mouvement de stock</h2>
-    <p>Enregistre une <strong>sortie</strong> (vente, consommation, perte) ou une <strong>entrée</strong> (retour, ajustement, correction) de stock.</p>
-    <div class="form-grid">
-      <div class="form-group">
-        <label>Type de mouvement *</label>
-        <select id="v-type" onchange="onVenteTypeChange()">
-          <option value="OUT">⬇️ OUT — Sortie (vente, consommation, perte)</option>
-          <option value="IN">⬆️ IN — Entrée (retour, ajustement, correction)</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Produit *</label>
-        <select id="v-product" onchange="updateStockInfo()"></select>
-      </div>
-      <div class="form-group">
-        <label>Quantité *</label>
-        <input id="v-quantity" type="number" value="1" min="1" oninput="updateStockInfo()"/>
-      </div>
-      <div class="form-group">
-        <label>Stock actuel</label>
-        <div id="v-stock-info" style="
-          padding: 12px; border-radius: 12px; background: #f8fafc;
-          border: 1.5px solid var(--border); font-weight: 900; font-size: 0.92rem;
-          display: flex; align-items: center; gap: 8px;
-        ">—</div>
-      </div>
-      <div class="form-group form-full">
-        <label>Raison / Note</label>
-        <textarea id="v-reason" rows="2" placeholder="Ex: vente client, retour fournisseur, correction inventaire..."></textarea>
-      </div>
-    </div>
-    <div class="modal-actions">
-      <button class="mini-btn" onclick="closeVenteModal()">Annuler</button>
-      <button class="btn btn-orange" id="v-submit-btn" onclick="createVente()">➖ Enregistrer sortie</button>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════════════════ MODAL : IA ═══════════════════ -->
-<div class="modal-overlay" id="ai-modal">
-  <div class="modal">
-    <h2>Recommandation IA</h2>
-    <p id="ai-text">—</p>
-    <div class="modal-actions"><button class="btn btn-primary" onclick="closeAiModal()">OK</button></div>
-  </div>
-</div>
-
-<div class="toast" id="toast"></div>
-
-<script>
-  /* ── URLs Fusion ── */
-  const DASHBOARD_URL   = "https://fusion-ai-api.medifus.dev/webhooks/webhook-d0giczyvk94wy7g084dyidiq/dashboard";
-  const ADD_PRODUCT_URL = "https://fusion-ai-api.medifus.dev/webhooks/webhook-yg9qb2wh9ewomrtgfyhhqvs9/add-product";
-  const ORDER_URL       = "https://fusion-ai-api.medifus.dev/webhooks/webhook-ibvcovotet1u57r07o6duq2p/achat";
-  const VENTE_URL       = "https://fusion-ai-api.medifus.dev/webhooks/webhook-m4iyuzlkmkgogu53ihrgvxrg/vente";
-
-  const USE_CORS_PROXY  = true;
-  const AUTO_REFRESH_MS = 15000;
-  const FETCH_TIMEOUT   = 25000;
-
-  /* ── localStorage key ── */
-  const NOTIF_STORAGE_KEY = "stock_notifications_v1";
-
-  let products    = [];
-  let purchases   = [];
-  let autoRefresh = true;
-  let timer       = null;
-
-  /* ══════════════════════════════════════════════
-     NOTIFICATIONS — stockage persistant localStorage
-     ══════════════════════════════════════════════ */
-
-  /**
-   * Charge les notifs depuis localStorage.
-   * Structure : { alerts: [...], tendances: [...] }
-   * Chaque item a un champ `id` unique pour pouvoir le supprimer.
-   */
-  const DISMISSED_KEY = "stock_notifications_dismissed_v1";
-
-  function loadStoredNotifications() {
-    try {
-      const raw = localStorage.getItem(NOTIF_STORAGE_KEY);
-      if (!raw) return { alerts: [], tendances: [] };
-      return JSON.parse(raw);
-    } catch { return { alerts: [], tendances: [] }; }
-  }
-
-  function saveNotifications(data) {
-    try {
-      localStorage.setItem(NOTIF_STORAGE_KEY, JSON.stringify(data));
-    } catch (e) {
-      console.warn("localStorage indisponible:", e);
-    }
-  }
-
-  /** IDs des notifs que l'utilisateur a explicitement annulées ou commandées */
-  function loadDismissed() {
-    try { return new Set(JSON.parse(localStorage.getItem(DISMISSED_KEY) || "[]")); }
-    catch { return new Set(); }
-  }
-
-  function saveDismissed(set) {
-    try { localStorage.setItem(DISMISSED_KEY, JSON.stringify([...set])); }
-    catch {}
-  }
-
-  function addDismissed(stableKey) {
-    const d = loadDismissed();
-    d.add(stableKey);
-    saveDismissed(d);
-  }
-
-  /** Clé stable basée sur product_id ou product_name (indépendante du timestamp) */
-  function stableKey(n, type) {
-    return `${type}_${n.product_id || n.product_name}`;
-  }
-
-  /**
-   * Fusionne les nouvelles notifs reçues de Fusion avec celles déjà stockées.
-   * - On génère un `id` basé sur product_id + type pour éviter les doublons.
-   * - Les nouvelles notifs remplacent les anciennes du même produit.
-   */
-  function mergeNotifications(data) {
-    const stored    = loadStoredNotifications();
-    const dismissed = loadDismissed();
-
-    let newAlerts    = [];
-    let newTendances = [];
-
-    try { newAlerts    = JSON.parse(data.notificationsJson || "[]"); } catch {}
-    try { newTendances = JSON.parse(data.tendanceJson      || "[]"); } catch {}
-
-    if (!newAlerts.length && !newTendances.length) {
-      // Fusion n'a rien envoyé : on garde ce qui est en localStorage
-      return stored;
-    }
-
-    // _id stable basé sur product uniquement (pas de timestamp) pour survivre aux refreshs
-    const stamp = (item, type) => ({
-      ...item,
-      _id: stableKey(item, type)
-    });
-
-    // Fusion des alertes — on skip les dismissées
-    const mergedAlerts = [...stored.alerts];
-    newAlerts.forEach(n => {
-      const sk = stableKey(n, "alert");
-      if (dismissed.has(sk)) return; // déjà annulée → on n'ajoute pas
-      const idx = mergedAlerts.findIndex(x =>
-        (x.product_id && x.product_id === n.product_id) ||
-        x.product_name === n.product_name
-      );
-      const stamped = stamp(n, "alert");
-      if (idx >= 0) mergedAlerts[idx] = stamped;
-      else mergedAlerts.push(stamped);
-    });
-
-    // Fusion des tendances — idem
-    const mergedTendances = [...stored.tendances];
-    newTendances.forEach(n => {
-      const sk = stableKey(n, "tendance");
-      if (dismissed.has(sk)) return;
-      const idx = mergedTendances.findIndex(x =>
-        (x.product_id && x.product_id === n.product_id) ||
-        x.product_name === n.product_name
-      );
-      const stamped = stamp(n, "tendance");
-      if (idx >= 0) mergedTendances[idx] = stamped;
-      else mergedTendances.push(stamped);
-    });
-
-    const merged = { alerts: mergedAlerts, tendances: mergedTendances };
-    saveNotifications(merged);
-    return merged;
-  }
-
-  /** Supprime une notif par son _id dans localStorage et re-render. */
-  /** Annuler = ne fait rien (la notif reste) */
-  function dismissNotification(_id) {
-    // intentionnellement vide — bouton Annuler ne supprime pas
-  }
-
-  /** Commander = suppression permanente (localStorage + liste noire) */
-  function permanentlyDismiss(_id) {
-    addDismissed(_id);
-    const stored = loadStoredNotifications();
-    stored.alerts    = stored.alerts.filter(x => x._id !== _id);
-    stored.tendances = stored.tendances.filter(x => x._id !== _id);
-    saveNotifications(stored);
-    const el = document.querySelector(`[data-notif-id="${CSS.escape(_id)}"]`);
-    if (el) {
-      el.classList.add("removing");
-      setTimeout(() => el.remove(), 280);
-    }
-  }
-
-  /** Vide toutes les notifs. */
-  function clearAllNotifications() {
-    saveNotifications({ alerts: [], tendances: [] });
-    // On vide aussi la liste noire pour permettre aux futures notifs de réapparaître
-    saveDismissed(new Set());
-    renderNotificationsUI({ alerts: [], tendances: [] });
-  }
-
-  /** Re-render depuis localStorage sans toucher au reste du dashboard. */
-  function renderNotificationsFromStorage() {
-    const stored = loadStoredNotifications();
-    renderNotificationsUI(stored);
-  }
-
-  /** Appelé par Fusion après réponse (vente, dashboard, etc.). */
-  function renderNotifications(data) {
-    const merged = mergeNotifications(data);
-    renderNotificationsUI(merged);
-  }
-
-  /** Rendu HTML des notifications. */
-  function renderNotificationsUI({ alerts = [], tendances = [] }) {
-    const container  = document.getElementById("notifications-container");
-    const countBadge = document.getElementById("notif-count");
-    const total = alerts.length + tendances.length;
-
-    // Badge compteur
-    countBadge.textContent = total;
-    countBadge.classList.toggle("hidden", total === 0);
-
-    if (!total) {
-      container.innerHTML = `<div class="notif-empty">✅ Aucune notification en attente</div>`;
-      return;
-    }
-
-    container.innerHTML = `
-      ${alerts.map(n => `
-        <div class="risk-item" data-notif-id="${escapeHtml(n._id || '')}">
-          <div class="risk-item-text">
-            <strong>⚠️ ${escapeHtml(n.product_name || '—')}</strong>
-            <div class="small-muted">${escapeHtml(n.reason || '')}</div>
-          </div>
-          <div class="risk-item-actions">
-            <button class="mini-btn cancel-notif"
-              onclick="dismissNotification(${JSON.stringify(n._id)})">
-              ✕ Annuler
-            </button>
-            <button class="mini-btn order"
-              onclick='commanderFromNotif(${safeJson(n)})'>
-              🛒 Commander
-            </button>
-          </div>
-        </div>
-      `).join("")}
-
-      ${tendances.map(n => `
-        <div class="risk-item" data-notif-id="${escapeHtml(n._id || '')}">
-          <div class="risk-item-text">
-            <strong>📈 ${escapeHtml(n.product_name || '—')}</strong>
-            <div class="small-muted">${escapeHtml(n.reason || '')}</div>
-          </div>
-          <div class="risk-item-actions">
-            <button class="mini-btn cancel-notif"
-              onclick="dismissNotification(${JSON.stringify(n._id)})">
-              ✕ Annuler
-            </button>
-          </div>
-        </div>
-      `).join("")}
-    `;
-  }
-
-  /**
-   * Commander depuis une notification :
-   * - Envoie la commande à Fusion
-   * - Supprime la notif de localStorage
-   * - Refresh le dashboard
-   */
-  async function commanderFromNotif(n) {
-    // Supprimer définitivement (localStorage + liste noire)
-    if (n._id) permanentlyDismiss(n._id);
-
-    try {
-      await apiPost(ORDER_URL, {
-        product_id:       n.product_id,
-        product_name:     n.product_name,
-        quantity_ordered: n.recommended_order_quantity || 30,
-        supplier_name:    n.supplier_name  || "",
-        supplier_email:   n.supplier_email || "",
-        status:           "pending",
-        message:          "Auto order from AI notification"
-      });
-      showToast(`✅ Commande envoyée — ${n.product_name}`);
-      loadDashboard(false);
-    } catch (err) {
-      showToast("❌ Erreur: " + err.message);
-    }
-  }
-
-  /* ══════════════════════════════════════════════
-     RÉSEAU
-     ══════════════════════════════════════════════ */
-  function buildUrl(url) {
-    const bust = url + (url.includes("?") ? "&" : "?") + "_=" + Date.now();
-    return USE_CORS_PROXY ? `https://corsproxy.io/?url=${encodeURIComponent(bust)}` : bust;
-  }
-
-  async function fetchWithTimeout(url, opts = {}, ms = FETCH_TIMEOUT) {
-    const ctrl = new AbortController();
-    const id   = setTimeout(() => ctrl.abort(), ms);
-    try {
-      const res = await fetch(url, { ...opts, signal: ctrl.signal });
-      clearTimeout(id);
-      return res;
-    } catch (e) {
-      clearTimeout(id);
-      throw e.name === "AbortError" ? new Error(`Timeout ${ms/1000}s — Fusion trop lent`) : e;
-    }
-  }
-
-  async function apiPost(url, body = {}) {
-    const res = await fetchWithTimeout(buildUrl(url), {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body)
-    });
-    if (!res.ok) throw new Error("HTTP " + res.status);
-    return res.json();
-  }
-
-  /* ══════════════════════════════════════════════
-     MODALS
-     ══════════════════════════════════════════════ */
-  function openProductModal()  { document.getElementById("product-modal").classList.add("open"); }
-  function closeProductModal() { document.getElementById("product-modal").classList.remove("open"); }
-
-  function openPurchaseModal() {
-    const select = document.getElementById("a-product");
-    select.innerHTML = products.map(p =>
-      `<option value="${p.id}">${escapeHtml(p.product_name)} — stock: ${Number(p.current_stock || 0)}</option>`
-    ).join("");
-    document.getElementById("a-quantity").value = 30;
-    document.getElementById("a-status").value   = "pending";
-    document.getElementById("a-message").value  = "";
-    fillPurchaseSupplier();
-    document.getElementById("purchase-modal").classList.add("open");
-  }
-
-  function fillPurchaseSupplier() {
-    const productId = Number(document.getElementById("a-product").value);
-    const p = products.find(x => Number(x.id) === productId);
-    document.getElementById("a-supplier").value = p?.supplier_name  || "";
-    document.getElementById("a-email").value    = p?.supplier_email || "";
-  }
-
-  function closePurchaseModal() { document.getElementById("purchase-modal").classList.remove("open"); }
-
-  function openVenteModal() {
-    const sel = document.getElementById("v-product");
-    sel.innerHTML = products.map(p =>
-      `<option value="${escapeHtml(p.product_name)}">${escapeHtml(p.product_name)} — stock: ${Number(p.current_stock||0)}</option>`
-    ).join("");
-    document.getElementById("v-type").value     = "OUT";
-    document.getElementById("v-quantity").value = 1;
-    document.getElementById("v-reason").value   = "";
-    onVenteTypeChange();
-    updateStockInfo();
-    document.getElementById("vente-modal").classList.add("open");
-  }
-  function closeVenteModal() { document.getElementById("vente-modal").classList.remove("open"); }
-  function closeAiModal()    { document.getElementById("ai-modal").classList.remove("open"); }
-
-  function onVenteTypeChange() {
-    const isOut = document.getElementById("v-type").value === "OUT";
-    const btn   = document.getElementById("v-submit-btn");
-    btn.textContent      = isOut ? "➖ Enregistrer sortie" : "➕ Enregistrer entrée";
-    btn.style.background = isOut ? "var(--warning)"       : "var(--success)";
-    updateStockInfo();
-  }
-
-  function updateStockInfo() {
-    const productName = val("v-product");
-    const qty         = num("v-quantity");
-    const isOut       = document.getElementById("v-type")?.value === "OUT";
-    const p           = products.find(p => p.product_name === productName);
-    const current     = Number(p?.current_stock || 0);
-    const after       = isOut ? current - qty : current + qty;
-    const ok          = !isOut || after >= 0;
-    const info        = document.getElementById("v-stock-info");
-    if (!info) return;
-    info.style.borderColor = ok ? "var(--border)" : "var(--danger)";
-    info.style.color       = ok ? "var(--text)"   : "var(--danger)";
-    info.innerHTML = p
-      ? `Stock: <strong>${current}</strong> → après: <strong style="color:${ok ? "var(--success)" : "var(--danger)"}">${after}</strong>${!ok ? " ❌ insuffisant" : ""}`
-      : "—";
-  }
-
-  /* ══════════════════════════════════════════════
-     DASHBOARD
-     ══════════════════════════════════════════════ */
-  async function loadDashboard(manual = false) {
-    if (manual) showToast("Refresh en cours...");
-    try {
-      const data = await apiPost(DASHBOARD_URL, { action: "dashboard" });
-      products  = normalizeArray(data.products  || data.productsJson  || data.data  || data.rows  || []);
-      purchases = normalizeArray(data.purchases || data.purchasesJson || data.orders || data.achats || []);
-      renderAll();
-      // Merge les nouvelles notifs de Fusion avec localStorage
-      renderNotifications(data);
-      setLive("Connecté à Fusion", false);
-      if (manual) showToast("✅ Dashboard mis à jour");
-    } catch (err) {
-      setLive("Erreur: " + err.message, true);
-      const msg = `<div class="error"><strong>Erreur Fusion</strong><br>${escapeHtml(err.message)}<br><br>Vérifie que ton workflow Fusion est activé (toggle ON).</div>`;
-      document.getElementById("products-table").innerHTML  = msg;
-      document.getElementById("purchases-table").innerHTML = msg;
-      if (manual) showToast("❌ " + err.message);
-    }
-  }
-
-  function normalizeArray(v) {
-    if (Array.isArray(v)) return v;
-    if (typeof v === "string") { try { return JSON.parse(v); } catch { return []; } }
-    return [];
-  }
-
-  function setLive(text, err = false) {
-    document.getElementById("live-status").textContent = text;
-    document.getElementById("live-dot").classList.toggle("error", err);
-  }
-
-  /* ══════════════════════════════════════════════
-     RENDER
-     ══════════════════════════════════════════════ */
-  function switchTab(tab) {
-    document.getElementById("products-panel").classList.toggle("hidden",  tab !== "products");
-    document.getElementById("purchases-panel").classList.toggle("hidden", tab !== "purchases");
-    document.getElementById("tab-products-btn").classList.toggle("active",  tab === "products");
-    document.getElementById("tab-purchases-btn").classList.toggle("active", tab === "purchases");
-    renderAll();
-  }
-
-  function renderAll() { updateStats(); renderProductsTable(); renderPurchasesTable(); }
-
-  function updateStats() {
-    document.getElementById("stat-products").textContent = products.length;
-    document.getElementById("stat-ok").textContent       = products.filter(p => getRisk(p).type === "OK").length;
-    document.getElementById("stat-critical").textContent = products.filter(p => getRisk(p).type === "CRITICAL").length;
-    document.getElementById("stat-pending").textContent  = purchases.filter(p => String(p.status||"pending").toLowerCase() === "pending").length;
-    document.getElementById("stat-ordered").textContent  = purchases.reduce((s,p) => s + Number(p.quantity_ordered||p.quantity||0), 0);
-  }
-
-  function filteredProducts() {
-    const q = document.getElementById("search-input").value.trim().toLowerCase();
-    const f = document.getElementById("status-filter").value;
-    return products.filter(p => {
-      const txt = [p.product_name,p.category,p.supplier_name,p.supplier_email].join(" ").toLowerCase();
-      return (!q || txt.includes(q)) && (f === "ALL" || f === getRisk(p).type);
-    });
-  }
-
-  function filteredPurchases() {
-    const q = document.getElementById("search-input").value.trim().toLowerCase();
-    const f = document.getElementById("status-filter").value;
-    return purchases.filter(p => {
-      const st  = String(p.status||"pending").toLowerCase();
-      const txt = [p.product_name,p.supplier_name,p.supplier_email,p.message].join(" ").toLowerCase();
-      return (!q || txt.includes(q)) && (f === "ALL" || f.toLowerCase() === st || ["OK","WARNING","CRITICAL"].includes(f));
-    });
-  }
-
-  function renderProductsTable() {
-    const list = filteredProducts();
-    document.getElementById("products-subtitle").textContent = `${list.length} produit(s) affiché(s)`;
-    const c = document.getElementById("products-table");
-    if (!list.length) { c.innerHTML = `<div class="empty">Aucun produit trouvé. Clique sur Ajouter produit.</div>`; return; }
-    c.innerHTML = `<div class="table-wrap"><table>
-      <thead><tr>
-        <th>Produit</th><th>Catégorie</th><th>Stock</th>
-        <th>Forecast</th><th>Couverture</th><th>Supplier</th>
-        <th>IoT</th><th>Statut</th><th>Actions</th>
-      </tr></thead>
-      <tbody>${list.map(productRow).join("")}</tbody>
-    </table></div>`;
-  }
-
-  function renderPurchasesTable() {
-    const list = filteredPurchases();
-    document.getElementById("purchases-subtitle").textContent = `${list.length} achat(s) affiché(s)`;
-    const c = document.getElementById("purchases-table");
-    if (!list.length) { c.innerHTML = `<div class="empty">Aucun achat trouvé. Clique sur Créer achat.</div>`; return; }
-    c.innerHTML = `<div class="table-wrap"><table>
-      <thead><tr><th>ID</th><th>Produit</th><th>Supplier</th><th>Email</th><th>Quantité</th><th>Status</th><th>Message</th><th>Date</th><th>Actions</th></tr></thead>
-      <tbody>${list.map(purchaseRow).join("")}</tbody>
-    </table></div>`;
-  }
-
-  function productRow(p) {
-    const risk  = getRisk(p);
-    const stock = Number(p.current_stock||0), min = Number(p.minimum_stock||10);
-    const max   = Math.max(Number(p.maximum_stock||100), stock, 1);
-    const pct   = Math.min(100, Math.round((stock/max)*100));
-    const days  = daysBeforeRupture(p);
-    return `<tr>
-      <td><div class="strong">${escapeHtml(p.product_name||"—")}</div><div class="muted">ID: ${escapeHtml(p.id||p.product_id||"—")}</div></td>
-      <td><span class="badge info">${escapeHtml(p.category||"—")}</span></td>
-      <td>
-        <span class="badge ${riskClass(risk.type)}">${stock} unité(s)</span>
-        <div class="muted">Min ${min} / Max ${max}</div>
-        <div class="stock-bar"><div class="stock-fill ${riskClass(risk.type)}" style="width:${pct}%"></div></div>
-      </td>
-      <td><strong>${Number(p.forecast_demand||1)}</strong><div class="muted">unité(s)/jour</div></td>
-      <td><strong>${days} jour(s)</strong><div class="muted">Delivery: ${Number(p.delivery_time_days||3)} j</div></td>
-      <td><div class="strong">${escapeHtml(p.supplier_name||"—")}</div><div class="muted">${escapeHtml(p.supplier_email||"—")}</div></td>
-      <td><span class="badge ${iotClass(p)}">${Number(p.temperature||0)}°C / ${Number(p.humidity||0)}%</span></td>
-      <td><span class="badge ${riskClass(risk.type)}">${risk.label}</span><div class="muted">${risk.message}</div></td>
-      <td>
-        <button class="mini-btn ai"    onclick='showAI(${safeJson(p)})'>IA</button>
-        <button class="mini-btn order" onclick='openPurchaseFromProduct(${safeJson(p)})'>Commander</button>
-      </td>
-    </tr>`;
-  }
-
-  function purchaseRow(p) {
-    const st  = String(p.status||"pending").toLowerCase();
-    const cls = st==="delivered"?"ok":st==="cancelled"?"danger":st==="sent"?"info":"warning";
-    return `<tr>
-      <td>${escapeHtml(p.id||p.purchase_id||"—")}</td>
-      <td><div class="strong">${escapeHtml(p.product_name||"—")}</div></td>
-      <td>${escapeHtml(p.supplier_name||"—")}</td>
-      <td>${escapeHtml(p.supplier_email||"—")}</td>
-      <td><span class="badge info">${Number(p.quantity_ordered||p.quantity||0)}</span></td>
-      <td><span class="badge ${cls}">${escapeHtml(st)}</span></td>
-      <td><div class="muted">${escapeHtml(p.message||"—")}</div></td>
-      <td>${formatDate(p.created_at)}</td>
-      <td>
-        ${st !== "delivered" && st !== "cancelled" ? `<button class="mini-btn" onclick='setPurchaseStatus(${p.id}, "delivered")'>✔ Deliver</button>` : ""}
-        ${st !== "cancelled" && st !== "delivered" ? `<button class="mini-btn" onclick='setPurchaseStatus(${p.id}, "cancelled")'>✖ Cancel</button>` : ""}
-      </td>
-    </tr>`;
-  }
-
-  async function setPurchaseStatus(id, status) {
-    try {
-      await apiPost(ORDER_URL, { action: "update_status", id, status });
-      showToast("Status updated ✅");
-      loadDashboard(false);
-    } catch (err) {
-      showToast("Erreur: " + err.message);
-    }
-  }
-
-  /* ══════════════════════════════════════════════
-     LOGIQUE STOCK
-     ══════════════════════════════════════════════ */
-  function getRisk(p) {
-    const stock=Number(p.current_stock||0), min=Number(p.minimum_stock||10);
-    const days=daysBeforeRupture(p), del=Number(p.delivery_time_days||3);
-    if (stock<=0)                      return {type:"CRITICAL",label:"Rupture",  message:"Stock épuisé"};
-    if (stock<=min || days<=del)       return {type:"CRITICAL",label:"Critique", message:"Commander rapidement"};
-    if (stock<=min*1.7 || days<=del+2) return {type:"WARNING", label:"Vigilance",message:"Préparer achat"};
-    return {type:"OK",label:"OK",message:"Stock sécurisé"};
-  }
-  function riskClass(t) { return t==="OK"?"ok":t==="WARNING"?"warning":t==="CRITICAL"?"danger":"gray"; }
-  function daysBeforeRupture(p) { return Math.floor(Number(p.current_stock||0)/Math.max(Number(p.forecast_demand||1),1)); }
-  function recommendedQty(p) {
-    const stock=Number(p.current_stock||0), max=Number(p.maximum_stock||100);
-    const safety=Number(p.safety_stock||p.minimum_stock||10);
-    const lead=Number(p.forecast_demand||1)*Number(p.delivery_time_days||3);
-    return Math.max(30, Math.ceil(max-stock+safety+lead-max));
-  }
-  function iotClass(p) {
-    const t=Number(p.temperature||0), h=Number(p.humidity||0);
-    return (t>32||h>75)?"danger":(t>28||h>65)?"warning":"ok";
-  }
-
-  function openPurchaseFromProduct(p) {
-    const qty=recommendedQty(p)||30;
-    openPurchaseModal();
-    setTimeout(() => {
-      const sel = document.getElementById("a-product");
-      const opt = Array.from(sel.options).find(o => Number(o.value) === Number(p.id));
-      if (opt) sel.value = opt.value;
-      document.getElementById("a-quantity").value = qty;
-      document.getElementById("a-supplier").value = p.supplier_name  || "";
-      document.getElementById("a-email").value    = p.supplier_email || "";
-      document.getElementById("a-status").value   = "pending";
-      document.getElementById("a-message").value  = `Commande fournisseur: ${qty} unité(s) de ${p.product_name}. Stock actuel: ${p.current_stock}.`;
-    }, 50);
-  }
-
-  /* ══════════════════════════════════════════════
-     ACTIONS FORMULAIRES
-     ══════════════════════════════════════════════ */
-  async function addProduct() {
-    const body = {
-      product_name:   val("p-name"),
-      category:       val("p-category"),
-      current_stock:  num("p-current"),
-      minimum_stock:  num("p-min"),
-      supplier_name:  val("p-supplier"),
-      supplier_email: val("p-email"),
-      expiration_date:val("p-expiration"),
-      temperature:    num("p-temp"),
-      humidity:       num("p-humidity")
-    };
-    if (!body.product_name) { showToast("❌ Product name requis"); return; }
-    if (!body.category)     { showToast("❌ Category requis"); return; }
-    closeProductModal();
-    showToast("Envoi à Fusion...");
-    try {
-      await apiPost(ADD_PRODUCT_URL, body);
-      showToast("✅ Produit ajouté");
-      loadDashboard(false);
-    } catch (err) {
-      showToast("❌ Erreur: " + err.message);
-    }
-  }
-
-  async function createPurchase() {
-    const productId = Number(document.getElementById("a-product").value);
-    const p = products.find(x => Number(x.id) === productId);
-    const body = {
-      product_id:       productId,
-      product_name:     p?.product_name || "",
-      quantity_ordered: num("a-quantity"),
-      supplier_name:    val("a-supplier"),
-      supplier_email:   val("a-email"),
-      status:           val("a-status") || "pending",
-      message:          val("a-message")
-    };
-    if (!body.product_id || body.quantity_ordered <= 0) {
-      showToast("Vérifie produit et quantité"); return;
-    }
-    closePurchaseModal();
-    try {
-      await apiPost(ORDER_URL, body);
-      showToast("✅ Achat créé");
-      loadDashboard(false);
-    } catch (err) {
-      showToast("❌ Erreur: " + err.message);
-    }
-  }
-
-  async function createVente() {
-    const productName = val("v-product");
-    const quantity    = num("v-quantity");
-    const reason      = val("v-reason");
-    const type        = document.getElementById("v-type").value;
-    const isOut       = type === "OUT";
-
-    if (!productName || quantity <= 0) {
-      showToast("❌ Vérifie produit et quantité"); return;
-    }
-    if (isOut) {
-      const selected  = products.find(p => p.product_name === productName);
-      const available = Number(selected?.current_stock || 0);
-      if (quantity > available) {
-        showToast(`❌ Stock insuffisant — disponible: ${available}`); return;
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Stock Platform - Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            background: '#f4f6f9',
+            foreground: '#1e293b',
+            card: '#ffffff',
+            'card-foreground': '#1e293b',
+            primary: '#22c55e',
+            'primary-foreground': '#ffffff',
+            secondary: '#f1f5f9',
+            'secondary-foreground': '#334155',
+            muted: '#f1f5f9',
+            'muted-foreground': '#64748b',
+            accent: '#f59e0b',
+            'accent-foreground': '#422006',
+            destructive: '#ef4444',
+            'destructive-foreground': '#ffffff',
+            border: '#e2e8f0',
+            input: '#f1f5f9',
+            ring: '#22c55e',
+            sidebar: '#1e293b',
+            'sidebar-foreground': '#cbd5e1',
+            'sidebar-accent': '#334155',
+            'sidebar-accent-foreground': '#f1f5f9',
+            'sidebar-border': '#334155',
+          }
+        }
       }
     }
-    closeVenteModal();
-    showToast("Envoi à Fusion...");
-    try {
-      const result = await apiPost(VENTE_URL, { product_name: productName, quantity, reason, type });
-      showToast(isOut ? "✅ Sortie enregistrée" : "✅ Entrée enregistrée");
-      // Merge les nouvelles notifs reçues par Fusion après la vente
-      renderNotifications(result);
-      loadDashboard(false);
-    } catch (err) {
-      showToast("❌ Erreur: " + err.message);
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+    .scrollbar-thin::-webkit-scrollbar { width: 4px; }
+    .scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
+    .scrollbar-thin::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    .animate-pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
+    .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  </style>
+</head>
+<body class="bg-background min-h-screen">
+  <div id="app" class="flex min-h-screen">
+    <!-- Mobile Sidebar Toggle -->
+    <button id="sidebarToggle" class="fixed top-4 left-4 z-50 lg:hidden bg-sidebar text-sidebar-foreground p-2 rounded-lg">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
+
+    <!-- Sidebar Overlay -->
+    <div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-30 lg:hidden hidden"></div>
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="fixed lg:static inset-y-0 left-0 z-40 w-64 bg-sidebar text-sidebar-foreground flex flex-col transform -translate-x-full lg:translate-x-0 transition-transform">
+      <!-- Logo -->
+      <div class="flex items-center gap-3 px-5 py-6 border-b border-sidebar-border">
+        <div class="w-9 h-9 rounded-lg bg-primary flex items-center justify-center">
+          <svg class="w-5 h-5 text-primary-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+          </svg>
+        </div>
+        <span class="font-semibold text-sm uppercase tracking-wide text-sidebar-foreground">Smart Stock Platform</span>
+      </div>
+
+      <!-- Menu -->
+      <nav class="flex-1 py-4 overflow-y-auto scrollbar-thin">
+        <div class="menu-item active">
+          <button class="w-full flex items-center gap-3 px-5 py-3 text-sm bg-sidebar-accent text-sidebar-accent-foreground border-l-2 border-primary">
+            <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"/></svg>
+            <span class="flex-1 text-left">Dashboard</span>
+          </button>
+        </div>
+        <div class="menu-item">
+          <button class="w-full flex items-center gap-3 px-5 py-3 text-sm text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground transition-colors">
+            <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+            <span class="flex-1 text-left">Produits</span>
+            <span class="bg-primary/20 text-primary px-2 py-0.5 rounded text-xs font-medium">122</span>
+          </button>
+        </div>
+        <div class="menu-item">
+          <button class="w-full flex items-center gap-3 px-5 py-3 text-sm text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground transition-colors">
+            <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+            <span class="flex-1 text-left">Fournisseurs</span>
+          </button>
+        </div>
+        <div class="menu-item">
+          <button class="w-full flex items-center gap-3 px-5 py-3 text-sm text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground transition-colors">
+            <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+            <span class="flex-1 text-left">Alertes</span>
+          </button>
+        </div>
+        <div class="menu-item">
+          <button id="analyticsToggle" class="w-full flex items-center gap-3 px-5 py-3 text-sm text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground transition-colors">
+            <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+            <span class="flex-1 text-left">Analytics</span>
+            <svg id="analyticsChevron" class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div id="analyticsSubmenu" class="hidden bg-sidebar-accent/30">
+            <button class="w-full text-left px-5 py-2 pl-12 text-sm text-sidebar-foreground/60 hover:text-sidebar-foreground hover:bg-sidebar-accent/50 transition-colors">Ventes</button>
+            <button class="w-full text-left px-5 py-2 pl-12 text-sm text-sidebar-foreground/60 hover:text-sidebar-foreground hover:bg-sidebar-accent/50 transition-colors">Stocks</button>
+            <button class="w-full text-left px-5 py-2 pl-12 text-sm text-sidebar-foreground/60 hover:text-sidebar-foreground hover:bg-sidebar-accent/50 transition-colors">Tendances</button>
+          </div>
+        </div>
+        <div class="menu-item">
+          <button class="w-full flex items-center gap-3 px-5 py-3 text-sm text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground transition-colors">
+            <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            <span class="flex-1 text-left">Contributeurs</span>
+          </button>
+        </div>
+        <div class="menu-item">
+          <button class="w-full flex items-center gap-3 px-5 py-3 text-sm text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground transition-colors">
+            <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
+            <span class="flex-1 text-left">Survey</span>
+          </button>
+        </div>
+        <div class="menu-item">
+          <button class="w-full flex items-center gap-3 px-5 py-3 text-sm text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground transition-colors">
+            <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            <span class="flex-1 text-left">Rapports</span>
+          </button>
+        </div>
+        <div class="menu-item">
+          <button class="w-full flex items-center gap-3 px-5 py-3 text-sm text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground transition-colors">
+            <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            <span class="flex-1 text-left">Parametres</span>
+          </button>
+        </div>
+      </nav>
+
+      <!-- User -->
+      <div class="p-4 border-t border-sidebar-border">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-full bg-sidebar-accent flex items-center justify-center text-sm font-medium">JD</div>
+          <div class="flex-1 min-w-0">
+            <p class="text-sm font-medium truncate">Jean Dupont</p>
+            <p class="text-xs text-sidebar-foreground/60 truncate">Admin</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col lg:ml-0">
+      <!-- Header -->
+      <header class="bg-card border-b border-border px-4 lg:px-6 py-4">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          <div class="lg:pl-0 pl-10">
+            <h1 class="text-xl font-bold text-card-foreground">Dashboard</h1>
+            <p class="text-sm text-muted-foreground">Prevention des ruptures de stock avec IA</p>
+          </div>
+          <div class="flex flex-wrap items-center gap-3">
+            <!-- Search -->
+            <div class="relative flex-1 min-w-[200px] lg:w-64 lg:flex-none">
+              <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+              <input id="searchInput" type="text" placeholder="Rechercher..." class="w-full pl-9 pr-4 py-2 rounded-lg border border-border bg-background text-sm outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-shadow">
+            </div>
+            <!-- Status -->
+            <div class="flex items-center gap-2 px-3 py-2 rounded-lg border border-border bg-background">
+              <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+              <span class="text-xs font-medium text-muted-foreground">Connecte</span>
+            </div>
+            <!-- Actions -->
+            <button id="addProductBtn" class="flex items-center gap-2 px-3 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-colors">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+              <span class="hidden sm:inline">Produit</span>
+            </button>
+            <button id="purchaseBtn" class="flex items-center gap-2 px-3 py-2 rounded-lg bg-accent text-accent-foreground text-sm font-medium hover:bg-accent/80 transition-colors">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+              <span class="hidden sm:inline">Achat</span>
+            </button>
+            <button id="saleBtn" class="flex items-center gap-2 px-3 py-2 rounded-lg bg-secondary text-secondary-foreground text-sm font-medium hover:bg-secondary/80 transition-colors">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/></svg>
+              <span class="hidden sm:inline">Vente</span>
+            </button>
+            <button class="p-2 rounded-lg border border-border hover:bg-muted transition-colors">
+              <svg class="w-4 h-4 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+            </button>
+            <button class="relative p-2 rounded-lg border border-border hover:bg-muted transition-colors">
+              <svg class="w-4 h-4 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+              <span class="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-destructive text-destructive-foreground text-[10px] font-bold flex items-center justify-center">3</span>
+            </button>
+            <div class="w-9 h-9 rounded-full bg-muted flex items-center justify-center"><span class="text-sm font-medium text-muted-foreground">JD</span></div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main -->
+      <main class="flex-1 p-4 lg:p-6 overflow-auto">
+        <!-- Stats -->
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+          <div class="bg-card rounded-lg border border-border p-4 shadow-sm">
+            <div class="flex items-start justify-between">
+              <div>
+                <p class="text-xs font-medium text-muted-foreground uppercase tracking-wide">Total Produits</p>
+                <p class="text-2xl font-bold text-card-foreground mt-1">5</p>
+              </div>
+              <div class="w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
+                <svg class="w-5 h-5 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+              </div>
+            </div>
+            <div class="mt-2 flex items-center gap-1">
+              <svg class="w-3.5 h-3.5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+              <span class="text-xs font-medium text-primary">+5.25%</span>
+            </div>
+          </div>
+          <div class="bg-card rounded-lg border border-border p-4 shadow-sm">
+            <div class="flex items-start justify-between">
+              <div>
+                <p class="text-xs font-medium text-muted-foreground uppercase tracking-wide">Stock OK</p>
+                <p class="text-2xl font-bold text-card-foreground mt-1">2</p>
+              </div>
+              <div class="w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
+                <svg class="w-5 h-5 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
+              </div>
+            </div>
+            <div class="mt-2 flex items-center gap-1">
+              <svg class="w-3.5 h-3.5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+              <span class="text-xs font-medium text-primary">+13.17%</span>
+            </div>
+          </div>
+          <div class="bg-card rounded-lg border border-border p-4 shadow-sm">
+            <div class="flex items-start justify-between">
+              <div>
+                <p class="text-xs font-medium text-muted-foreground uppercase tracking-wide">Critiques</p>
+                <p class="text-2xl font-bold text-card-foreground mt-1">1</p>
+              </div>
+              <div class="w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
+                <svg class="w-5 h-5 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+              </div>
+            </div>
+            <div class="mt-2 flex items-center gap-1">
+              <svg class="w-3.5 h-3.5 text-destructive" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"/></svg>
+              <span class="text-xs font-medium text-destructive">-1.19%</span>
+            </div>
+          </div>
+          <div class="bg-card rounded-lg border border-border p-4 shadow-sm">
+            <div class="flex items-start justify-between">
+              <div>
+                <p class="text-xs font-medium text-muted-foreground uppercase tracking-wide">Achats Pending</p>
+                <p class="text-2xl font-bold text-card-foreground mt-1">17</p>
+              </div>
+              <div class="w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
+                <svg class="w-5 h-5 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+              </div>
+            </div>
+            <div class="mt-2 flex items-center gap-1">
+              <svg class="w-3.5 h-3.5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+              <span class="text-xs font-medium text-primary">+1.2%</span>
+            </div>
+          </div>
+          <div class="bg-card rounded-lg border border-border p-4 shadow-sm">
+            <div class="flex items-start justify-between">
+              <div>
+                <p class="text-xs font-medium text-muted-foreground uppercase tracking-wide">Qte Commandee</p>
+                <p class="text-2xl font-bold text-card-foreground mt-1">226</p>
+              </div>
+              <div class="w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
+                <svg class="w-5 h-5 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              </div>
+            </div>
+            <div class="mt-2 flex items-center gap-1">
+              <svg class="w-3.5 h-3.5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+              <span class="text-xs font-medium text-primary">+6.66%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Charts Row 1 -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-6">
+          <div class="bg-card rounded-lg border border-border p-4 shadow-sm">
+            <h3 class="text-sm font-semibold text-card-foreground mb-4">Commandes par mois</h3>
+            <div class="h-64"><canvas id="barChart"></canvas></div>
+          </div>
+          <div class="bg-card rounded-lg border border-border p-4 shadow-sm">
+            <h3 class="text-sm font-semibold text-card-foreground mb-4">Mouvements de stock</h3>
+            <div class="h-64"><canvas id="lineChart"></canvas></div>
+            <div class="flex items-center justify-center gap-6 mt-3">
+              <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-primary"></span><span class="text-xs text-muted-foreground">Entrees</span></div>
+              <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-accent"></span><span class="text-xs text-muted-foreground">Sorties</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Charts Row 2 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
+          <!-- World Map (simplified) -->
+          <div class="bg-card rounded-lg border border-border p-4 shadow-sm">
+            <h3 class="text-sm font-semibold text-card-foreground mb-4">Distribution des fournisseurs</h3>
+            <div class="h-52 flex items-center justify-center bg-muted/30 rounded-lg relative overflow-hidden">
+              <svg viewBox="0 0 800 400" class="w-full h-full">
+                <!-- Simplified Europe map -->
+                <path d="M350,150 L400,120 L450,130 L500,110 L520,140 L540,120 L560,150 L550,180 L520,200 L480,220 L450,210 L420,230 L380,220 L360,200 L340,180 Z" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="1"/>
+                <path d="M380,180 L420,160 L460,170 L480,190 L470,220 L430,230 L390,210 Z" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="1"/>
+                <path d="M320,200 L360,190 L380,220 L360,250 L320,240 Z" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="1"/>
+                <path d="M460,240 L500,220 L530,250 L510,280 L470,270 Z" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="1"/>
+                <!-- Markers -->
+                <circle cx="400" cy="180" r="12" fill="#22c55e" fill-opacity="0.7" stroke="#22c55e"/>
+                <circle cx="420" cy="200" r="9" fill="#22c55e" fill-opacity="0.7" stroke="#22c55e"/>
+                <circle cx="450" cy="230" r="7" fill="#22c55e" fill-opacity="0.7" stroke="#22c55e"/>
+                <circle cx="480" cy="170" r="10" fill="#22c55e" fill-opacity="0.7" stroke="#22c55e"/>
+                <circle cx="340" cy="220" r="8" fill="#22c55e" fill-opacity="0.7" stroke="#22c55e"/>
+                <circle cx="510" cy="150" r="11" fill="#22c55e" fill-opacity="0.7" stroke="#22c55e"/>
+                <circle cx="380" cy="250" r="6" fill="#22c55e" fill-opacity="0.7" stroke="#22c55e"/>
+              </svg>
+            </div>
+            <div class="flex flex-wrap gap-3 mt-3 justify-center">
+              <div class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-primary"></span><span class="text-xs text-muted-foreground">Paris (45)</span></div>
+              <div class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-primary"></span><span class="text-xs text-muted-foreground">Lyon (28)</span></div>
+              <div class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-primary"></span><span class="text-xs text-muted-foreground">Berlin (32)</span></div>
+              <div class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-primary"></span><span class="text-xs text-muted-foreground">Londres (38)</span></div>
+            </div>
+          </div>
+
+          <!-- Pie Chart -->
+          <div class="bg-card rounded-lg border border-border p-4 shadow-sm">
+            <h3 class="text-sm font-semibold text-card-foreground mb-4">Repartition des stocks</h3>
+            <div class="h-48"><canvas id="pieChart"></canvas></div>
+            <div class="grid grid-cols-2 gap-2 mt-2">
+              <div class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-primary"></span><span class="text-xs text-muted-foreground">Stock OK</span></div>
+              <div class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-accent"></span><span class="text-xs text-muted-foreground">Vigilance</span></div>
+              <div class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-destructive"></span><span class="text-xs text-muted-foreground">Critique</span></div>
+              <div class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-muted-foreground"></span><span class="text-xs text-muted-foreground">Epuise</span></div>
+            </div>
+          </div>
+
+          <!-- Notifications -->
+          <div class="bg-card rounded-lg border border-border shadow-sm">
+            <div class="flex items-center justify-between px-4 py-3 border-b border-border">
+              <div class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+                <h3 class="text-sm font-semibold text-card-foreground">Notifications IA</h3>
+                <span id="notifBadge" class="bg-destructive text-destructive-foreground text-xs font-medium px-1.5 py-0.5 rounded-full">3</span>
+              </div>
+              <button id="clearAllNotifs" class="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-card-foreground transition-colors">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                Tout effacer
+              </button>
+            </div>
+            <div id="notificationsContainer" class="p-3 max-h-64 overflow-y-auto scrollbar-thin">
+              <!-- Notifications will be rendered here -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Tables Row -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-6">
+          <!-- Products Table -->
+          <div class="lg:col-span-2 bg-card rounded-lg border border-border shadow-sm">
+            <div class="flex items-center justify-between px-4 py-3 border-b border-border">
+              <div>
+                <h3 class="text-sm font-semibold text-card-foreground">Produits & Stock</h3>
+                <p class="text-xs text-muted-foreground mt-0.5"><span id="productCount">5</span> produits au total</p>
+              </div>
+              <button class="p-1.5 hover:bg-muted rounded-md transition-colors">
+                <svg class="w-4 h-4 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"/></svg>
+              </button>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm">
+                <thead>
+                  <tr class="bg-muted/50">
+                    <th class="text-left px-4 py-2.5 font-medium text-muted-foreground text-xs uppercase tracking-wide">Produit</th>
+                    <th class="text-left px-4 py-2.5 font-medium text-muted-foreground text-xs uppercase tracking-wide">Categorie</th>
+                    <th class="text-left px-4 py-2.5 font-medium text-muted-foreground text-xs uppercase tracking-wide">Stock</th>
+                    <th class="text-left px-4 py-2.5 font-medium text-muted-foreground text-xs uppercase tracking-wide">Statut</th>
+                    <th class="text-left px-4 py-2.5 font-medium text-muted-foreground text-xs uppercase tracking-wide">Tendance</th>
+                    <th class="text-left px-4 py-2.5 font-medium text-muted-foreground text-xs uppercase tracking-wide">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="productsTableBody">
+                  <!-- Products will be rendered here -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Clients Table -->
+          <div class="bg-card rounded-lg border border-border shadow-sm">
+            <div class="flex items-center justify-between px-4 py-3 border-b border-border">
+              <h3 class="text-sm font-semibold text-card-foreground">Fournisseurs principaux</h3>
+              <button class="p-1.5 hover:bg-muted rounded-md transition-colors">
+                <svg class="w-4 h-4 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"/></svg>
+              </button>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm">
+                <thead>
+                  <tr class="bg-muted/50">
+                    <th class="text-left px-4 py-2.5 font-medium text-muted-foreground text-xs uppercase tracking-wide">Nom</th>
+                    <th class="text-left px-4 py-2.5 font-medium text-muted-foreground text-xs uppercase tracking-wide">Actifs</th>
+                    <th class="text-left px-4 py-2.5 font-medium text-muted-foreground text-xs uppercase tracking-wide">Commandes</th>
+                    <th class="text-left px-4 py-2.5 font-medium text-muted-foreground text-xs uppercase tracking-wide">Statut</th>
+                  </tr>
+                </thead>
+                <tbody id="clientsTableBody">
+                  <!-- Clients will be rendered here -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Modal Backdrop -->
+  <div id="modalBackdrop" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 hidden">
+    <div id="modalContent" class="bg-card rounded-xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+      <div class="flex items-start justify-between p-5 border-b border-border">
+        <div>
+          <h2 id="modalTitle" class="text-lg font-semibold text-card-foreground"></h2>
+          <p id="modalDescription" class="text-sm text-muted-foreground mt-1"></p>
+        </div>
+        <button id="modalClose" class="p-1.5 hover:bg-muted rounded-md transition-colors">
+          <svg class="w-5 h-5 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div id="modalBody" class="p-5"></div>
+    </div>
+  </div>
+
+  <script>
+    // Data
+    const products = [
+      { id: "1", name: "Paracetamol 500mg", category: "Medicaments", currentStock: 85, minStock: 100, supplier: "MedSupply SA", status: "WARNING", trend: "down", change: "-12%" },
+      { id: "2", name: "Gants Latex M", category: "Equipements", currentStock: 250, minStock: 100, supplier: "EquipMed", status: "OK", trend: "up", change: "+8%" },
+      { id: "3", name: "Seringues 5ml", category: "Consommables", currentStock: 15, minStock: 50, supplier: "MediTools", status: "CRITICAL", trend: "down", change: "-45%" },
+      { id: "4", name: "Masques FFP2", category: "Protection", currentStock: 180, minStock: 150, supplier: "SafeMed", status: "OK", trend: "stable", change: "+2%" },
+      { id: "5", name: "Ibuprofene 400mg", category: "Medicaments", currentStock: 45, minStock: 80, supplier: "PharmaPlus", status: "WARNING", trend: "down", change: "-18%" }
+    ];
+
+    const clients = [
+      { id: "1", name: "MedSupply SA", active: 301, revenue: 180, status: "active" },
+      { id: "2", name: "EquipMed", active: 229, revenue: 290, status: "active" },
+      { id: "3", name: "MediTools", active: 175, revenue: 38, status: "active" },
+      { id: "4", name: "SafeMed", active: 166, revenue: 60, status: "inactive" }
+    ];
+
+    let notifications = [
+      { id: "1", type: "alert", title: "Stock critique: Seringues 5ml", message: "Le stock est descendu a 15 unites. Commande recommandee: 100 unites.", time: "10:30" },
+      { id: "2", type: "tendance", title: "Tendance baissiere: Paracetamol", message: "Consommation en hausse de 25% cette semaine. Prevision de rupture dans 5 jours.", time: "10:00" },
+      { id: "3", type: "info", title: "Livraison confirmee", message: "Commande #2847 de MedSupply SA sera livree demain.", time: "09:30" }
+    ];
+
+    // Sidebar toggle
+    const sidebar = document.getElementById('sidebar');
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+    sidebarToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('-translate-x-full');
+      sidebarOverlay.classList.toggle('hidden');
+    });
+
+    sidebarOverlay.addEventListener('click', () => {
+      sidebar.classList.add('-translate-x-full');
+      sidebarOverlay.classList.add('hidden');
+    });
+
+    // Analytics submenu toggle
+    const analyticsToggle = document.getElementById('analyticsToggle');
+    const analyticsSubmenu = document.getElementById('analyticsSubmenu');
+    const analyticsChevron = document.getElementById('analyticsChevron');
+
+    analyticsToggle.addEventListener('click', () => {
+      analyticsSubmenu.classList.toggle('hidden');
+      analyticsChevron.classList.toggle('rotate-180');
+    });
+
+    // Render products table
+    function renderProducts(filter = '') {
+      const tbody = document.getElementById('productsTableBody');
+      const filtered = products.filter(p =>
+        p.name.toLowerCase().includes(filter.toLowerCase()) ||
+        p.category.toLowerCase().includes(filter.toLowerCase()) ||
+        p.supplier.toLowerCase().includes(filter.toLowerCase())
+      );
+      document.getElementById('productCount').textContent = filtered.length;
+      
+      tbody.innerHTML = filtered.map(p => {
+        const ratio = Math.min((p.currentStock / p.minStock) * 100, 100);
+        const barColor = ratio >= 80 ? 'bg-primary' : ratio >= 50 ? 'bg-accent' : 'bg-destructive';
+        const statusStyles = {
+          OK: 'bg-primary/10 text-primary',
+          WARNING: 'bg-accent/20 text-amber-700',
+          CRITICAL: 'bg-destructive/10 text-destructive'
+        };
+        const statusLabels = { OK: 'Stock OK', WARNING: 'Vigilance', CRITICAL: 'Critique' };
+        const trendIcon = p.trend === 'up' 
+          ? '<svg class="w-3.5 h-3.5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>'
+          : p.trend === 'down'
+          ? '<svg class="w-3.5 h-3.5 text-destructive" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"/></svg>'
+          : '<span class="w-3.5 h-0.5 bg-muted-foreground rounded"></span>';
+        const trendColor = p.trend === 'up' ? 'text-primary' : p.trend === 'down' ? 'text-destructive' : 'text-muted-foreground';
+
+        return `
+          <tr class="border-b border-border last:border-0 hover:bg-muted/30 transition-colors">
+            <td class="px-4 py-3">
+              <div><p class="font-medium text-card-foreground">${p.name}</p><p class="text-xs text-muted-foreground">${p.supplier}</p></div>
+            </td>
+            <td class="px-4 py-3 text-muted-foreground">${p.category}</td>
+            <td class="px-4 py-3">
+              <div class="w-24">
+                <div class="h-2 bg-muted rounded-full overflow-hidden"><div class="h-full rounded-full ${barColor}" style="width: ${ratio}%"></div></div>
+                <p class="text-[10px] text-muted-foreground mt-1">${p.currentStock} / ${p.minStock} min</p>
+              </div>
+            </td>
+            <td class="px-4 py-3"><span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${statusStyles[p.status]}">${statusLabels[p.status]}</span></td>
+            <td class="px-4 py-3"><div class="flex items-center gap-1">${trendIcon}<span class="text-xs font-medium ${trendColor}">${p.change}</span></div></td>
+            <td class="px-4 py-3">
+              <div class="flex items-center gap-1.5">
+                <button onclick="openPurchaseModal('${p.id}')" class="px-2 py-1 text-xs font-medium rounded bg-accent/20 text-amber-700 hover:bg-accent/30 transition-colors">Commander</button>
+                <button onclick="openAiModal('${p.id}')" class="p-1.5 rounded bg-primary/10 text-primary hover:bg-primary/20 transition-colors" title="Recommandation IA">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
     }
-  }
 
-  /* ══════════════════════════════════════════════
-     IA
-     ══════════════════════════════════════════════ */
-  function showAI(p) {
-    const risk=getRisk(p), days=daysBeforeRupture(p), qty=recommendedQty(p)||30;
-    const text = risk.type==="CRITICAL"
-      ? `🔴 Critique: ${p.product_name}. Stock: ${p.current_stock}. Couverture: ${days} j. Commander ${qty} unité(s) chez ${p.supplier_name||"le fournisseur"}.`
-      : risk.type==="WARNING"
-      ? `🟡 Vigilance: ${p.product_name}. Couverture: ${days} j. Préparer ${qty} unité(s).`
-      : `🟢 Stable: ${p.product_name}. Stock: ${p.current_stock}. Couverture: ${days} j. Aucun achat urgent.`;
-    document.getElementById("ai-text").textContent = text;
-    document.getElementById("ai-modal").classList.add("open");
-  }
+    // Render clients table
+    function renderClients() {
+      const tbody = document.getElementById('clientsTableBody');
+      tbody.innerHTML = clients.map(c => `
+        <tr class="border-b border-border last:border-0 hover:bg-muted/30 transition-colors">
+          <td class="px-4 py-3 font-medium text-card-foreground">${c.name}</td>
+          <td class="px-4 py-3 text-muted-foreground">${c.active}</td>
+          <td class="px-4 py-3 text-muted-foreground">${c.revenue.toLocaleString()}</td>
+          <td class="px-4 py-3"><span class="text-xs font-medium ${c.status === 'active' ? 'text-primary' : 'text-destructive'}">${c.status === 'active' ? 'Actif' : 'Inactif'}</span></td>
+        </tr>
+      `).join('');
+    }
 
-  /* ══════════════════════════════════════════════
-     AUTO-REFRESH
-     ══════════════════════════════════════════════ */
-  function toggleAutoRefresh() {
-    autoRefresh = !autoRefresh;
-    document.getElementById("auto-btn").textContent = autoRefresh ? "Pause auto" : "Activer auto";
-    setLive(autoRefresh ? "Auto-refresh actif" : "Auto-refresh en pause", false);
-    autoRefresh ? startAutoRefresh() : clearInterval(timer);
-  }
-  function startAutoRefresh() {
-    clearInterval(timer);
-    timer = setInterval(() => { if (autoRefresh) loadDashboard(false); }, AUTO_REFRESH_MS);
-  }
+    // Render notifications
+    function renderNotifications() {
+      const container = document.getElementById('notificationsContainer');
+      const badge = document.getElementById('notifBadge');
+      badge.textContent = notifications.length;
+      badge.style.display = notifications.length ? 'inline' : 'none';
 
-  /* ══════════════════════════════════════════════
-     UTILS
-     ══════════════════════════════════════════════ */
-  function val(id) { const el=document.getElementById(id); return el ? el.value.trim() : ""; }
-  function num(id) { const el=document.getElementById(id); return el ? Number(el.value||0) : 0; }
-  function showToast(msg) {
-    const t=document.getElementById("toast");
-    t.textContent=msg; t.classList.add("show");
-    setTimeout(()=>t.classList.remove("show"), 2800);
-  }
-  function escapeHtml(s) {
-    return String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
-  }
-  function safeJson(o) { return JSON.stringify(o).replace(/</g,"\\u003c").replace(/'/g,"&#39;"); }
-  function formatDate(v) {
-    if (!v) return "—";
-    const d=new Date(v);
-    return isNaN(d) ? escapeHtml(v) : d.toLocaleString("fr-FR");
-  }
+      if (notifications.length === 0) {
+        container.innerHTML = '<p class="text-center text-sm text-muted-foreground py-6">Aucune notification</p>';
+        return;
+      }
 
-  /* ══════════════════════════════════════════════
-     INIT
-     ══════════════════════════════════════════════ */
-  // Au démarrage, afficher immédiatement les notifs depuis localStorage
-  renderNotificationsFromStorage();
-  loadDashboard();
-  startAutoRefresh();
-</script>
+      container.innerHTML = notifications.map(n => {
+        const iconMap = {
+          alert: '<div class="w-8 h-8 rounded-full bg-destructive/10 flex items-center justify-center"><svg class="w-4 h-4 text-destructive" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg></div>',
+          tendance: '<div class="w-8 h-8 rounded-full bg-accent/20 flex items-center justify-center"><svg class="w-4 h-4 text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"/></svg></div>',
+          info: '<div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center"><svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg></div>'
+        };
+        return `
+          <div class="flex items-start gap-3 p-3 bg-muted/50 rounded-lg group mb-2">
+            ${iconMap[n.type]}
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-medium text-card-foreground">${n.title}</p>
+              <p class="text-xs text-muted-foreground mt-0.5 line-clamp-2">${n.message}</p>
+              <p class="text-[10px] text-muted-foreground mt-1">${n.time}</p>
+            </div>
+            <button onclick="dismissNotification('${n.id}')" class="p-1 rounded hover:bg-muted opacity-0 group-hover:opacity-100 transition-opacity">
+              <svg class="w-3.5 h-3.5 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function dismissNotification(id) {
+      notifications = notifications.filter(n => n.id !== id);
+      renderNotifications();
+    }
+
+    document.getElementById('clearAllNotifs').addEventListener('click', () => {
+      notifications = [];
+      renderNotifications();
+    });
+
+    // Search
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+      renderProducts(e.target.value);
+    });
+
+    // Modal functions
+    const modalBackdrop = document.getElementById('modalBackdrop');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalDescription = document.getElementById('modalDescription');
+    const modalBody = document.getElementById('modalBody');
+
+    function openModal(title, description, content) {
+      modalTitle.textContent = title;
+      modalDescription.textContent = description;
+      modalBody.innerHTML = content;
+      modalBackdrop.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      modalBackdrop.classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+
+    document.getElementById('modalClose').addEventListener('click', closeModal);
+    modalBackdrop.addEventListener('click', (e) => {
+      if (e.target === modalBackdrop) closeModal();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
+
+    // Modal content generators
+    document.getElementById('addProductBtn').addEventListener('click', () => {
+      openModal('Ajouter un produit', 'Ajoutez un nouveau produit dans votre inventaire.', `
+        <div class="grid grid-cols-2 gap-4">
+          <div><label class="block text-sm font-medium text-card-foreground mb-1.5">Nom du produit *</label><input class="w-full px-3 py-2 rounded-lg border border-border bg-input text-card-foreground text-sm outline-none focus:ring-2 focus:ring-ring" placeholder="ex: Paracetamol 500mg"></div>
+          <div><label class="block text-sm font-medium text-card-foreground mb-1.5">Categorie *</label><input class="w-full px-3 py-2 rounded-lg border border-border bg-input text-card-foreground text-sm outline-none focus:ring-2 focus:ring-ring" placeholder="ex: Medicaments"></div>
+          <div><label class="block text-sm font-medium text-card-foreground mb-1.5">Stock actuel</label><input type="number" value="50" min="0" class="w-full px-3 py-2 rounded-lg border border-border bg-input text-card-foreground text-sm outline-none focus:ring-2 focus:ring-ring"></div>
+          <div><label class="block text-sm font-medium text-card-foreground mb-1.5">Stock minimum</label><input type="number" value="20" min="0" class="w-full px-3 py-2 rounded-lg border border-border bg-input text-card-foreground text-sm outline-none focus:ring-2 focus:ring-ring"></div>
+          <div><label class="block text-sm font-medium text-card-foreground mb-1.5">Fournisseur</label><input class="w-full px-3 py-2 rounded-lg border border-border bg-input text-card-foreground text-sm outline-none focus:ring-2 focus:ring-ring" placeholder="ex: MedSupply SA"></div>
+          <div><label class="block text-sm font-medium text-card-foreground mb-1.5">Email fournisseur</label><input type="email" class="w-full px-3 py-2 rounded-lg border border-border bg-input text-card-foreground text-sm outline-none focus:ring-2 focus:ring-ring" placeholder="supplier@email.com"></div>
+        </div>
+        <div class="flex justify-end gap-3 mt-6">
+          <button onclick="closeModal()" class="px-4 py-2 rounded-lg text-sm font-medium hover:bg-muted text-card-foreground transition-colors">Annuler</button>
+          <button onclick="closeModal()" class="px-4 py-2 rounded-lg text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-colors">Ajouter produit</button>
+        </div>
+      `);
+    });
+
+    document.getElementById('purchaseBtn').addEventListener('click', () => openPurchaseModal());
+
+    function openPurchaseModal(productId = '') {
+      const product = products.find(p => p.id === productId);
+      openModal('Creer un achat', 'Commander une quantite aupres du fournisseur.', `
+        <div class="grid grid-cols-2 gap-4">
+          <div><label class="block text-sm font-medium text-card-foreground mb-1.5">Produit *</label>
+            <select class="w-full px-3 py-2 rounded-lg border border-border bg-input text-card-foreground text-sm outline-none focus:ring-2 focus:ring-ring">
+              <option value="">Selectionner un produit</option>
+              ${products.map(p => `<option value="${p.id}" ${p.id === productId ? 'selected' : ''}>${p.name}</option>`).join('')}
+            </select>
+          </div>
+          <div><label class="block text-sm font-medium text-card-foreground mb-1.5">Quantite *</label><input type="number" value="30" min="1" class="w-full px-3 py-2 rounded-lg border border-border bg-input text-card-foreground text-sm outline-none focus:ring-2 focus:ring-ring"></div>
+          <div><label class="block text-sm font-medium text-card-foreground mb-1.5">Fournisseur *</label><input class="w-full px-3 py-2 rounded-lg border border-border bg-input text-card-foreground text-sm outline-none focus:ring-2 focus:ring-ring" value="${product?.supplier || ''}" placeholder="ex: MedSupply SA"></div>
+          <div><label class="block text-sm font-medium text-card-foreground mb-1.5">Statut</label>
+            <select class="w-full px-3 py-2 rounded-lg border border-border bg-input text-card-foreground text-sm outline-none focus:ring-2 focus:ring-ring">
+              <option value="pending">Pending</option><option value="sent">Sent</option><option value="delivered">Delivered</option>
+            </select>
+          </div>
+          <div class="col-span-2"><label class="block text-sm font-medium text-card-foreground mb-1.5">Message</label><textarea rows="3" class="w-full px-3 py-2 rounded-lg border border-border bg-input text-card-foreground text-sm outline-none focus:ring-2 focus:ring-ring resize-none" placeholder="Commande fournisseur..."></textarea></div>
+        </div>
+        <div class="flex justify-end gap-3 mt-6">
+          <button onclick="closeModal()" class="px-4 py-2 rounded-lg text-sm font-medium hover:bg-muted text-card-foreground transition-colors">Annuler</button>
+          <button onclick="closeModal()" class="px-4 py-2 rounded-lg text-sm font-medium bg-accent text-accent-foreground hover:bg-accent/80 transition-colors">Creer achat</button>
+        </div>
+      `);
+    }
+
+    document.getElementById('saleBtn').addEventListener('click', () => {
+      openModal('Mouvement de stock', 'Enregistrer une sortie ou entree de stock.', `
+        <div class="grid grid-cols-2 gap-4">
+          <div><label class="block text-sm font-medium text-card-foreground mb-1.5">Type de mouvement *</label>
+            <select class="w-full px-3 py-2 rounded-lg border border-border bg-input text-card-foreground text-sm outline-none focus:ring-2 focus:ring-ring">
+              <option value="OUT">Sortie (vente, consommation)</option><option value="IN">Entree (retour, ajustement)</option>
+            </select>
+          </div>
+          <div><label class="block text-sm font-medium text-card-foreground mb-1.5">Produit *</label>
+            <select class="w-full px-3 py-2 rounded-lg border border-border bg-input text-card-foreground text-sm outline-none focus:ring-2 focus:ring-ring">
+              <option value="">Selectionner un produit</option>
+              ${products.map(p => `<option value="${p.id}">${p.name} (Stock: ${p.currentStock})</option>`).join('')}
+            </select>
+          </div>
+          <div><label class="block text-sm font-medium text-card-foreground mb-1.5">Quantite *</label><input type="number" value="1" min="1" class="w-full px-3 py-2 rounded-lg border border-border bg-input text-card-foreground text-sm outline-none focus:ring-2 focus:ring-ring"></div>
+          <div class="col-span-2"><label class="block text-sm font-medium text-card-foreground mb-1.5">Raison / Note</label><textarea rows="2" class="w-full px-3 py-2 rounded-lg border border-border bg-input text-card-foreground text-sm outline-none focus:ring-2 focus:ring-ring resize-none" placeholder="Ex: vente client, retour fournisseur..."></textarea></div>
+        </div>
+        <div class="flex justify-end gap-3 mt-6">
+          <button onclick="closeModal()" class="px-4 py-2 rounded-lg text-sm font-medium hover:bg-muted text-card-foreground transition-colors">Annuler</button>
+          <button onclick="closeModal()" class="px-4 py-2 rounded-lg text-sm font-medium bg-accent text-accent-foreground hover:bg-accent/80 transition-colors">Enregistrer</button>
+        </div>
+      `);
+    });
+
+    function openAiModal(productId) {
+      const product = products.find(p => p.id === productId);
+      if (!product) return;
+      const qty = Math.max(50, product.minStock - product.currentStock + 30);
+      const statusText = product.status === 'CRITICAL' ? 'critique' : product.status === 'WARNING' ? 'en vigilance' : 'suffisant';
+      openModal('Recommandation IA', `Analyse pour: ${product.name}`, `
+        <div class="bg-muted rounded-lg p-4">
+          <p class="text-sm text-card-foreground leading-relaxed">
+            Base sur l'analyse des tendances de consommation et des donnees historiques, nous recommandons de commander <strong>${qty} unites</strong> de <strong>${product.name}</strong>.<br><br>
+            Le stock actuel (${product.currentStock} unites) est ${statusText}. La tendance de consommation montre une variation de ${product.change} sur la derniere periode.
+          </p>
+        </div>
+        <div class="flex justify-end gap-3 mt-6">
+          <button onclick="closeModal()" class="px-4 py-2 rounded-lg text-sm font-medium hover:bg-muted text-card-foreground transition-colors">Fermer</button>
+          <button onclick="closeModal(); openPurchaseModal('${productId}')" class="px-4 py-2 rounded-lg text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-colors">Commander maintenant</button>
+        </div>
+      `);
+    }
+
+    // Charts
+    const barCtx = document.getElementById('barChart').getContext('2d');
+    new Chart(barCtx, {
+      type: 'bar',
+      data: {
+        labels: ['Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Jun', 'Jul', 'Aou', 'Sep'],
+        datasets: [{
+          data: [65, 85, 75, 120, 95, 140, 110, 130, 105],
+          backgroundColor: '#f59e0b',
+          borderRadius: 4
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { grid: { display: false } },
+          y: { grid: { color: '#e2e8f0' }, beginAtZero: true }
+        }
+      }
+    });
+
+    const lineCtx = document.getElementById('lineChart').getContext('2d');
+    new Chart(lineCtx, {
+      type: 'line',
+      data: {
+        labels: ['Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Jun', 'Jul', 'Aou', 'Sep'],
+        datasets: [
+          { label: 'Entrees', data: [40, 55, 70, 45, 60, 80, 75, 85, 90], borderColor: '#22c55e', backgroundColor: '#22c55e', tension: 0.3, pointRadius: 3 },
+          { label: 'Sorties', data: [30, 45, 50, 55, 40, 65, 70, 60, 75], borderColor: '#f59e0b', backgroundColor: '#f59e0b', tension: 0.3, pointRadius: 3 }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { grid: { display: false } },
+          y: { grid: { color: '#e2e8f0' }, beginAtZero: true }
+        }
+      }
+    });
+
+    const pieCtx = document.getElementById('pieChart').getContext('2d');
+    new Chart(pieCtx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Stock OK', 'Vigilance', 'Critique', 'Epuise'],
+        datasets: [{
+          data: [55, 25, 12, 8],
+          backgroundColor: ['#22c55e', '#f59e0b', '#ef4444', '#64748b'],
+          borderWidth: 0
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        cutout: '60%'
+      }
+    });
+
+    // Initialize
+    renderProducts();
+    renderClients();
+    renderNotifications();
+  </script>
 </body>
 </html>
