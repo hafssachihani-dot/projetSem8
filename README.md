@@ -25,7 +25,7 @@
 
 ## 📝 À propos
 
-**DYNEX** est une solution complète de gestion de stock qui combine un tableau de bord web, une application mobile multiplateforme et une couche d’automatisation pilotée par l’IA. Le projet centralise les données dans **Supabase**, orchestre les flux via **fusion AI / n8n** (webhooks), et exploite des nœuds IA pour les prévisions et les notifications intelligentes.
+**DYNEX** est une solution complète de gestion de stock qui combine un tableau de bord web, une application mobile multiplateforme et une couche d’automatisation pilotée par l’IA. Le projet centralise les données dans **Supabase** et orchestre les flux via **fusion AI** (webhooks d’automatisation), avec des **nœuds IA**, un **agent Google** et le modèle **Gemini** pour les prévisions et les notifications intelligentes.
 
 L’objectif est de **réduire les ruptures**, **fluidifier les achats** et **donner une vision claire** des tendances — en temps réel ou quasi temps réel — aux équipes terrain comme aux décideurs.
 
@@ -36,23 +36,24 @@ Que vous consultiez les graphiques sur le web ou gériez les commandes sur mobil
 ## 🏗️ Architecture
 
 ```
-   ┌─────────────────────┐         ┌──────────────────┐         ┌─────────────────┐
-   │  Mobile App (RN)   │────────▶│   n8n Webhooks   │────────▶│   Supabase DB   │
-   └─────────────────────┘         │   (fusion AI)    │         │  (PostgreSQL)   │
-                                   └────────┬─────────┘         └─────────────────┘
-   ┌─────────────────────┐                │
-   │   Web Dashboard     │────────────────┘
+   ┌─────────────────────┐         ┌─────────────────────────────┐         ┌─────────────────┐
+   │  Mobile App (RN)   │────────▶│  Webhooks automation       │────────▶│   Supabase DB   │
+   └─────────────────────┘         │  fusion AI                 │         │  (PostgreSQL)   │
+                                   └─────────────┬──────────────┘         └─────────────────┘
+   ┌─────────────────────┐                       │
+   │   Web Dashboard     │───────────────────────┘
    └─────────────────────┘
-                                   │
-                                   ▼
-                            ┌──────────────┐
-                            │  AI / IA     │
-                            │  Layer       │
-                            └──────┬───────┘
-                                   ▼
-                     ┌─────────────────────────────┐
-                     │ Notifications & Prévisions  │
-                     └─────────────────────────────┘
+                                                 │
+                                                 ▼
+                                      ┌──────────────────────┐
+                                      │  Couche IA           │
+                                      │  fusion AI · Agent   │
+                                      │  Google · Gemini     │
+                                      └──────────┬───────────┘
+                                                 ▼
+                                   ┌───────────────────────────────┐
+                                   │ Notifications & Prévisions    │
+                                   └───────────────────────────────┘
 ```
 
 ---
@@ -77,9 +78,9 @@ Que vous consultiez les graphiques sur le web ou gériez les commandes sur mobil
 |--------|----------------|
 | 🖥️ **Dashboard web** | HTML, Tailwind CSS, Chart.js, JavaScript |
 | 📱 **Application mobile** | React Native, Expo, TypeScript, Zustand |
-| ⚙️ **Backend & automatisation** | fusion AI (webhooks), n8n |
+| ⚙️ **Backend & automatisation** | fusion AI (webhooks) |
 | 🗄️ **Base de données** | Supabase (PostgreSQL) |
-| 🤖 **Couche IA** | Nœuds n8n IA — prévisions stock & notifications |
+| 🤖 **Couche IA** | Nœuds fusion AI, agent Google, modèle **Gemini** — prévisions stock & notifications |
 
 ---
 
@@ -89,7 +90,7 @@ Que vous consultiez les graphiques sur le web ou gériez les commandes sur mobil
 projetSem8/
 ├── dashboard_smart_stock_modern.html   ← Dashboard web
 ├── gestion_stock.sql                   ← Schéma base de données
-├── ProjetSem8-2026-04-29T00_58_53.587Z.json   ← Workflow n8n (export)
+├── ProjetSem8-2026-04-29T00_58_53.587Z.json   ← Workflow fusion AI (export)
 ├── Planning Projet Professionnel.pdf   ← Planning projet
 └── mobile/                             ← App React Native (Expo)
     ├── app/
@@ -122,15 +123,17 @@ npx expo start
 
 Importez le fichier `gestion_stock.sql` dans votre projet **Supabase** (SQL Editor → exécution du script).
 
-### ⚡ Workflow fusion AI / n8n
+### ⚡ Workflow fusion AI
 
-Importez `ProjetSem8-2026-04-29T00_58_53.587Z.json` dans **n8n** (ou votre instance fusion AI compatible), puis activez les webhooks selon votre déploiement.
+1. Importez `ProjetSem8-2026-04-29T00_58_53.587Z.json` dans **fusion AI**.
+2. **Activez** le workflow et les webhooks selon votre déploiement.
+3. **Lancez** l’exécution pour voir la chaîne IA → base de données → alertes en action et **vivre l’expérience DYNEX** de bout en bout (dashboard web + app mobile connectés aux mêmes flux).
 
 ---
 
 ## 🔌 Endpoints API (Webhooks)
 
-Les URLs ci-dessous correspondent à la configuration utilisée par le dashboard web ; adaptez-les si votre instance n8n / fusion AI change.
+Les URLs ci-dessous correspondent à la configuration utilisée par le dashboard web ; adaptez-les si votre instance **fusion AI** change.
 
 | Endpoint | Méthode | Description |
 |----------|---------|-------------|
@@ -160,14 +163,12 @@ Les URLs ci-dessous correspondent à la configuration utilisée par le dashboard
 
 ## 👥 Équipe
 
-Nous sommes ravis de partager **DYNEX** avec la communauté. Retrouvez-nous sur GitHub :
-
-| Membre | Profil |
-|--------|--------|
-| 👩‍💻 **hafssachihani-dot** | [@hafssachihani-dot](https://github.com/hafssachihani-dot) |
-| 👨‍💻 **sabiressaad** | [@sabiressaad](https://github.com/sabiressaad) |
-
-Merci d’avoir pris le temps de découvrir notre projet — vos ⭐ sur le dépôt nous motivent !
+| Rôle | Personne |
+|------|----------|
+| 🧠 **Responsable IA** | Hafsa Chihani ([@hafssachihani-dot](https://github.com/hafssachihani-dot)) |
+| 💻 **Responsable développement** | Sabir Essaad ([@sabiressaad](https://github.com/sabiressaad)) |
+| 🎯 **Chef d’équipe** | Amine Sadouk |
+| 🎨 **Responsable design** | Yacine El Idrissi |
 
 ---
 
@@ -179,10 +180,8 @@ Ce projet est distribué sous la [**licence MIT**](https://opensource.org/licens
 
 <div align="center">
 
-### 💜 Remerciements
-
 **Fait avec ❤️ dans le cadre de la formation GenAIOT 2026**
 
-*Prédire. Optimiser. Sécuriser — avec **DYNEX**.*
+*Prédire. Optimiser. Sécuriser — **DYNEX**.*
 
 </div>
