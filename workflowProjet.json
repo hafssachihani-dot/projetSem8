@@ -1,0 +1,2611 @@
+[
+  {
+    "_id": "69ef372365ba93c1d2d6801e",
+    "userId": "3cb6231c-b74a-48a7-8a40-71a046f4dc4f",
+    "name": "control8",
+    "variables": {},
+    "secrets": {},
+    "nodes": [
+      {
+        "position": {
+          "x": -204.70043347475178,
+          "y": 356.2119943370575
+        },
+        "width": 64,
+        "height": 64,
+        "selected": false,
+        "id": "cis6ls9trx767p87ljfrplxq",
+        "type": "trigger",
+        "data": {
+          "description": "Triggers workflow on incoming HTTP requests",
+          "showRunningStatus": false,
+          "_morphing": false,
+          "name": "webhook",
+          "label": "WebhookProduct",
+          "inputs": {},
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": null
+            },
+            "error": {
+              "label": "Error",
+              "isConnectable": null
+            }
+          },
+          "parameters": {
+            "method": "post",
+            "respondType": "deferred",
+            "responseCode": 200,
+            "path": "/add-product"
+          },
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": -256.1988099853401,
+          "y": 289.4606614470346
+        },
+        "width": 256,
+        "height": 100,
+        "dragHandle": ".drag-handle__custom",
+        "selected": false,
+        "id": "nwtzkapyx2doaiglzc5zvqne",
+        "type": "display",
+        "data": {
+          "description": "Logs the input data to the console.",
+          "showRunningStatus": false,
+          "_morphing": false,
+          "name": "media-log",
+          "label": "Log",
+          "inputs": {
+            "input": {
+              "label": "Input"
+            }
+          },
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": false
+            }
+          },
+          "parameters": {},
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": -721.0209205622973,
+          "y": -113.1880116474583
+        },
+        "width": 256,
+        "height": 100,
+        "dragHandle": ".drag-handle__custom",
+        "selected": false,
+        "id": "ljle8rmi55ufixxxh1nlk7us",
+        "type": "display",
+        "data": {
+          "description": "Logs the input data to the console.",
+          "showRunningStatus": false,
+          "_morphing": false,
+          "name": "media-log",
+          "label": "Log1",
+          "inputs": {
+            "input": {
+              "label": "Input"
+            }
+          },
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": false
+            }
+          },
+          "parameters": {},
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": 46.602954568540554,
+          "y": 334.2358305259637
+        },
+        "width": 64,
+        "height": 64,
+        "selected": false,
+        "id": "kulojtiplzufezafsli76zdb",
+        "type": "action",
+        "data": {
+          "description": "Execute PostgreSQL operations (select, insert, update, delete)",
+          "showRunningStatus": true,
+          "_morphing": false,
+          "name": "postgres action",
+          "label": "AjouterProduct",
+          "inputs": {
+            "input": {
+              "label": "Input"
+            }
+          },
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": null
+            },
+            "error": {
+              "label": "Error",
+              "isConnectable": null
+            }
+          },
+          "parameters": {
+            "port": 6543,
+            "schemaName": "public",
+            "connectionTimeoutMillis": 5000,
+            "host": "aws-0-eu-west-1.pooler.supabase.com",
+            "user": "postgres.sefwdcdembztgpxikqfn",
+            "password": "HAFSSACHIHANI",
+            "database": "postgres",
+            "operation": "Execute SQL query",
+            "executeQueryParams": {
+              "query": "INSERT INTO products    (product_name, category, current_stock, minimum_stock, supplier_name, supplier_email,  expiration_date, temperature, humidity) VALUES    (     '{{outputs.WebhookProduct.success.body.product_name}}',     '{{outputs.WebhookProduct.success.body.category}}',     {{outputs.WebhookProduct.success.body.current_stock}},     {{outputs.WebhookProduct.success.body.minimum_stock}},     '{{outputs.WebhookProduct.success.body.supplier_name}}',     '{{outputs.WebhookProduct.success.body.supplier_email}}',   '{{outputs.WebhookProduct.success.body.expiration_date}}',     {{outputs.WebhookProduct.success.body.temperature}},     {{outputs.WebhookProduct.success.body.humidity}}   );"
+            },
+            "tableName": "products    "
+          },
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": 249.29563047573788,
+          "y": 448.78192328377895
+        },
+        "width": 256,
+        "height": 100,
+        "dragHandle": ".drag-handle__custom",
+        "selected": false,
+        "id": "vvvwexk8fuud64syrzsvt8ax",
+        "type": "display",
+        "data": {
+          "description": "Logs the input data to the console.",
+          "showRunningStatus": false,
+          "_morphing": false,
+          "name": "media-log",
+          "label": "Log2",
+          "inputs": {
+            "input": {
+              "label": "Input"
+            }
+          },
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": false
+            }
+          },
+          "parameters": {},
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": -229.30888278330406,
+          "y": 745.974574578504
+        },
+        "width": 64,
+        "height": 64,
+        "id": "ivyz7p0n6uoadbgsxa50e40o",
+        "type": "trigger",
+        "data": {
+          "description": "Triggers workflow on incoming HTTP requests",
+          "showRunningStatus": false,
+          "_morphing": false,
+          "name": "webhook",
+          "label": "WebhookAchat",
+          "inputs": {},
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": null
+            },
+            "error": {
+              "label": "Error",
+              "isConnectable": null
+            }
+          },
+          "parameters": {
+            "method": "post",
+            "respondType": "deferred",
+            "responseCode": 200,
+            "path": "/achat"
+          },
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": -220.7280179517203,
+          "y": 904.464984680383
+        },
+        "width": 256,
+        "height": 100,
+        "dragHandle": ".drag-handle__custom",
+        "selected": false,
+        "id": "dx6th4bn20e6yfmocyob9soq",
+        "type": "display",
+        "data": {
+          "description": "Logs the input data to the console.",
+          "showRunningStatus": false,
+          "_morphing": false,
+          "name": "media-log",
+          "label": "Log3",
+          "inputs": {
+            "input": {
+              "label": "Input"
+            }
+          },
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": false
+            }
+          },
+          "parameters": {},
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": 195.68443378640893,
+          "y": 797.5500720686464
+        },
+        "width": 64,
+        "height": 64,
+        "selected": false,
+        "id": "crngoktvzzp5lejxkgl6210u",
+        "type": "action",
+        "data": {
+          "description": "Execute PostgreSQL operations (select, insert, update, delete)",
+          "showRunningStatus": true,
+          "_morphing": false,
+          "name": "postgres action",
+          "label": "AjouterAchat",
+          "inputs": {
+            "input": {
+              "label": "Input"
+            }
+          },
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": null
+            },
+            "error": {
+              "label": "Error",
+              "isConnectable": null
+            }
+          },
+          "parameters": {
+            "port": 6543,
+            "schemaName": "public",
+            "connectionTimeoutMillis": 5000,
+            "host": "aws-0-eu-west-1.pooler.supabase.com",
+            "user": "postgres.sefwdcdembztgpxikqfn",
+            "password": "HAFSSACHIHANI",
+            "database": "postgres",
+            "operation": "Execute SQL query",
+            "executeQueryParams": {
+              "query": "INSERT INTO purchases (   product_id,   product_name,   quantity_ordered,   supplier_name,   supplier_email,   status,   message ) VALUES (   {{outputs.WebhookAchat.success.body.product_id}},   '{{outputs.WebhookAchat.success.body.product_name}}',   {{outputs.WebhookAchat.success.body.quantity_ordered}},   '{{outputs.WebhookAchat.success.body.supplier_name}}',   '{{outputs.WebhookAchat.success.body.supplier_email}}',   '{{outputs.WebhookAchat.success.body.status}}',   '{{outputs.WebhookAchat.success.body.message}}' );"
+            },
+            "tableName": "purchases "
+          },
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": 215.5556088631717,
+          "y": 973.4802870550874
+        },
+        "width": 256,
+        "height": 100,
+        "dragHandle": ".drag-handle__custom",
+        "selected": false,
+        "id": "n1n68xun2uyj82y1irecr6v1",
+        "type": "display",
+        "data": {
+          "description": "Logs the input data to the console.",
+          "showRunningStatus": false,
+          "_morphing": false,
+          "name": "media-log",
+          "label": "Log4",
+          "inputs": {
+            "input": {
+              "label": "Input"
+            }
+          },
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": false
+            }
+          },
+          "parameters": {},
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": 90.98176216549342,
+          "y": 109.36213792441944
+        },
+        "width": 64,
+        "height": 64,
+        "selected": false,
+        "id": "hs8d652dcvf1syyfpy1owb0s",
+        "type": "action",
+        "data": {
+          "description": "Execute PostgreSQL operations (select, insert, update, delete)",
+          "showRunningStatus": true,
+          "_morphing": false,
+          "name": "postgres action",
+          "label": "selectAllProducts",
+          "inputs": {
+            "input": {
+              "label": "Input"
+            }
+          },
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": null
+            },
+            "error": {
+              "label": "Error",
+              "isConnectable": null
+            }
+          },
+          "parameters": {
+            "port": 6543,
+            "schemaName": "public",
+            "connectionTimeoutMillis": 5000,
+            "host": "aws-0-eu-west-1.pooler.supabase.com",
+            "user": "postgres.sefwdcdembztgpxikqfn",
+            "password": "HAFSSACHIHANI",
+            "database": "postgres",
+            "operation": "Execute SQL query",
+            "tableName": "products    ",
+            "executeQueryParams": {
+              "query": "SELECT   id,   product_name,   category,   current_stock,   minimum_stock,   supplier_name,   supplier_email,   temperature,   humidity,   created_at,    CASE     WHEN current_stock = 0 THEN 'RUPTURE'     WHEN current_stock <= minimum_stock THEN 'COMMANDER'     ELSE 'OK'   END AS stock_status,    CASE     WHEN current_stock = 0 THEN 'RED'     WHEN current_stock <= minimum_stock THEN 'ORANGE'     ELSE 'GREEN'   END AS stock_color  FROM products ORDER BY current_stock ASC;"
+            }
+          },
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": 88.58506427664491,
+          "y": -29.646339628793864
+        },
+        "width": 64,
+        "height": 64,
+        "id": "ketqa1t9mgv67xwu15soucqa",
+        "type": "action",
+        "data": {
+          "description": "Execute PostgreSQL operations (select, insert, update, delete)",
+          "showRunningStatus": true,
+          "_morphing": false,
+          "name": "postgres action",
+          "label": "selectPurchase",
+          "inputs": {
+            "input": {
+              "label": "Input"
+            }
+          },
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": null
+            },
+            "error": {
+              "label": "Error",
+              "isConnectable": null
+            }
+          },
+          "parameters": {
+            "port": 6543,
+            "schemaName": "public",
+            "connectionTimeoutMillis": 5000,
+            "host": "aws-0-eu-west-1.pooler.supabase.com",
+            "user": "postgres.sefwdcdembztgpxikqfn",
+            "password": "HAFSSACHIHANI",
+            "database": "postgres",
+            "operation": "Execute SQL query",
+            "executeQueryParams": {
+              "query": "SELECT   id,   product_name,   quantity_ordered,   supplier_name,   supplier_email,   status,   message,   created_at FROM purchases ORDER BY created_at DESC;"
+            },
+            "tableName": "purchases "
+          },
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": 339.0399936613137,
+          "y": 42.254597036661295
+        },
+        "width": 64,
+        "height": 64,
+        "id": "omkloozg0cml2wsj16wb5vjg",
+        "type": "action",
+        "data": {
+          "description": "Executes custom JavaScript code on the input data.",
+          "showRunningStatus": true,
+          "_morphing": false,
+          "name": "function",
+          "label": "Function",
+          "inputs": {
+            "input": {
+              "label": "Input"
+            }
+          },
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": null
+            },
+            "error": {
+              "label": "Error",
+              "isConnectable": null
+            }
+          },
+          "parameters": {
+            "code": "const products = outputs.selectAllProducts.success.rows || [];\nconst purchases = outputs.selectPurchase.success.rows || [];\n\nreturn {\n  success: true,\n  productsJson: JSON.stringify(products),\n  purchasesJson: JSON.stringify(purchases),\n  products_count: products.length,\n  purchases_count: purchases.length\n};"
+          },
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": 1009.8182708965302,
+          "y": -415.745066797038
+        },
+        "width": 256,
+        "height": 100,
+        "dragHandle": ".drag-handle__custom",
+        "selected": false,
+        "id": "jit44u253o0l03ou4m4k9oqs",
+        "type": "display",
+        "data": {
+          "description": "Logs the input data to the console.",
+          "showRunningStatus": false,
+          "_morphing": false,
+          "name": "media-log",
+          "label": "Log5",
+          "inputs": {
+            "input": {
+              "label": "Input"
+            }
+          },
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": false
+            }
+          },
+          "parameters": {},
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": 656.5714255235041,
+          "y": 17.81429979725374
+        },
+        "width": 256,
+        "height": 100,
+        "dragHandle": ".drag-handle__custom",
+        "selected": false,
+        "id": "g3oy72jguoecaygsmm26dtkx",
+        "type": "display",
+        "data": {
+          "description": "Logs the input data to the console.",
+          "showRunningStatus": false,
+          "_morphing": false,
+          "name": "media-log",
+          "label": "Log6",
+          "inputs": {
+            "input": {
+              "label": "Input"
+            }
+          },
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": false
+            }
+          },
+          "parameters": {},
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": 1296.6724232130928,
+          "y": -105.74825645801042
+        },
+        "width": 256,
+        "height": 100,
+        "dragHandle": ".drag-handle__custom",
+        "selected": false,
+        "id": "k8z5oes3pqm3woc76ok76ihc",
+        "type": "display",
+        "data": {
+          "description": "Logs the input data to the console.",
+          "showRunningStatus": false,
+          "_morphing": false,
+          "name": "media-log",
+          "label": "Log7",
+          "inputs": {
+            "input": {
+              "label": "Input"
+            }
+          },
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": false
+            }
+          },
+          "parameters": {},
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": 549.5031783238613,
+          "y": -68.5140329073995
+        },
+        "width": 64,
+        "height": 64,
+        "selected": false,
+        "id": "dnwqex0tzszeakkr2trphhna",
+        "type": "action",
+        "data": {
+          "description": "Responds to a webhook with a specific message.",
+          "showRunningStatus": false,
+          "_morphing": false,
+          "name": "respond-to-webhook",
+          "label": "Respond to Socket Webhook",
+          "inputs": {
+            "input": {
+              "label": "Input"
+            }
+          },
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": null
+            },
+            "error": {
+              "label": "Error",
+              "isConnectable": null
+            }
+          },
+          "parameters": {
+            "responseCode": 200,
+            "responseBody": {
+              "success": true,
+              "productsJson": "{{outputs.Function.success.productsJson}}",
+              "purchasesJson": "{{outputs.Function.success.purchasesJson}}",
+              "products_count": "{{outputs.Function.success.products_count}}",
+              "purchases_count": "{{outputs.Function.success.purchases_count}}"
+            }
+          },
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": 692.1962062459033,
+          "y": -118.6371913207905
+        },
+        "width": 256,
+        "height": 100,
+        "dragHandle": ".drag-handle__custom",
+        "selected": false,
+        "id": "x9bes0d5812vpv7eoq5y3ptv",
+        "type": "display",
+        "data": {
+          "description": "Logs the input data to the console.",
+          "showRunningStatus": false,
+          "_morphing": false,
+          "name": "media-log",
+          "label": "Log8",
+          "inputs": {
+            "input": {
+              "label": "Input"
+            }
+          },
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": false
+            }
+          },
+          "parameters": {},
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": -562.3407898061055,
+          "y": 1682.7518707934246
+        },
+        "width": 64,
+        "height": 64,
+        "id": "zk3gbb2bj1j8d26e8q3evlcz",
+        "type": "trigger",
+        "data": {
+          "description": "Triggers workflow on incoming HTTP requests",
+          "showRunningStatus": false,
+          "_morphing": false,
+          "name": "webhook",
+          "label": "WebhookVente",
+          "inputs": {},
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": null
+            },
+            "error": {
+              "label": "Error",
+              "isConnectable": null
+            }
+          },
+          "parameters": {
+            "method": "post",
+            "respondType": "deferred",
+            "responseCode": 200,
+            "path": "/vente"
+          },
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": -548.878561862598,
+          "y": 1829.2333047506015
+        },
+        "width": 256,
+        "height": 100,
+        "dragHandle": ".drag-handle__custom",
+        "id": "gwenglt93o1mwzh6zpzk46s5",
+        "type": "display",
+        "data": {
+          "description": "Logs the input data to the console.",
+          "showRunningStatus": false,
+          "_morphing": false,
+          "name": "media-log",
+          "label": "Log9",
+          "inputs": {
+            "input": {
+              "label": "Input"
+            }
+          },
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": false
+            }
+          },
+          "parameters": {},
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": -146.34078980610548,
+          "y": 1595.5018707934246
+        },
+        "width": 64,
+        "height": 64,
+        "id": "fpvl8dxtrbnzemin2u4ur83k",
+        "type": "action",
+        "data": {
+          "description": "Execute PostgreSQL operations (select, insert, update, delete)",
+          "showRunningStatus": true,
+          "_morphing": false,
+          "name": "postgres action",
+          "label": "updatequantity",
+          "inputs": {
+            "input": {
+              "label": "Input"
+            }
+          },
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": null
+            },
+            "error": {
+              "label": "Error",
+              "isConnectable": null
+            }
+          },
+          "parameters": {
+            "port": 6543,
+            "schemaName": "public",
+            "connectionTimeoutMillis": 5000,
+            "host": "aws-0-eu-west-1.pooler.supabase.com",
+            "user": "postgres.sefwdcdembztgpxikqfn",
+            "password": "HAFSSACHIHANI",
+            "database": "postgres",
+            "operation": "Execute SQL query",
+            "executeQueryParams": {
+              "query": "UPDATE products SET current_stock =   CASE     WHEN '{{outputs.WebhookVente.success.body.type}}' = 'OUT'       THEN current_stock - {{outputs.WebhookVente.success.body.quantity}}     WHEN '{{outputs.WebhookVente.success.body.type}}' = 'IN'       THEN current_stock + {{outputs.WebhookVente.success.body.quantity}}     ELSE current_stock   END WHERE product_name = '{{outputs.WebhookVente.success.body.product_name}}' AND (   '{{outputs.WebhookVente.success.body.type}}' = 'IN'   OR current_stock >= {{outputs.WebhookVente.success.body.quantity}} );"
+            },
+            "tableName": "products "
+          },
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": -448.9344186206956,
+          "y": 1496.625744149481
+        },
+        "width": 256,
+        "height": 100,
+        "dragHandle": ".drag-handle__custom",
+        "id": "voj9ef9lhrml557xhilwb26l",
+        "type": "display",
+        "data": {
+          "description": "Logs the input data to the console.",
+          "showRunningStatus": false,
+          "_morphing": false,
+          "name": "media-log",
+          "label": "Log10",
+          "inputs": {
+            "input": {
+              "label": "Input"
+            }
+          },
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": false
+            }
+          },
+          "parameters": {},
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": -132.34078980610548,
+          "y": 1745.5018707934246
+        },
+        "width": 64,
+        "height": 64,
+        "id": "sfdwuweowxk837vzh9p2odf0",
+        "type": "action",
+        "data": {
+          "description": "Execute PostgreSQL operations (select, insert, update, delete)",
+          "showRunningStatus": true,
+          "_morphing": false,
+          "name": "postgres action",
+          "label": "insertVente",
+          "inputs": {
+            "input": {
+              "label": "Input"
+            }
+          },
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": null
+            },
+            "error": {
+              "label": "Error",
+              "isConnectable": null
+            }
+          },
+          "parameters": {
+            "port": 6543,
+            "schemaName": "public",
+            "connectionTimeoutMillis": 5000,
+            "host": "aws-0-eu-west-1.pooler.supabase.com",
+            "user": "postgres.sefwdcdembztgpxikqfn",
+            "password": "HAFSSACHIHANI",
+            "database": "postgres",
+            "operation": "Execute SQL query",
+            "executeQueryParams": {
+              "query": "INSERT INTO stock_movements (   product_name,   movement_type,   quantity,   reason,   created_at ) VALUES (   '{{outputs.WebhookVente.success.body.product_name}}',   '{{outputs.WebhookVente.success.body.type}}',   {{outputs.WebhookVente.success.body.quantity}},   '{{outputs.WebhookVente.success.body.reason}}',   NOW() );"
+            },
+            "tableName": "stock_movements "
+          },
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": -227.12421443633633,
+          "y": 1928.1731588987273
+        },
+        "width": 256,
+        "height": 100,
+        "dragHandle": ".drag-handle__custom",
+        "id": "jb8yshiiigpfd650knlplyxx",
+        "type": "display",
+        "data": {
+          "description": "Logs the input data to the console.",
+          "showRunningStatus": false,
+          "_morphing": false,
+          "name": "media-log",
+          "label": "Log11",
+          "inputs": {
+            "input": {
+              "label": "Input"
+            }
+          },
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": false
+            }
+          },
+          "parameters": {},
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": -37.3190747599355,
+          "y": 725.472963241345
+        },
+        "width": 64,
+        "height": 68,
+        "id": "ihmo3dcxh0slj6aeod30m4aa",
+        "type": "utility",
+        "data": {
+          "description": "Executes different branches based on a condition",
+          "showRunningStatus": false,
+          "_morphing": false,
+          "name": "if-else",
+          "label": "If-Else",
+          "inputs": {
+            "input": {
+              "label": "Input"
+            }
+          },
+          "outputs": {
+            "true": {
+              "label": "True",
+              "isConnectable": null
+            },
+            "false": {
+              "label": "False",
+              "isConnectable": null
+            },
+            "error": {
+              "label": "Error",
+              "isConnectable": null
+            }
+          },
+          "parameters": {
+            "condition": "input.body.action === \"update_status\""
+          },
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": 163.43735884157317,
+          "y": 671.0961565450309
+        },
+        "width": 64,
+        "height": 64,
+        "selected": false,
+        "id": "egejw4i5ytxhsfyiwfok5axs",
+        "type": "action",
+        "data": {
+          "description": "Execute PostgreSQL operations (select, insert, update, delete)",
+          "showRunningStatus": true,
+          "_morphing": false,
+          "name": "postgres action",
+          "label": "updateStatus",
+          "inputs": {
+            "input": {
+              "label": "Input"
+            }
+          },
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": null
+            },
+            "error": {
+              "label": "Error",
+              "isConnectable": null
+            }
+          },
+          "parameters": {
+            "port": 6543,
+            "schemaName": "public",
+            "connectionTimeoutMillis": 5000,
+            "host": "aws-0-eu-west-1.pooler.supabase.com",
+            "user": "postgres.sefwdcdembztgpxikqfn",
+            "password": "HAFSSACHIHANI",
+            "database": "postgres",
+            "operation": "Execute SQL query",
+            "executeQueryParams": {
+              "query": "UPDATE purchases SET status = '{{outputs.WebhookAchat.success.body.status}}' WHERE id = {{outputs.WebhookAchat.success.body.id}};"
+            },
+            "tableName": "purchases "
+          },
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": 175.61094049625262,
+          "y": 548.3465500065646
+        },
+        "width": 256,
+        "height": 100,
+        "dragHandle": ".drag-handle__custom",
+        "selected": false,
+        "id": "dfxyz2da8b7qmzos3sxn2w10",
+        "type": "display",
+        "data": {
+          "description": "Logs the input data to the console.",
+          "showRunningStatus": false,
+          "_morphing": false,
+          "name": "media-log",
+          "label": "Log12",
+          "inputs": {
+            "input": {
+              "label": "Input"
+            }
+          },
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": false
+            }
+          },
+          "parameters": {},
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": 412.32033474481335,
+          "y": 660.8458921504485
+        },
+        "width": 64,
+        "height": 68,
+        "id": "wqlphxffik0vkvk4viwtcnpp",
+        "type": "utility",
+        "data": {
+          "description": "Executes different branches based on a condition",
+          "showRunningStatus": false,
+          "_morphing": false,
+          "name": "if-else",
+          "label": "If-Else1",
+          "inputs": {
+            "input": {
+              "label": "Input"
+            }
+          },
+          "outputs": {
+            "true": {
+              "label": "True",
+              "isConnectable": null
+            },
+            "false": {
+              "label": "False",
+              "isConnectable": null
+            },
+            "error": {
+              "label": "Error",
+              "isConnectable": null
+            }
+          },
+          "parameters": {
+            "condition": "outputs.WebhookAchat.success.body.status === \"delivered\" "
+          },
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": 603.4514598859757,
+          "y": 650.4704955585747
+        },
+        "width": 64,
+        "height": 64,
+        "selected": false,
+        "id": "x08qfi6tkr5ajlfgxhhcpx4n",
+        "type": "action",
+        "data": {
+          "description": "Execute PostgreSQL operations (select, insert, update, delete)",
+          "showRunningStatus": true,
+          "_morphing": false,
+          "name": "postgres action",
+          "label": "SelectPurchase",
+          "inputs": {
+            "input": {
+              "label": "Input"
+            }
+          },
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": null
+            },
+            "error": {
+              "label": "Error",
+              "isConnectable": null
+            }
+          },
+          "parameters": {
+            "port": 6543,
+            "schemaName": "public",
+            "connectionTimeoutMillis": 5000,
+            "host": "aws-0-eu-west-1.pooler.supabase.com",
+            "user": "postgres.sefwdcdembztgpxikqfn",
+            "password": "HAFSSACHIHANI",
+            "database": "postgres",
+            "tableName": "purchases ",
+            "operation": "Execute SQL query",
+            "executeQueryParams": {
+              "query": "SELECT    product_id,   product_name,   quantity_ordered FROM purchases WHERE id = {{outputs.WebhookAchat.success.body.id}};"
+            },
+            "replaceEmptyStringWithNull": false,
+            "selectParams": {
+              "returnAll": false
+            },
+            "insertParams": {
+              "skipOnConflict": false
+            },
+            "deleteParams": {
+              "cascade": false
+            }
+          },
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": 1098.8979108704557,
+          "y": 1018.7624351950965
+        },
+        "width": 256,
+        "height": 100,
+        "dragHandle": ".drag-handle__custom",
+        "selected": false,
+        "id": "i76i43bnmi0otoeaecn7oyba",
+        "type": "display",
+        "data": {
+          "description": "Logs the input data to the console.",
+          "showRunningStatus": false,
+          "_morphing": false,
+          "name": "media-log",
+          "label": "Log13",
+          "inputs": {
+            "input": {
+              "label": "Input"
+            }
+          },
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": false
+            }
+          },
+          "parameters": {},
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": 787.7073646983192,
+          "y": 644.9703192955196
+        },
+        "width": 64,
+        "height": 64,
+        "selected": false,
+        "id": "fpcogsv03aoapu5ejaajb0c4",
+        "type": "action",
+        "data": {
+          "description": "Execute PostgreSQL operations (select, insert, update, delete)",
+          "showRunningStatus": true,
+          "_morphing": false,
+          "name": "postgres action",
+          "label": "insertStockMovement",
+          "inputs": {
+            "input": {
+              "label": "Input"
+            }
+          },
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": null
+            },
+            "error": {
+              "label": "Error",
+              "isConnectable": null
+            }
+          },
+          "parameters": {
+            "port": 6543,
+            "schemaName": "public",
+            "connectionTimeoutMillis": 5000,
+            "host": "aws-0-eu-west-1.pooler.supabase.com",
+            "user": "postgres.sefwdcdembztgpxikqfn",
+            "password": "HAFSSACHIHANI",
+            "database": "postgres",
+            "tableName": "products ",
+            "operation": "Execute SQL query",
+            "executeQueryParams": {
+              "query": "INSERT INTO stock_movements (   product_name,   movement_type,   quantity,   reason,   created_at ) VALUES (   '{{outputs.SelectPurchase.success.rows.0.product_name}}',   'IN',   {{outputs.SelectPurchase.success.rows.0.quantity_ordered}},   'Purchase delivered',   NOW() );"
+            }
+          },
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": 1033.7057773870893,
+          "y": 559.7279035944107
+        },
+        "width": 256,
+        "height": 100,
+        "dragHandle": ".drag-handle__custom",
+        "selected": false,
+        "id": "rp6nzqg08piy9qmb40mhto8g",
+        "type": "display",
+        "data": {
+          "description": "Logs the input data to the console.",
+          "showRunningStatus": false,
+          "_morphing": false,
+          "name": "media-log",
+          "label": "Log14",
+          "inputs": {
+            "input": {
+              "label": "Input"
+            }
+          },
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": false
+            }
+          },
+          "parameters": {},
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": 995.3390186286467,
+          "y": 644.9703192955196
+        },
+        "width": 64,
+        "height": 64,
+        "id": "xvz8fa1a3h4w2cju2t50oau4",
+        "type": "action",
+        "data": {
+          "description": "Execute PostgreSQL operations (select, insert, update, delete)",
+          "showRunningStatus": true,
+          "_morphing": false,
+          "name": "postgres action",
+          "label": "UpdateQuant",
+          "inputs": {
+            "input": {
+              "label": "Input"
+            }
+          },
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": null
+            },
+            "error": {
+              "label": "Error",
+              "isConnectable": null
+            }
+          },
+          "parameters": {
+            "port": 6543,
+            "schemaName": "public",
+            "connectionTimeoutMillis": 5000,
+            "host": "aws-0-eu-west-1.pooler.supabase.com",
+            "user": "postgres.sefwdcdembztgpxikqfn",
+            "password": "HAFSSACHIHANI",
+            "database": "postgres",
+            "tableName": "products    ",
+            "operation": "Execute SQL query",
+            "executeQueryParams": {
+              "query": "UPDATE products SET current_stock = current_stock + {{outputs.SelectPurchase.success.rows.0.quantity_ordered}} WHERE id = {{outputs.SelectPurchase.success.rows.0.product_id}};"
+            }
+          },
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": 1115.2209369535565,
+          "y": 686.0972141233613
+        },
+        "width": 256,
+        "height": 100,
+        "dragHandle": ".drag-handle__custom",
+        "id": "pg5kfuxnhof1e7tl30lrfev0",
+        "type": "display",
+        "data": {
+          "description": "Logs the input data to the console.",
+          "showRunningStatus": false,
+          "_morphing": false,
+          "name": "media-log",
+          "label": "Log15",
+          "inputs": {
+            "input": {
+              "label": "Input"
+            }
+          },
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": false
+            }
+          },
+          "parameters": {},
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": 1076.0517537394162,
+          "y": 803.152763082719
+        },
+        "width": 256,
+        "height": 100,
+        "dragHandle": ".drag-handle__custom",
+        "selected": false,
+        "id": "vy8188j9etcl3xrlh73p35gs",
+        "type": "display",
+        "data": {
+          "description": "Logs the input data to the console.",
+          "showRunningStatus": false,
+          "_morphing": false,
+          "name": "media-log",
+          "label": "Log16",
+          "inputs": {
+            "input": {
+              "label": "Input"
+            }
+          },
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": false
+            }
+          },
+          "parameters": {},
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": 38.30834885707103,
+          "y": 1575.1875930670644
+        },
+        "width": 64,
+        "height": 64,
+        "id": "t8iu4gbcjlmrtwmw26ffhdcy",
+        "type": "action",
+        "data": {
+          "description": "Execute PostgreSQL operations (select, insert, update, delete)",
+          "showRunningStatus": true,
+          "_morphing": false,
+          "name": "postgres action",
+          "label": "Stock",
+          "inputs": {
+            "input": {
+              "label": "Input"
+            }
+          },
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": null
+            },
+            "error": {
+              "label": "Error",
+              "isConnectable": null
+            }
+          },
+          "parameters": {
+            "port": 6543,
+            "schemaName": "public",
+            "connectionTimeoutMillis": 5000,
+            "replaceEmptyStringWithNull": false,
+            "selectParams": {
+              "returnAll": false
+            },
+            "insertParams": {
+              "skipOnConflict": false
+            },
+            "deleteParams": {
+              "cascade": false
+            },
+            "host": "aws-0-eu-west-1.pooler.supabase.com",
+            "user": "postgres.sefwdcdembztgpxikqfn",
+            "password": "HAFSSACHIHANI",
+            "database": "postgres",
+            "operation": "Execute SQL query",
+            "executeQueryParams": {
+              "query": "SELECT   id,   product_name,   category,   current_stock,   minimum_stock,   supplier_name,   supplier_email FROM products;"
+            },
+            "tableName": "products"
+          },
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": 45.93365731741734,
+          "y": 1725.1918233803854
+        },
+        "width": 64,
+        "height": 64,
+        "selected": false,
+        "id": "s2iwt7jx1yw1e61zy4hk69a0",
+        "type": "action",
+        "data": {
+          "description": "Execute PostgreSQL operations (select, insert, update, delete)",
+          "showRunningStatus": true,
+          "_morphing": false,
+          "name": "postgres action",
+          "label": "StockMovement",
+          "inputs": {
+            "input": {
+              "label": "Input"
+            }
+          },
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": null
+            },
+            "error": {
+              "label": "Error",
+              "isConnectable": null
+            }
+          },
+          "parameters": {
+            "port": 6543,
+            "schemaName": "public",
+            "connectionTimeoutMillis": 5000,
+            "replaceEmptyStringWithNull": false,
+            "selectParams": {
+              "returnAll": false
+            },
+            "insertParams": {
+              "skipOnConflict": false
+            },
+            "deleteParams": {
+              "cascade": false
+            },
+            "host": "aws-0-eu-west-1.pooler.supabase.com",
+            "user": "postgres.sefwdcdembztgpxikqfn",
+            "password": "HAFSSACHIHANI",
+            "database": "postgres",
+            "operation": "Execute SQL query",
+            "executeQueryParams": {
+              "query": "SELECT   product_name,   SUM(quantity) AS total_sold_7_days,   ROUND(SUM(quantity) / 7.0, 2) AS avg_daily_demand FROM stock_movements WHERE movement_type = 'OUT' AND created_at >= NOW() - INTERVAL '7 days' GROUP BY product_name;"
+            },
+            "tableName": "stock_movements"
+          },
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": 179.18709444699053,
+          "y": 1912.8220672062725
+        },
+        "width": 256,
+        "height": 100,
+        "dragHandle": ".drag-handle__custom",
+        "selected": false,
+        "id": "n0vvnvn5rjncpwlnfo6r2x63",
+        "type": "display",
+        "data": {
+          "description": "Logs the input data to the console.",
+          "showRunningStatus": false,
+          "_morphing": false,
+          "name": "media-log",
+          "label": "Log17",
+          "inputs": {
+            "input": {
+              "label": "Input"
+            }
+          },
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": false
+            }
+          },
+          "parameters": {},
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": 55.8984878290737,
+          "y": 1508.474664668658
+        },
+        "width": 256,
+        "height": 100,
+        "dragHandle": ".drag-handle__custom",
+        "selected": false,
+        "id": "klj32mghqeyesr38gma9u17y",
+        "type": "display",
+        "data": {
+          "description": "Logs the input data to the console.",
+          "showRunningStatus": false,
+          "_morphing": false,
+          "name": "media-log",
+          "label": "Log18",
+          "inputs": {
+            "input": {
+              "label": "Input"
+            }
+          },
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": false
+            }
+          },
+          "parameters": {},
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": 300.56777893051526,
+          "y": 1659.1890031715047
+        },
+        "width": 64,
+        "height": 64,
+        "selected": false,
+        "id": "t5hfwc7nzi9opszfgwu27edi",
+        "type": "utility",
+        "data": {
+          "description": "Merges multiple branches. Example: waits for all 2 branches → merges results, or continues when first completes (mode dependent)",
+          "showRunningStatus": false,
+          "_morphing": false,
+          "name": "merge",
+          "label": "Merge",
+          "inputs": {
+            "input1": {
+              "label": "Input1"
+            },
+            "input2": {
+              "label": "Input2"
+            }
+          },
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": null
+            },
+            "error": {
+              "label": "Error",
+              "isConnectable": null
+            }
+          },
+          "parameters": {
+            "inputCount": 2,
+            "strategy": "zip"
+          },
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": 317.9470533095998,
+          "y": 1801.5693351289194
+        },
+        "width": 256,
+        "height": 100,
+        "dragHandle": ".drag-handle__custom",
+        "id": "ufebbnmqtdlybhucg4n7989d",
+        "type": "display",
+        "data": {
+          "description": "Logs the input data to the console.",
+          "showRunningStatus": false,
+          "_morphing": false,
+          "name": "media-log",
+          "label": "Log19",
+          "inputs": {
+            "input": {
+              "label": "Input"
+            }
+          },
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": false
+            }
+          },
+          "parameters": {},
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": 444.4532802482788,
+          "y": 1623.2571116621853
+        },
+        "width": 64,
+        "height": 64,
+        "id": "bl73evftchythoplycmgeza3",
+        "type": "action",
+        "data": {
+          "description": "Executes custom JavaScript code on the input data.",
+          "showRunningStatus": true,
+          "_morphing": false,
+          "name": "function",
+          "label": "FunctionOrganiser",
+          "inputs": {
+            "input": {
+              "label": "Input"
+            }
+          },
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": null
+            },
+            "error": {
+              "label": "Error",
+              "isConnectable": null
+            }
+          },
+          "parameters": {
+            "code": "const products = input[0]?.rows || [];\nconst movements = input[1]?.rows || [];\n\nconst organizedProducts = products.map(product => {\n  const movement = movements.find(m => m.product_name === product.product_name);\n\n  const currentStock = Number(product.current_stock || 0);\n  const minimumStock = Number(product.minimum_stock || 0);\n  const avgDailyDemand = Number(movement?.avg_daily_demand || 0);\n  const totalSold7Days = Number(movement?.total_sold_7_days || 0);\n\n  const daysBeforeRupture =\n    avgDailyDemand > 0 ? Math.floor(currentStock / avgDailyDemand) : 999;\n\n  const recommendedOrderQuantity = Math.max(\n    0,\n    Math.ceil((avgDailyDemand * 7) + minimumStock - currentStock)\n  );\n\n  return {\n    product_id: product.id,\n    product_name: product.product_name,\n    category: product.category,\n    current_stock: currentStock,\n    minimum_stock: minimumStock,\n    supplier_name: product.supplier_name,\n    supplier_email: product.supplier_email,\n    total_sold_7_days: totalSold7Days,\n    avg_daily_demand: avgDailyDemand,\n    days_before_rupture: daysBeforeRupture,\n    recommended_order_quantity: recommendedOrderQuantity\n  };\n});\n\nreturn {\n  products: organizedProducts,\n  productsJson: JSON.stringify(organizedProducts)\n};"
+          },
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": 608.699498153222,
+          "y": 1611.872728357881
+        },
+        "width": 64,
+        "height": 64,
+        "selected": false,
+        "id": "cd0s0gy3nlja4onth9b5y1bp",
+        "type": "agent",
+        "data": {
+          "description": "An AI agent that can perform tasks using nodes as tools based on user input.",
+          "showRunningStatus": true,
+          "_morphing": false,
+          "name": "agent",
+          "label": "Agent",
+          "inputs": {
+            "input": {
+              "label": "Input"
+            }
+          },
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": null
+            },
+            "error": {
+              "label": "Error",
+              "isConnectable": null
+            }
+          },
+          "parameters": {
+            "threadId": "2",
+            "systemPrompt": "You are a smart supply forecast agent.\n\nAnalyze the products data below and decide the correct path for each product.\n\nRules:\n1. If current_stock <= minimum_stock OR days_before_rupture <= 3:\n   path = \"ALERT_STOCK\"\n   reason: product is near rupture or already below minimum stock.\n   action: recommend creating a supplier order.\n\n2. If total_sold_7_days >= 10 OR avg_daily_demand is high compared to stock:\n   path = \"TENDANCE\"\n   reason: product is trending this week.\n   action: monitor and prepare order if needed.\n\nsi normal ne pas returner\nReturn ONLY valid JSON, no markdown.\n\nExpected JSON format sans backtick:\n{\n  \"Alert_Stock\": \n    {\n      \"product_id\": 1,\n      \"product_name\": \"pc hp\",\n      \"path\": \"ALERT_STOCK\",\n      \"risk_level\": \"HIGH\",\n      \"reason\": \"Stock may run out in 1 day.\",\n      \"recommended_order_quantity\": 198,\n      \"supplier_name\": \"tecno\",\n      \"supplier_email\": \"email@example.com\"\n    }\n  \"TENDANCE\": \n    {\n      \"product_id\": ..,\n      \"product_name\": \"..\",\n      \"path\": \"...\",\n      \"risk_level\": \"...\",\n      \"reason\": \".....\",\n      \"recommended_order_quantity\": ...,\n      \"supplier_name\": \"....\",\n      \"supplier_email\": \"....\"\n    }\n  \n}\n\nProducts data:\n{{outputs.FunctionOrganiser.success.productsJson}}"
+          },
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": 773.1436069342745,
+          "y": 1772.6202438721969
+        },
+        "width": 256,
+        "height": 100,
+        "dragHandle": ".drag-handle__custom",
+        "id": "seflsuzkegdibb73oet705vt",
+        "type": "display",
+        "data": {
+          "description": "Logs the input data to the console.",
+          "showRunningStatus": false,
+          "_morphing": false,
+          "name": "media-log",
+          "label": "Log20",
+          "inputs": {
+            "input": {
+              "label": "Input"
+            }
+          },
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": false
+            }
+          },
+          "parameters": {},
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": 922.9577266876745,
+          "y": 1607.3922456308337
+        },
+        "width": 64,
+        "height": 64,
+        "id": "wh7g216srhbsh6gxqtf011dg",
+        "type": "action",
+        "data": {
+          "description": "Executes custom JavaScript code on the input data.",
+          "showRunningStatus": true,
+          "_morphing": false,
+          "name": "function",
+          "label": "FunctionNotifications",
+          "inputs": {
+            "input": {
+              "label": "Input"
+            }
+          },
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": null
+            },
+            "error": {
+              "label": "Error",
+              "isConnectable": null
+            }
+          },
+          "parameters": {
+            "code": "let data = input;\n\n// 1. Sécurisation du Parsing JSON\ntry {\n  if (typeof data === \"string\") data = JSON.parse(data);\n  if (input.output) data = typeof input.output === \"string\" ? JSON.parse(input.output) : input.output;\n  if (input.text) data = typeof input.text === \"string\" ? JSON.parse(input.text) : input.text;\n} catch (e) {\n  console.log(\"Erreur de parsing JSON\", e);\n}\n\n// 2. L'arme secrète : Une fonction qui transforme tout en tableau\nfunction forceArray(val) {\n  if (!val) return []; // Si c'est null ou undefined -> []\n  if (Array.isArray(val)) return val; // Si c'est déjà un tableau -> on le garde\n  if (typeof val === 'object') return [val]; // SI C'EST L'OBJET DE VOTRE AGENT -> on le met dans un tableau : [{...}]\n  return [];\n}\n\n// 3. On applique la fonction\nconst alertStock = forceArray(data.Alert_Stock);\nconst tendance = forceArray(data.TENDANCE);\nconst ok = forceArray(data.OK);\n\n// 4. Maintenant les .map() fonctionneront à 100%\nconst notifications = alertStock.map(p => ({\n  type: \"ALERT_STOCK\",\n  product_id: p.product_id,\n  product_name: p.product_name,\n  risk_level: p.risk_level,\n  reason: p.reason,\n  recommended_order_quantity: p.recommended_order_quantity,\n  supplier_name: p.supplier_name,\n  supplier_email: p.supplier_email\n}));\n\nconst tendanceNotifications = tendance.map(p => ({\n  type: \"TENDANCE\",\n  product_id: p.product_id,\n  product_name: p.product_name,\n  risk_level: p.risk_level,\n  reason: p.reason\n}));\n\nreturn {\n  success: true,\n  notifications,\n  tendanceNotifications,\n  analysis: {\n    alert_count: alertStock.length,\n    tendance_count: tendance.length,\n    ok_count: ok.length\n  },\n  notificationsJson: JSON.stringify(notifications),\n  tendanceJson: JSON.stringify(tendanceNotifications)\n};"
+          },
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": 1212.394944891057,
+          "y": 1765.9661995843408
+        },
+        "width": 256,
+        "height": 100,
+        "dragHandle": ".drag-handle__custom",
+        "id": "oleef0kgbphnqaiyz79phd2g",
+        "type": "display",
+        "data": {
+          "description": "Logs the input data to the console.",
+          "showRunningStatus": false,
+          "_morphing": false,
+          "name": "media-log",
+          "label": "Log21",
+          "inputs": {
+            "input": {
+              "label": "Input"
+            }
+          },
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": false
+            }
+          },
+          "parameters": {},
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": 1119.844952446556,
+          "y": 1527.1355926059034
+        },
+        "width": 256,
+        "height": 100,
+        "dragHandle": ".drag-handle__custom",
+        "selected": false,
+        "id": "gq69hot9upjil3yx2buuj7jc",
+        "type": "display",
+        "data": {
+          "description": "Logs the input data to the console.",
+          "showRunningStatus": false,
+          "_morphing": false,
+          "name": "media-log",
+          "label": "Log22",
+          "inputs": {
+            "input": {
+              "label": "Input"
+            }
+          },
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": false
+            }
+          },
+          "parameters": {},
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": 672.848738033078,
+          "y": 1899.5352041022802
+        },
+        "width": 64,
+        "height": 64,
+        "selected": true,
+        "id": "g0dz4hhyoosj2qp38wnnx71n",
+        "type": "agent-llm",
+        "data": {
+          "description": "A node that uses Google's LLM models.",
+          "showRunningStatus": true,
+          "_morphing": false,
+          "name": "google-llm",
+          "label": "Google LLM",
+          "inputs": {
+            "input": {
+              "label": "Input"
+            }
+          },
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": null
+            },
+            "error": {
+              "label": "Error",
+              "isConnectable": null
+            }
+          },
+          "parameters": {
+            "apiKey": "AIzaSyBMvWiGse7j2BJZajypoTtQQAUtfuR4_1A",
+            "model": "gemini-3-flash-preview"
+          },
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": 1154.848738033078,
+          "y": 1593.5352041022802
+        },
+        "width": 64,
+        "height": 64,
+        "id": "vfvo3k1moax512dkib4romtw",
+        "type": "action",
+        "data": {
+          "description": "Responds to a webhook with a specific message.",
+          "showRunningStatus": false,
+          "_morphing": false,
+          "name": "respond-to-webhook",
+          "label": "Respond to Socket Webhook1",
+          "inputs": {
+            "input": {
+              "label": "Input"
+            }
+          },
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": null
+            },
+            "error": {
+              "label": "Error",
+              "isConnectable": null
+            }
+          },
+          "parameters": {
+            "responseCode": 200,
+            "responseBody": {
+              "success": true,
+              "message": "Vente enregistrée",
+              "notificationsJson": "{{outputs.FunctionNotifications.success.notificationsJson}}",
+              "tendanceJson": "{{outputs.FunctionNotifications.success.tendanceJson}}"
+            }
+          },
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": -292.78794573026835,
+          "y": 35.16350020461721
+        },
+        "width": 64,
+        "height": 64,
+        "selected": false,
+        "id": "xxfpu33os15qyhhu3vv9oodb",
+        "type": "trigger",
+        "data": {
+          "description": "Triggers workflow on incoming HTTP requests",
+          "showRunningStatus": false,
+          "_morphing": false,
+          "name": "webhook",
+          "label": "Webhook Trigger1",
+          "inputs": {},
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": null
+            },
+            "error": {
+              "label": "Error",
+              "isConnectable": null
+            }
+          },
+          "parameters": {
+            "method": "post",
+            "respondType": "deferred",
+            "responseCode": 200,
+            "path": "/dashboard"
+          },
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": 358.96205426973165,
+          "y": 327.9135002046173
+        },
+        "width": 64,
+        "height": 64,
+        "selected": false,
+        "id": "c3y0zj1hv1uc5865s47dlw95",
+        "type": "action",
+        "data": {
+          "description": "Responds to a webhook with a specific message.",
+          "showRunningStatus": false,
+          "_morphing": false,
+          "name": "respond-to-webhook",
+          "label": "Respond to Socket Webhook2",
+          "inputs": {
+            "input": {
+              "label": "Input"
+            }
+          },
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": null
+            },
+            "error": {
+              "label": "Error",
+              "isConnectable": null
+            }
+          },
+          "parameters": {
+            "responseCode": 200,
+            "responseBody": {
+              "success": true,
+              "message": "Produit ajouté avec succès",
+              "product": {
+                "name": "{{outputs.WebhookProduct.success.body.product_name}}",
+                "category": "{{outputs.WebhookProduct.success.body.category}}",
+                "stock": "{{outputs.WebhookProduct.success.body.current_stock}}"
+              }
+            }
+          },
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": 459.7888488145958,
+          "y": 796.6562237640485
+        },
+        "width": 64,
+        "height": 64,
+        "selected": false,
+        "id": "t0tem1rhs8znbf4jj94vxt09",
+        "type": "action",
+        "data": {
+          "description": "Consolidated Gmail operations (send/get/delete/move/markUnread/createLabel)",
+          "showRunningStatus": true,
+          "_morphing": false,
+          "name": "gmail",
+          "label": "Gmail",
+          "inputs": {
+            "input": {
+              "label": "Input"
+            }
+          },
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": null
+            },
+            "error": {
+              "label": "Error",
+              "isConnectable": null
+            }
+          },
+          "parameters": {
+            "operation": "send",
+            "clientId": "GOOGLE_CLIENT_ID_HERE",
+	    "clientSecret": "GOOGLE_CLIENT_SECRET_HERE",
+            "refreshToken": "1//04bZr-wezON-zCgYIARAAGAQSNgF-L9IrBr_zefGLk9U22jIjDWXzSv1R6ueQwtf-CX6SBRutHG4Luzyaodgj5xuAMQAQPTqcjw",
+            "to": "{{outputs.WebhookAchat.success.body.supplier_email}}",
+            "subject": "Commande fournisseur urgente - {{outputs.WebhookAchat.success.body.product_name}}",
+            "text": "🚨 ALERTE STOCK - COMMANDE FOURNISSEUR  Bonjour {{outputs.WebhookAchat.success.body.supplier_name}},  Nous vous contactons concernant une commande urgente.  ───────────────────────────── 📦 Détails de la commande :  Produit : {{outputs.WebhookAchat.success.body.product_name}} Quantité demandée : {{outputs.WebhookAchat.success.body.quantity_ordered}} unité(s) Statut : {{outputs.WebhookAchat.success.body.status}}  ───────────────────────────── ⚠️ Raison : Le produit risque une rupture de stock. Veuillez confirmer la disponibilité, le prix et le délai de livraison.  Merci de nous répondre rapidement.  Cordialement, Système Smart Stock Forecast"
+          },
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      }
+    ],
+    "connections": [
+      {
+        "type": "directed",
+        "id": "xy-edge__cis6ls9trx767p87ljfrplxqsuccess-nwtzkapyx2doaiglzc5zvqneinput",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "cis6ls9trx767p87ljfrplxq",
+        "target": "nwtzkapyx2doaiglzc5zvqne",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__kulojtiplzufezafsli76zdbsuccess-vvvwexk8fuud64syrzsvt8axinput",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "kulojtiplzufezafsli76zdb",
+        "target": "vvvwexk8fuud64syrzsvt8ax",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__ivyz7p0n6uoadbgsxa50e40osuccess-dx6th4bn20e6yfmocyob9soqinput",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "ivyz7p0n6uoadbgsxa50e40o",
+        "target": "dx6th4bn20e6yfmocyob9soq",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__crngoktvzzp5lejxkgl6210usuccess-n1n68xun2uyj82y1irecr6v1input",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "crngoktvzzp5lejxkgl6210u",
+        "target": "n1n68xun2uyj82y1irecr6v1",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__hs8d652dcvf1syyfpy1owb0ssuccess-omkloozg0cml2wsj16wb5vjginput",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "hs8d652dcvf1syyfpy1owb0s",
+        "target": "omkloozg0cml2wsj16wb5vjg",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__ketqa1t9mgv67xwu15soucqasuccess-omkloozg0cml2wsj16wb5vjginput",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "ketqa1t9mgv67xwu15soucqa",
+        "target": "omkloozg0cml2wsj16wb5vjg",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__ketqa1t9mgv67xwu15soucqasuccess-jit44u253o0l03ou4m4k9oqsinput",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "ketqa1t9mgv67xwu15soucqa",
+        "target": "jit44u253o0l03ou4m4k9oqs",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__hs8d652dcvf1syyfpy1owb0ssuccess-g3oy72jguoecaygsmm26dtkxinput",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "hs8d652dcvf1syyfpy1owb0s",
+        "target": "g3oy72jguoecaygsmm26dtkx",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__omkloozg0cml2wsj16wb5vjgsuccess-k8z5oes3pqm3woc76ok76ihcinput",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "omkloozg0cml2wsj16wb5vjg",
+        "target": "k8z5oes3pqm3woc76ok76ihc",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__omkloozg0cml2wsj16wb5vjgsuccess-dnwqex0tzszeakkr2trphhnainput",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "omkloozg0cml2wsj16wb5vjg",
+        "target": "dnwqex0tzszeakkr2trphhna",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__dnwqex0tzszeakkr2trphhnasuccess-x9bes0d5812vpv7eoq5y3ptvinput",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "dnwqex0tzszeakkr2trphhna",
+        "target": "x9bes0d5812vpv7eoq5y3ptv",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__zk3gbb2bj1j8d26e8q3evlczsuccess-gwenglt93o1mwzh6zpzk46s5input",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "zk3gbb2bj1j8d26e8q3evlcz",
+        "target": "gwenglt93o1mwzh6zpzk46s5",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__zk3gbb2bj1j8d26e8q3evlczsuccess-fpvl8dxtrbnzemin2u4ur83kinput",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "zk3gbb2bj1j8d26e8q3evlcz",
+        "target": "fpvl8dxtrbnzemin2u4ur83k",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__fpvl8dxtrbnzemin2u4ur83ksuccess-voj9ef9lhrml557xhilwb26linput",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "fpvl8dxtrbnzemin2u4ur83k",
+        "target": "voj9ef9lhrml557xhilwb26l",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__zk3gbb2bj1j8d26e8q3evlczsuccess-sfdwuweowxk837vzh9p2odf0input",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "zk3gbb2bj1j8d26e8q3evlcz",
+        "target": "sfdwuweowxk837vzh9p2odf0",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__sfdwuweowxk837vzh9p2odf0success-jb8yshiiigpfd650knlplyxxinput",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "sfdwuweowxk837vzh9p2odf0",
+        "target": "jb8yshiiigpfd650knlplyxx",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__ivyz7p0n6uoadbgsxa50e40osuccess-ihmo3dcxh0slj6aeod30m4aainput",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "ivyz7p0n6uoadbgsxa50e40o",
+        "target": "ihmo3dcxh0slj6aeod30m4aa",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__ihmo3dcxh0slj6aeod30m4aafalse-crngoktvzzp5lejxkgl6210uinput",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "ihmo3dcxh0slj6aeod30m4aa",
+        "target": "crngoktvzzp5lejxkgl6210u",
+        "sourceHandle": "false",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__ihmo3dcxh0slj6aeod30m4aatrue-egejw4i5ytxhsfyiwfok5axsinput",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "ihmo3dcxh0slj6aeod30m4aa",
+        "target": "egejw4i5ytxhsfyiwfok5axs",
+        "sourceHandle": "true",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__egejw4i5ytxhsfyiwfok5axssuccess-dfxyz2da8b7qmzos3sxn2w10input",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "egejw4i5ytxhsfyiwfok5axs",
+        "target": "dfxyz2da8b7qmzos3sxn2w10",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__egejw4i5ytxhsfyiwfok5axssuccess-wqlphxffik0vkvk4viwtcnppinput",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "egejw4i5ytxhsfyiwfok5axs",
+        "target": "wqlphxffik0vkvk4viwtcnpp",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__wqlphxffik0vkvk4viwtcnpptrue-x08qfi6tkr5ajlfgxhhcpx4ninput",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "wqlphxffik0vkvk4viwtcnpp",
+        "target": "x08qfi6tkr5ajlfgxhhcpx4n",
+        "sourceHandle": "true",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__wqlphxffik0vkvk4viwtcnpptrue-i76i43bnmi0otoeaecn7oybainput",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "wqlphxffik0vkvk4viwtcnpp",
+        "target": "i76i43bnmi0otoeaecn7oyba",
+        "sourceHandle": "true",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__x08qfi6tkr5ajlfgxhhcpx4nsuccess-fpcogsv03aoapu5ejaajb0c4input",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "x08qfi6tkr5ajlfgxhhcpx4n",
+        "target": "fpcogsv03aoapu5ejaajb0c4",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__fpcogsv03aoapu5ejaajb0c4success-rp6nzqg08piy9qmb40mhto8ginput",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "fpcogsv03aoapu5ejaajb0c4",
+        "target": "rp6nzqg08piy9qmb40mhto8g",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__fpcogsv03aoapu5ejaajb0c4success-xvz8fa1a3h4w2cju2t50oau4input",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "fpcogsv03aoapu5ejaajb0c4",
+        "target": "xvz8fa1a3h4w2cju2t50oau4",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__xvz8fa1a3h4w2cju2t50oau4success-pg5kfuxnhof1e7tl30lrfev0input",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "xvz8fa1a3h4w2cju2t50oau4",
+        "target": "pg5kfuxnhof1e7tl30lrfev0",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__x08qfi6tkr5ajlfgxhhcpx4nsuccess-vy8188j9etcl3xrlh73p35gsinput",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "x08qfi6tkr5ajlfgxhhcpx4n",
+        "target": "vy8188j9etcl3xrlh73p35gs",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__s2iwt7jx1yw1e61zy4hk69a0success-n0vvnvn5rjncpwlnfo6r2x63input",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "s2iwt7jx1yw1e61zy4hk69a0",
+        "target": "n0vvnvn5rjncpwlnfo6r2x63",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__t8iu4gbcjlmrtwmw26ffhdcysuccess-klj32mghqeyesr38gma9u17yinput",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "t8iu4gbcjlmrtwmw26ffhdcy",
+        "target": "klj32mghqeyesr38gma9u17y",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__t8iu4gbcjlmrtwmw26ffhdcysuccess-t5hfwc7nzi9opszfgwu27ediinput1",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "t8iu4gbcjlmrtwmw26ffhdcy",
+        "target": "t5hfwc7nzi9opszfgwu27edi",
+        "sourceHandle": "success",
+        "targetHandle": "input1"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__s2iwt7jx1yw1e61zy4hk69a0success-t5hfwc7nzi9opszfgwu27ediinput2",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "s2iwt7jx1yw1e61zy4hk69a0",
+        "target": "t5hfwc7nzi9opszfgwu27edi",
+        "sourceHandle": "success",
+        "targetHandle": "input2"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__t5hfwc7nzi9opszfgwu27edisuccess-ufebbnmqtdlybhucg4n7989dinput",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "t5hfwc7nzi9opszfgwu27edi",
+        "target": "ufebbnmqtdlybhucg4n7989d",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__t5hfwc7nzi9opszfgwu27edisuccess-bl73evftchythoplycmgeza3input",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "t5hfwc7nzi9opszfgwu27edi",
+        "target": "bl73evftchythoplycmgeza3",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__bl73evftchythoplycmgeza3success-cd0s0gy3nlja4onth9b5y1bpinput",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "bl73evftchythoplycmgeza3",
+        "target": "cd0s0gy3nlja4onth9b5y1bp",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__cd0s0gy3nlja4onth9b5y1bpsuccess-seflsuzkegdibb73oet705vtinput",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "cd0s0gy3nlja4onth9b5y1bp",
+        "target": "seflsuzkegdibb73oet705vt",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__cd0s0gy3nlja4onth9b5y1bpsuccess-wh7g216srhbsh6gxqtf011dginput",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "cd0s0gy3nlja4onth9b5y1bp",
+        "target": "wh7g216srhbsh6gxqtf011dg",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__wh7g216srhbsh6gxqtf011dgsuccess-oleef0kgbphnqaiyz79phd2ginput",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "wh7g216srhbsh6gxqtf011dg",
+        "target": "oleef0kgbphnqaiyz79phd2g",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "agentConnection",
+        "id": "xy-edge__g0dz4hhyoosj2qp38wnnx71nllm-cd0s0gy3nlja4onth9b5y1bpllm",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "g0dz4hhyoosj2qp38wnnx71n",
+        "target": "cd0s0gy3nlja4onth9b5y1bp",
+        "sourceHandle": "llm",
+        "targetHandle": "llm"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__wh7g216srhbsh6gxqtf011dgsuccess-vfvo3k1moax512dkib4romtwinput",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "wh7g216srhbsh6gxqtf011dg",
+        "target": "vfvo3k1moax512dkib4romtw",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__vfvo3k1moax512dkib4romtwsuccess-gq69hot9upjil3yx2buuj7jcinput",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "vfvo3k1moax512dkib4romtw",
+        "target": "gq69hot9upjil3yx2buuj7jc",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__fpvl8dxtrbnzemin2u4ur83ksuccess-t8iu4gbcjlmrtwmw26ffhdcyinput",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "fpvl8dxtrbnzemin2u4ur83k",
+        "target": "t8iu4gbcjlmrtwmw26ffhdcy",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__sfdwuweowxk837vzh9p2odf0success-s2iwt7jx1yw1e61zy4hk69a0input",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "sfdwuweowxk837vzh9p2odf0",
+        "target": "s2iwt7jx1yw1e61zy4hk69a0",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__xxfpu33os15qyhhu3vv9oodbsuccess-ketqa1t9mgv67xwu15soucqainput",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "xxfpu33os15qyhhu3vv9oodb",
+        "target": "ketqa1t9mgv67xwu15soucqa",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__xxfpu33os15qyhhu3vv9oodbsuccess-hs8d652dcvf1syyfpy1owb0sinput",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "xxfpu33os15qyhhu3vv9oodb",
+        "target": "hs8d652dcvf1syyfpy1owb0s",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__xxfpu33os15qyhhu3vv9oodbsuccess-ljle8rmi55ufixxxh1nlk7usinput",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "xxfpu33os15qyhhu3vv9oodb",
+        "target": "ljle8rmi55ufixxxh1nlk7us",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__cis6ls9trx767p87ljfrplxqsuccess-kulojtiplzufezafsli76zdbinput",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "cis6ls9trx767p87ljfrplxq",
+        "target": "kulojtiplzufezafsli76zdb",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__kulojtiplzufezafsli76zdbsuccess-c3y0zj1hv1uc5865s47dlw95input",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "kulojtiplzufezafsli76zdb",
+        "target": "c3y0zj1hv1uc5865s47dlw95",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__crngoktvzzp5lejxkgl6210usuccess-t0tem1rhs8znbf4jj94vxt09input",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "crngoktvzzp5lejxkgl6210u",
+        "target": "t0tem1rhs8znbf4jj94vxt09",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      }
+    ],
+    "status": "stopped",
+    "id": "36f4191e-9ead-48e4-9c57-226791850a9c",
+    "createdAt": 1777284899273,
+    "updatedAt": "2026-04-30T00:45:10.517Z",
+    "previousStatus": "running"
+  }
+]
